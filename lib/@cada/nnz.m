@@ -34,5 +34,5 @@ if PFLAG
   fprintf(fid,[indent,funcstr,' = nnz(',x.func.name,');\n']);
 end
 ADIGATOR.VARINFO.LASTOCC([x.id y.id],1) = ADIGATOR.VARINFO.COUNT;
-y = class(y,'cada');
+y = cada(y);
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;

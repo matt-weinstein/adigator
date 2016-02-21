@@ -48,7 +48,7 @@ if ssize == 1 && strcmp(s(1).type,'()') && (isa(b,'cada') || isnumeric(b))
     btemp.func.size = [bMrow, bNcol];
     btemp.deriv = struct('name',cell(NUMvod,1),'nzlocs',cell(NUMvod,1));
     b = btemp;
-    b = class(b,'cada');
+    b = cada(b);
   else
     bMrow = b.func.size(1);
     bNcol = b.func.size(2);
@@ -70,7 +70,7 @@ if ssize == 1 && strcmp(s(1).type,'()') && (isa(b,'cada') || isnumeric(b))
     xtemp.func.size = [xMrow, xNcol];
     xtemp.deriv = struct('name',cell(NUMvod,1),'nzlocs',cell(NUMvod,1));
     x = xtemp;
-    x = class(x,'cada');
+    x = cada(x);
   else
     xMrow = x.func.size(1);
     xNcol = x.func.size(2);
@@ -801,7 +801,7 @@ if ssize == 1 && strcmp(s(1).type,'()') && (isa(b,'cada') || isnumeric(b))
   end
   ADIGATOR.VARINFO.LASTOCC([subs1.id y.id x.id b.id],1) = ADIGATOR.VARINFO.COUNT;
   ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-  y = class(y,'cada');
+  y = cada(y);
 
   if ADIGATOR.RUNFLAG == 1 && ADIGATOR.FORINFO.FLAG && ~logicflag1 && ~logicflag2
     SubsasgnUnion(y,b);
@@ -867,28 +867,11 @@ if isa(index,'cada')
   elseif isfield(index.func,'logical')
     overloaded = index;
     logicflag  = 1;
-%     if any(isinf(index.func.size))
-%       if isinf(index.func.size(1))
-%         numeric = true(1,index.func.size(2));
-%       elseif isinf(index.func.size(2))
-%         numeric = true(index.func.size(1),1);
-%       end
-%       numeric(index.func.zerolocs) = false;
-%       if ~any(numeric)
-%         numeric = [];
-%         overloaded.func.name = '[]';
-%       else
-%         numeric = ':';
-%       end
     if any(isinf(index.func.size))
         numeric = ':';
         logicflag = Inf;
-%     elseif any(isinf(index.func.size))
-%       error(['A vectorized logical reference index must be of dim ',...
-%         'N by 1 or 1 by N, where N is vectorized dim']);
     elseif ~isempty(index.func.zerolocs)
       numeric = true(index.func.size);
-      %numeric(index.func.zerolocs) = false;
     else
       numeric = true(prod(overloaded.func.size),1);
     end
@@ -1006,7 +989,7 @@ function SubsasgnUnion(x,b)
 global ADIGATOR ADIGATORFORDATA
 INNERLOC  = ADIGATOR.FORINFO.INNERLOC;
 ASGNCOUNT = ADIGATORFORDATA(INNERLOC).COUNT.SUBSASGN;
-if ~isa(b,'cada'); b = class(b,'cada'); end
+if ~isa(b,'cada'); b = cada(b); end
 if isempty(ADIGATORFORDATA(INNERLOC).SUBSASGN(ASGNCOUNT).VARS)
   ADIGATORFORDATA(INNERLOC).SUBSASGN(ASGNCOUNT).VARS = cell(1,2);
 %  ADIGATORFORDATA(INNERLOC).SUBSASGN(ASGNCOUNT).VARS{1} = ...
@@ -1168,7 +1151,7 @@ if isnumeric(b)
   btemp.func.value  = b;
   btemp.func.zerolocs = [];
   b = btemp;
-  b = class(b,'cada');
+  b = cada(b);
 else
   bMrow = b.func.size(1);
   bNcol = b.func.size(2);
@@ -1475,99 +1458,7 @@ end
 ADIGATOR.VARINFO.LASTOCC([subs1.id y.id x.id b.id],1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
 if ~isa(y,'cada')
-  y = class(y,'cada');
-end
-return
-end
-
-function lRefStr = getLogicalDerivRef...
-  (logicflag1,logicflag2,s,subs1,subs2,nsubs,FMrow,FNcol,nv)
-global ADIGATOR
-NDstr   = sprintf('%1.0f',ADIGATOR.DERNUMBER);
-fid = ADIGATOR.PRINT.FID;
-indent = ADIGATOR.PRINT.INDENT;
-lRefStr = ['cada',NDstr,'tf1'];
-if logicflag1 && logicflag2 && ~isinf(FMrow) && ~isinf(FNcol)
-  % Both Logical Unknowns - need to convert them to a single
-  % reference.
-  dim1 = numel(s.subs{1});
-  dim2 = numel(s.subs{2});
-  refind = 1:dim1*dim2;
-  refind = reshape(refind,dim1,dim2);
-  refind = refind(s.subs{1},s.subs{2});
-  [refind1, refind2] = ind2sub(refind(:),dim1,dim2);
-  refind1str = cadaindprint(refind1);
-  refind2str = cadaindprint(refind2);
-  fprintf(fid,[indent,lRefStr,' = ',subs1.func.name,'(',refind1str,') & ',...
-    subs2.func.name,'(',refind2str,');\n']);
-elseif logicflag1
-  % First ref logical
-  if nnz(s.subs{1}) == nsubs
-    % Assignment locations fully defined by logical index
-    if numel(s.subs{1}) == nsubs
-      % No known zeros in logical index
-      lRefStr = subs1.func.name;
-    else
-      % Have some known zeros in logical index.
-      knownInd = cadaindprint(s.subs{1});
-      fprintf(fid,[indent,lRefStr,' = ',subs1.func.name,'(',knownInd,');\n']);
-      if isinf(FNcol)
-        % Second dimension is vectorized - do this a little differently
-        fprintf(fid,[indent,lRefStr,' = repmat(',lRefStr,'(:).'',[1 %1.0f]);\n'],nv);
-      end
-    end
-  elseif length(s.subs) == 1 && strcmp(s.subs{1},':')
-    lRefStr = subs1.func.name;
-  else
-    % Second assignment index is vector
-    if islogical(s.subs{2})
-      dim = nnz(s.subs{2});
-    elseif isnumeric(s.subs{2})
-      dim = numel(s.subs{2});
-    else
-      dim = FNcol;
-    end
-    if nnz(s.subs{1}) < numel(s.subs{1})
-      knownInd = cadaindprint(s.subs{1});
-      fprintf(fid,[indent,lRefStr,' = ',subs1.func.name,'(',knownInd,');\n']);
-      fprintf(fid,[indent,lRefStr,' = repmat(',lRefStr,',[1 %1.0f]);\n'],dim);
-    else
-      fprintf(fid,[indent,lRefStr,' = repmat(',subs1.func.name,'(:),[1 %1.0f]);\n'],dim);
-    end
-  end
-else
-  % Second ref logical
-  if nnz(s.subs{2}) == nsubs
-    % Assignment locations fully defined by logical index
-    if numel(s.subs{2}) == nsubs
-      % No known zeros in logical index
-      lRefStr = subs2.func.name;
-    else
-      % Have some known zeros in logical index.
-      knownInd = cadaindprint(s.subs{2});
-      fprintf(fid,[indent,lRefStr,' = ',subs2.func.name,'(',knownInd,');\n']);
-      if isinf(FMrow)
-        % First Dimension is vectorized
-        fprintf(fid,[indent,lRefStr,' = repmat(',lRefStr,'(:).'',[1 %1.0f]);\n'],nv);
-      end
-    end
-  else
-    % First assignment index is vector
-    if islogical(s.subs{1})
-      dim = nnz(s.subs{1});
-    elseif isnumeric(s.subs{1})
-      dim = numel(s.subs{1});
-    else
-      dim = FMrow;
-    end
-    if nnz(s.subs{2}) < numel(s.subs{2})
-      knownInd = cadaindprint(s.subs{2});
-      fprintf(fid,[indent,lRefStr,' = ',subs2.func.name,'(',knownInd,');\n']);
-      fprintf(fid,[indent,lRefStr,' = repmat(',lRefStr,'(:).'',[%1.0f 1]);\n'],dim);
-    else
-      fprintf(fid,[indent,lRefStr,' = repmat(',subs2.func.name,'(:).'',[%1.0f 1]);\n'],dim);
-    end
-  end
+  y = cada(y);
 end
 return
 end

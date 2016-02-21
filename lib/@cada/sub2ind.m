@@ -27,7 +27,7 @@ if PFLAG
 end
 ADIGATOR.VARINFO.LASTOCC(K.id,1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-K = class(K,'cada');
+K = cada(K);
 end
 function [num,str] = parseInput(x)
 global ADIGATOR

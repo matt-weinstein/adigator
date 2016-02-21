@@ -34,28 +34,7 @@ for Vcount = 1:NUMvars
 end
 varargout = cell(NUMvars,1);
 
-if ADIGATOR.FILE.CALLFLAG
-  % Function was called
-  PreOpCount = adigatorFunctionCalled(Variables,VarStrings,SubsFlags);
-  if ~PreOpCount
-    % adigatorFunctionCalled took care of everything.
-    ADIGATOR.PREOPCOUNT = ADIGATOR.VARINFO.COUNT;
-    ADIGATOR.FILE.CALLFLAG = 0;
-    varargout = Variables;
-    if ADIGATOR.PRINT.FLAG
-      if ADIGATOR.DERNUMBER == 1
-        fprintf(ADIGATOR.PRINT.FID,[ADIGATOR.PRINT.INDENT,'%%User Line: ',...
-          FunString,'\n\n']);
-      else
-        fprintf(ADIGATOR.PRINT.FID,[ADIGATOR.PRINT.INDENT,'%% Deriv %1.0d Line: ',...
-          FunString,'\n'],ADIGATOR.DERNUMBER-1);
-      end
-    end
-    return
-  end
-  % Only way this wont fire as a return is that operations were done after
-  % the function call. Ex. y = myfunc(x)*a;
-end
+
 if ~ADIGATOR.RUNFLAG
   % --------------------------------------------------------------------- %
   %                            Empty Run                                  %
@@ -130,7 +109,7 @@ elseif ADIGATOR.RUNFLAG == 1
       derflag = cadaCheckForDerivs(x);
       if derflag
         error(['variable ''',ADIGATOR.VARINFO.NAMES{ADIGATOR.VARINFO.NAMELOCS(x.id,1)},...
-          ''' is either an auxillory or global variable which was ',...
+          ''' is either an auxiliary or global variable which was ',...
           're-assigned to have derivative information - this is not allowed.']);
       end
     end
@@ -158,7 +137,7 @@ else
         if ~isempty(x.deriv(Vcount).nzlocs)
           if any(ADIGATOR.VARINFO.NAMELOCS(ADIGATOR.VARINFO.NAMELOCS(xID,1)==ADIGATOR.VARINFO.NAMELOCS(:,1),3) == -Inf)
             error(['variable ''',ADIGATOR.VARINFO.NAMES{ADIGATOR.VARINFO.NAMELOCS(x.id,1)},...
-              ''' is either an auxillory or global variable which was ',...
+              ''' is either an auxiliary or global variable which was ',...
               're-assigned to have derivative information - this is not allowed.']);
           end
           derivname = cadadername(funcname,Vcount);
@@ -184,7 +163,7 @@ else
         derflag = cadaCheckForDerivs(x);
         if derflag
           error(['variable ''',ADIGATOR.VARINFO.NAMES{ADIGATOR.VARINFO.NAMELOCS(x.id,1)},...
-            ''' is either an auxillory or global variable which was ',...
+            ''' is either an auxiliary or global variable which was ',...
             're-assigned to have derivative information - this is not allowed.']);
         end
       end
@@ -209,7 +188,6 @@ else
   end
 end
 ADIGATOR.PREOPCOUNT = ADIGATOR.VARINFO.COUNT;
-ADIGATOR.FILE.CALLFLAG = 0;
 ADIGATOR.SUBSINDEXFLAG = 0;
 return
 end

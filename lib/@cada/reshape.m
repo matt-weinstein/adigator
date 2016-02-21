@@ -148,7 +148,7 @@ if PFLAG
 end
 ADIGATOR.VARINFO.LASTOCC([y.id x.id],1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT                  = ADIGATOR.VARINFO.COUNT+1;
-y = class(y,'cada');
+y = cada(y);
 if ADIGATOR.FORINFO.FLAG
   AssignForReshapeData(y,x);
 end
@@ -181,7 +181,7 @@ else
 end
 
 % Variable OverMapping
-if ~isa(x,'cada'); x = class(x,'cada'); end
+if ~isa(x,'cada'); x = cada(x); end
 if isempty(ADIGATORFORDATA(INNERLOC).RESHAPE(Rcount).VARS)
   % First Call
   ADIGATORFORDATA(INNERLOC).RESHAPE(Rcount).VARS{1} = y;
@@ -371,7 +371,7 @@ fprintf(fid,[indent,funcstr,'(1:size(',TF1,',1),1:size(',TF1,',2)) = ',TF1,';\n'
 ADIGATOR.VARINFO.LASTOCC([y.id x.id],1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
 if ~isa(y,'cada')
-  y = class(y,'cada');
+  y = cada(y);
 end
 return
 end

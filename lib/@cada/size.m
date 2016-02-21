@@ -47,7 +47,7 @@ if nargout == 1 && nargin == 1
     
     ADIGATOR.VARINFO.LASTOCC([x.id y.id],1) = ADIGATOR.VARINFO.COUNT;
     ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-    y = class(y,'cada');
+    y = cada(y);
     if ADIGATOR.FORINFO.FLAG
       AssignForSizes(y.func.value);
     end
@@ -113,7 +113,7 @@ elseif nargin == 2 && (nargout == 1 || nargout == 0)
     end
   end
   ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-  varargout{1} = class(y,'cada');
+  varargout{1} = cada(y);
   if ADIGATOR.FORINFO.FLAG
     AssignForSizes(y.func.value);
   end
@@ -169,7 +169,7 @@ elseif nargin == 1 && (nargout == 2 || nargout == 0)
     end
     ADIGATOR.VARINFO.LASTOCC(y2.id,1) = ...
       ADIGATOR.VARINFO.COUNT;
-    varargout{2} = class(y2,'cada');
+    varargout{2} = cada(y2);
   else
     y1.func.size = [1 2];
     y1.func.value = x.func.size;
@@ -178,7 +178,7 @@ elseif nargin == 1 && (nargout == 2 || nargout == 0)
     ADIGATOR.VARINFO.COUNT;
   
   ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-  varargout{1} = class(y1,'cada');
+  varargout{1} = cada(y1);
   if ADIGATOR.FORINFO.FLAG
     AssignForSizes(x.func.size);
   end
@@ -284,7 +284,7 @@ if nargin == 2
   ADIGATOR.VARINFO.LASTOCC(y.id,1) =...
     ADIGATOR.VARINFO.COUNT;
   ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-  y = class(y,'cada');
+  y = cada(y);
 elseif nargout == 2
   % Two Outputs, both dimensions
   y.id = ADIGATOR.VARINFO.COUNT;
@@ -320,8 +320,8 @@ elseif nargout == 2
   
   ADIGATOR.VARINFO.LASTOCC([y.id y1.id],1) = ADIGATOR.VARINFO.COUNT;
   ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-  y = class(y,'cada');
-  varargout{1} = class(y1,'cada');
+  y = cada(y);
+  varargout{1} = cada(y1);
 elseif nargout == 1
   % One Output, both dimensions
   y.id = ADIGATOR.VARINFO.COUNT;
@@ -346,7 +346,7 @@ elseif nargout == 1
   ADIGATOR.VARINFO.LASTOCC(y.id,1) =...
     ADIGATOR.VARINFO.COUNT;
   ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-  y = class(y,'cada');
+  y = cada(y);
 else
   error('??? too many outputs')
 end

@@ -94,7 +94,7 @@ end
 % ------------------------Build Derivative Properties----------------------
 z.deriv = struct('name',cell(NUMvod,1),'nzlocs',cell(NUMvod,1));
 ADIGATOR.VARINFO.LASTOCC(ADIGATOR.VARINFO.COUNT,1) = ADIGATOR.VARINFO.COUNT;
-z = class(z,'cada');
+z = cada(z);
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
 else
   % Being called from within adigatorFunctionInitialize

@@ -45,19 +45,6 @@ if ADIGATOR.OPTIONS.PREALLOCATE
 end
 PreOpCount = ADIGATOR.PREOPCOUNT;
 
-if ADIGATOR.FILE.CALLFLAG
-  % Function was called
-  PreOpCount = adigatorFunctionCalled(Variables,VarStrings,SubsFlags);
-  if ~PreOpCount
-    % adigatorFunctionCalled took care of everything.
-    ADIGATOR.PREOPCOUNT    = ADIGATOR.VARINFO.COUNT;
-    ADIGATOR.FILE.CALLFLAG = 0;
-    varargout = Variables;
-    return
-  end
-  % Only way this wont fire as a return is that operations were done after
-  % the function call. Ex. y = myfunc(x)*a;
-end
 if ~ADIGATOR.RUNFLAG
   % --------------------------------------------------------------------- %
   %                            Empty Run                                  %
@@ -221,10 +208,6 @@ else
       varargout{Vcount} = x;
     end
     fprintf(fid,[indent,'global ',cell2mat(VarStrings),'\n']);
-  elseif ADIGATOR.FILE.CALLFLAG
-    % A function was called - Everything will be worked out in
-    % FunctionCatcher file.
-    varargout = Variables;
   elseif NUMvars == 1
     % Single Variable Assignment - Either Numeric or Structure/Cell
     x = Variables{1};
@@ -334,7 +317,6 @@ else
   end
 end
 ADIGATOR.PREOPCOUNT    = ADIGATOR.VARINFO.COUNT;
-ADIGATOR.FILE.CALLFLAG = 0;
 ADIGATOR.SUBSINDEXFLAG = 0;
 return
 end

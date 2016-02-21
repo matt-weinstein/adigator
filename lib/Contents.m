@@ -5,10 +5,10 @@
 %
 % ----------------------------------------------------------------------- %
 % CLASSES:
-% @cada                         - primary overloaded class, all doubles of
+% cada                          - primary overloaded class, all doubles of
 %                                 original program replaced by objects of
 %                                 cada class in intermediate program
-% @cadastruct                   - all cells/structures of original program
+% cadastruct                    - all cells/structures of original program
 %                                 replaced by objects of cadastruct class
 %                                 in intermediate program, cadastruct
 %                                 objects contain cell/structure arrays
@@ -30,10 +30,6 @@
 %                                 intermediate program
 % adigatorForIterEnd.m          - called at end of each loop iteration
 % adigatorForIterStart.m        - called at start of each loop iteration
-% adigatorFunctionCalled.m      - called immediately after a
-%                                 adigatortempfunc# intermediate function
-%                                 is called from within another
-%                                 adigatortempfunc
 % adigatorFunctionEnd.m         - called at end of each adigatortempfunc#
 % adigatorFunctionInitialize.m  - called at start of each adigatortempfunc#
 % adigatorGenInterp2pp.m        - generates coefficients of 2D
@@ -63,7 +59,7 @@
 % adigatorVarAnalyzer.m         - analyzes variables after they have been
 %                                 assigned in intermediate program 
 %                                 (non-overloaded version)
-% cadadername.m                 - get derivative variable name for printing
-% cadafuncname.m                - get function variable name for printing
-% cadaindprint.m                - store indices/generate variable name
-% cadamatprint.m                - store data/generate variable name
+% ----------------------------------------------------------------------- %
+% DIRECTORIES:
+% cadaUtils                     - common utility functions called by
+%                                 cada/cadastruct routines

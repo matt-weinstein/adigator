@@ -468,7 +468,7 @@ else
   end
   
   xnew.arrayflag = 1;
-  x = class(xnew,'cadastruct');
+  x = cadastruct(xnew);
   if ADIGATOR.FORINFO.FLAG && ADIGATOR.RUNFLAG == 1 && ...
       (cadaflag || refasgnflag) && ~ADIGATOR.EMPTYFLAG
     if isstruct(yprior) || iscell(yprior)
@@ -483,7 +483,7 @@ else
 
   if ADIGATOR.RUNFLAG && ~ADIGATOR.EMPTYFLAG && isinf(ADIGATOR.VARINFO.NAMELOCS(ADIGATOR.VARINFO.COUNT,3)) && dbflag
     error(['variable ''',x.name,...
-      ''' is either an auxillory or global variable which was ',...
+      ''' is either an auxiliary or global variable which was ',...
       're-assigned to have derivative information - this is not allowed.']);
   end
   ADIGATOR.VARINFO.LASTOCC([xid,xoldid],1) = xid;

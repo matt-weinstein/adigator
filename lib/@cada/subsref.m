@@ -67,7 +67,7 @@ for scount = 1:ssize;
       % ------------------Build Function Properties---------------------- %
       y.id = ADIGATOR.VARINFO.COUNT;
       
-      if isinf(xMrow) 
+      if isinf(xMrow)
         xvec=1; xnvec=2;
         ytemp = 1:xNcol;
         if length(s.subs)==2 && isequal(s.subs{1},':')
@@ -85,7 +85,7 @@ for scount = 1:ssize;
         else
           error('Invalid vectorized subsref')
         end
-      elseif isinf(xNcol); 
+      elseif isinf(xNcol);
         xvec=2; xnvec=1;
         ytemp = (1:xMrow).';
         if length(s.subs)==2 && isequal(s.subs{2},':')
@@ -120,7 +120,7 @@ for scount = 1:ssize;
       if ADIGATOR.FORINFO.FLAG && ADIGATOR.RUNFLAG == 1
         AssgnForRefInds(isubs,s.subs,logicflag1|logicflag2);
       end
-
+      
       % Function Numerics/Sparsity
       if ~isempty(x.func.value) && ~logicflag1 && ~logicflag2
         if xvec
@@ -183,7 +183,7 @@ for scount = 1:ssize;
             dx = sparse(x.deriv(Vcount).nzlocs(:,1),x.deriv(Vcount).nzlocs(:,2),(1:nzx)',...
               xMrow*xNcol,ADIGATOR.VAROFDIFF(Vcount).usize);
           end
-
+          
           [yrows,ycols,yind] = find(dx(isubs,:));
           if size(yrows,2) > 1
             yrows = yrows';
@@ -222,14 +222,14 @@ for scount = 1:ssize;
           fprintf(fid,[indent,funcstr,' = ',x.func.name,'(',subs1.func.name,',',subs2.func.name,');\n']);
         end
       end
-
+      
       % ---------------- Set Last Occurence and Var Count --------------- %
       if ~isempty(subs2)
         ADIGATOR.VARINFO.LASTOCC(subs2.id,1) = ADIGATOR.VARINFO.COUNT;
       end
       ADIGATOR.VARINFO.LASTOCC([subs1.id x.id y.id],1) = ADIGATOR.VARINFO.COUNT;
       ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-      y = class(y,'cada');
+      y = cada(y);
       if ADIGATOR.RUNFLAG == 1 && ADIGATOR.FORINFO.FLAG && ~logicflag1 && ~logicflag2
         SubsrefUnion(x,y);
       end
@@ -273,19 +273,6 @@ if isa(index,'cada')
   elseif isfield(index.func,'logical')
     overloaded = index;
     logicflag  = 1;
-%     if any(isinf(index.func.size))
-%       if isinf(index.func.size(1))
-%         numeric = true(1,index.func.size(2));
-%       elseif isinf(index.func.size(2))
-%         numeric = true(index.func.size(1),1);
-%       end
-%       numeric(index.func.zerolocs) = false;
-%       if ~any(numeric)
-%         numeric = [];
-%       else
-%         numeric = ':';
-%         overloaded.func.name = ':';
-%       end
     if (isinf(index.func.size(1)) && index.func.size(2) == 1) || ...
         (isinf(index.func.size(2)) && index.func.size(1) == 1)
       if isequal(index.func.value,false)
@@ -296,13 +283,10 @@ if isa(index,'cada')
         overloaded.func.name = ':';
       end
     elseif any(isinf(index.func.size))
-      %error(['A vectorized logical reference index must be of dim ',...
-      %  'N by 1 or 1 by N, where N is vectorized dim']);
       numeric = ':';
       overloaded.func.name = ':';
     elseif ~isempty(index.func.zerolocs)
       numeric = true(index.func.size);
-      %numeric(index.func.zerolocs) = false;
       if ADIGATOR.PRINT.FLAG
         overloaded.func.name = cadaindprint(numeric);
       end
@@ -440,7 +424,7 @@ else
   end
 end
 ysize = y.func.size;
-if any(ysize == 0) 
+if any(ysize == 0)
   ysize(ysize == 0) = -1;
 end
 
@@ -465,7 +449,7 @@ PFLAG     = ADIGATOR.PRINT.FLAG;
 indent    = ADIGATOR.PRINT.INDENT;
 NDstr     = sprintf('%1.0f',ADIGATOR.DERNUMBER);
 if size(ADIGATORFORDATA(INNERLOC).SUBSREF(REFCOUNT).FLAGS,2) == 1
-  y = []; returnflag = 0; 
+  y = []; returnflag = 0;
   return
 else
   returnflag = 1;
@@ -633,7 +617,7 @@ if PFLAG == 1
     % we just did.
     ADIGATORFORDATA(INNERLOC).SUBSREF(REFCOUNT).FLAGS(1) = 2;
   end
-
+  
   RowIndName = ADIGATORFORDATA(INNERLOC).SUBSREF(REFCOUNT).SIZES{2,1};
   ColIndName = ADIGATORFORDATA(INNERLOC).SUBSREF(REFCOUNT).SIZES{3,1};
   if ~isempty(RowIndName)
@@ -661,7 +645,7 @@ if PFLAG == 1
       ColIndName = [ColIndName,'(',CountName,')'];
     end
     tempfuncstr  = ['cada',NDstr,'tempf1'];
-
+    
     if ~isempty(RowIndName) && ~isempty(ColIndName)
       % Rows and Columns Changing Size
       if isempty(subs2)
@@ -778,7 +762,7 @@ end
 ADIGATOR.VARINFO.LASTOCC([subs1.id x.id y.id],1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
 if ~isa(y,'cada')
-  y = class(y,'cada');
+  y = cada(y);
 end
 
 return

@@ -20,7 +20,7 @@ function funcs = adigatorGenFiles4Fminunc(setup)
 %
 % --------------------------- Input Structure --------------------------- %
 %
-% setup is should be a structure with the following fields:
+% setup should be a structure with the following fields:
 %
 % setup.order:      derivative order - 1 generates objective gradient, 2
 %                   generates objective hessian

@@ -34,7 +34,7 @@ function funcs = adigatorGenFiles4Ipopt(setup)
 %
 % --------------------------- Input Structure --------------------------- %
 %
-% setup is should be a structure with the following fields:
+% setup should be a structure with the following fields:
 %
 % setup.order:      derivative order - 1 generates objective gradient and
 %                   (if constrained) constraint Jacobian, 2 also generates

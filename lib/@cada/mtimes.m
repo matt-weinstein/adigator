@@ -55,7 +55,7 @@ elseif isa(x,'cada')
   end
   ytemp.deriv = struct('name',cell(NUMvod,1),'nzlocs',cell(NUMvod,1));
   y = ytemp;
-  y = class(y,'cada');
+  y = cada(y);
 else
   % x is numeric input
   yMrow = y.func.size(1); yNcol = y.func.size(2);
@@ -76,7 +76,7 @@ else
   end
   xtemp.deriv = struct('name',cell(NUMvod,1),'nzlocs',cell(NUMvod,1));
   x = xtemp;
-  x = class(x,'cada');
+  x = cada(x);
 end
 % ----------------------------Function Sizing------------------------------
 sizechangeflag = 0;
@@ -242,5 +242,5 @@ if PFLAG == 1
 end
 
 ADIGATOR.VARINFO.LASTOCC([x.id y.id z.id],1) = ADIGATOR.VARINFO.COUNT;
-z = class(z,'cada');
+z = cada(z);
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;

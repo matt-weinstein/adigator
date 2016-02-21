@@ -9,13 +9,17 @@
 %
 % ----------------------------------------------------------------------- %
 % FILES:
-% ADiGatorUserGuide.pdf - user's guide
-% COPYING.txt           - copyright information
-% README.txt            - readme
-%
+% adigator.m                 - main adigator function
+% adigatorCreateAuxInput.m   - function for identifying auxiliary numerical
+%                              inputs
+% adigatorCreateDerivInput.m - function for identifying derivative inputs
+% adigatorOptions.m          - function for setting adigator options
+%                              structure
+% startupadigator.m          - path setup for adigator toolbox
 % ----------------------------------------------------------------------- %
 % DIRECTORIES:
+% doc      - user's guide and licensing information
 % examples - various example problems
 % lib      - ADiGator library of source transformation routines, overloaded
-%            classes, etc.
+%            classes, etc
 % util     - user utility functions to invoke source transformation

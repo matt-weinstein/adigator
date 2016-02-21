@@ -172,6 +172,6 @@ for Vcount = 1:NUMvod
     end
   end
 end
-z = class(z,'cada');
+z = cada(z);
 return
 end

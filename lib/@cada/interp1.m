@@ -112,7 +112,7 @@ if ppflag
   yi.deriv = struct('name',cell(NUMvod,1),'nzlocs',cell(NUMvod,1));
   ADIGATOR.VARINFO.LASTOCC([x.id y.id yi.id],1) = ADIGATOR.VARINFO.COUNT;
   ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-  yi = class(yi,'cada');
+  yi = cada(yi);
   return
 elseif PFLAG
   fpp = interp1(x.func.value,y.func.value,method,'pp');
@@ -242,7 +242,7 @@ end
 
 ADIGATOR.VARINFO.LASTOCC([x.id y.id yi.id xi.id],1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-yi = class(yi,'cada');
+yi = cada(yi);
 return
 end
 

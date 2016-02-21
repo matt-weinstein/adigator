@@ -75,7 +75,7 @@ if ~ADIGATOR.RUNFLAG
   if CallCount && FunctionInfo(FunID).DERNUMBER > 1 && ...
       strcmp(FunctionInfo(FunID).PreviousDerivData.Derivative...
       (FunctionInfo(FunID).DERNUMBER-1).FunType,'Main')
-    % Take care of Auxillory Inputs
+    % Take care of Auxiliary Inputs
     PrevAux = FunctionInfo(FunID).PreviousDerivData.AuxInputs;
     if FunID > 1
       PrevAuxFlags = FunctionInfo(FunID).PreviousDerivData.AuxInputFlags;
@@ -413,36 +413,20 @@ else
   end
   ADiGatorstruc.Derivative(ADIGATOR.DERNUMBER).FunType = 'Sub';
 end
-ADiGatorstruc.Derivative(ADIGATOR.DERNUMBER,1).Variables = ADIGATOR.VAROFDIFF;
+ADiGatorstruc.Derivative(ADIGATOR.DERNUMBER).Variables = ADIGATOR.VAROFDIFF;
 if FunID == 1
   % Build some input checks for derivatives
   AuxInputs     = FunctionInfo(FunID).Input.StrucNames;
   CurrentInputs = FunctionInfo(FunID).Input.StrucVars;
   InputChecks   = struct('name',[],'deriv',[]);
-  I2count = 0;
   for Icount = 1:length(FunctionInfo(FunID).Input.StrucVars)
     curInput = CurrentInputs{Icount};
     flag = cadaCheckForDerivs(curInput);
     if flag
-      %       I2count = I2count+1;
-      %       funcstr = cadafuncname(Icount);
-      %       InputChecks(I2count,1).name  = funcstr;
-      %       InputChecks(I2count,1).deriv = struct('vodname',[],'name',[],'nzlocs',[]);
-      %       D2count = 0;
-      %       curDeriv = curInput.deriv;
-      %       for Dcount = 1:ADIGATOR.NVAROFDIFF
-      %         if ~isempty(curDeriv(Dcount).nzlocs)
-      %           D2count = D2count+1;
-      %           InputChecks(I2count).deriv(D2count,1).vodname = ADIGATOR.VAROFDIFF(Dcount).name;
-      %           derivstr = cadadername(funcstr,Dcount,Icount);
-      %           InputChecks(I2count).deriv(D2count,1).name = derivstr;
-      %           InputChecks(I2count).deriv(D2count,1).nzlocs = curDeriv(Dcount).nzlocs;
-      %         end
-      %       end
       AuxInputs{Icount} = [];
     end
   end
-  ADiGatorstruc.Derivative(ADIGATOR.DERNUMBER,1).InputChecks = InputChecks;
+  ADiGatorstruc.Derivative(ADIGATOR.DERNUMBER).InputChecks = InputChecks;
   if ADIGATOR.DERNUMBER > 1
     OldAuxInputs = FunctionInfo(1).PreviousDerivData.AuxInputs;
     for Acount = 1:length(AuxInputs)
