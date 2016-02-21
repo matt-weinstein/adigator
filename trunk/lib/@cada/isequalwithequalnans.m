@@ -91,5 +91,5 @@ end
 z.deriv = struct('name',cell(NUMvod,1),'nzlocs',cell(NUMvod,1));
 
 ADIGATOR.VARINFO.LASTOCC([x.id y.id z.id],1) = ADIGATOR.VARINFO.COUNT;
-z = class(z,'cada');
+z = cada(z);
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;

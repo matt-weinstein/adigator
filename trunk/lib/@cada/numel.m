@@ -45,7 +45,7 @@ end
 ADIGATOR.VARINFO.LASTOCC([y.id x.id],1) = ADIGATOR.VARINFO.COUNT;
 
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-y = class(y,'cada');
+y = cada(y);
 if ADIGATOR.RUNFLAG == 1 && ADIGATOR.FORINFO.FLAG
   AssignForSizes(y.func.value);
 end
@@ -114,6 +114,6 @@ end
 
 ADIGATOR.VARINFO.LASTOCC([y.id x.id],1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-y = class(y,'cada');
+y = cada(y);
 return
 end

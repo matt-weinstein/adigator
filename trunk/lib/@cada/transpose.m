@@ -79,7 +79,7 @@ if PFLAG == 1
 end
 ADIGATOR.VARINFO.LASTOCC([y.id x.id],1)  = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT                   = ADIGATOR.VARINFO.COUNT+1;
-y = class(y,'cada');
+y = cada(y);
 if ADIGATOR.FORINFO.FLAG
   AssignForTransposeData(y,x);
 end
@@ -112,7 +112,7 @@ else
 end
 
 % Variable OverMapping
-if ~isa(x,'cada'); x = class(x,'cada'); end
+if ~isa(x,'cada'); x = cada(x); end
 if isempty(ADIGATORFORDATA(INNERLOC).TRANSPOSE(Tcount).VARS)
   % First Call
   ADIGATORFORDATA(INNERLOC).TRANSPOSE(Tcount).VARS{1} = y;
@@ -256,7 +256,7 @@ fprintf(fid,[indent,yStr,' = ',TF1,';\n']);
 ADIGATOR.VARINFO.LASTOCC([x.id y.id],1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
 if ~isa(y,'cada')
-  y = class(y,'cada');
+  y = cada(y);
 end
 return
 end

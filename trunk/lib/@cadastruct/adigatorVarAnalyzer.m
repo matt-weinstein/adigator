@@ -14,27 +14,6 @@ PreOpCount = ADIGATOR.PREOPCOUNT;
 fid     =   ADIGATOR.PRINT.FID;
 PFLAG   =   ADIGATOR.PRINT.FLAG;
 indent  =   ADIGATOR.PRINT.INDENT;
-if ADIGATOR.FILE.CALLFLAG
-  % Function was called
-  PreOpCount = adigatorFunctionCalled(Variables,VarStrings,SubsFlags);
-  if ~PreOpCount
-    % adigatorFunctionCalled took care of everything.
-    ADIGATOR.PREOPCOUNT = ADIGATOR.VARINFO.COUNT;
-    ADIGATOR.FILE.CALLFLAG = 0;
-    if ADIGATOR.PRINT.FLAG
-      if ADIGATOR.DERNUMBER == 1
-        fprintf(ADIGATOR.PRINT.FID,[ADIGATOR.PRINT.INDENT,'%%User Line: ',...
-          FunString,'\n\n']);
-      else
-        fprintf(ADIGATOR.PRINT.FID,[ADIGATOR.PRINT.INDENT,'%% Deriv %1.0d Line: ',...
-          FunString,'\n'],ADIGATOR.DERNUMBER-1);
-      end
-    end
-    return
-  end
-  % Only way this wont fire as a return is that operations were done after
-  % the function call. Ex. y = myfunc(x)*a;
-end
 
 if x.arrayflag
   if ~ADIGATOR.RUNFLAG
@@ -105,7 +84,7 @@ if x.arrayflag
         derflag = cadaCheckForDerivs(x);
         if derflag
           error(['variable ''',ADIGATOR.VARINFO.NAMES{ADIGATOR.VARINFO.NAMELOCS(x.id,1)},...
-            ''' is either an auxillory or global variable which was ',...
+            ''' is either an auxiliary or global variable which was ',...
             're-assigned to have derivative information - this is not allowed.']);
         end
       end
@@ -160,7 +139,6 @@ if ADIGATOR.RUNFLAG == 2
   end
 end
 ADIGATOR.PREOPCOUNT = ADIGATOR.VARINFO.COUNT;
-ADIGATOR.FILE.CALLFLAG = 0;
 ADIGATOR.SUBSINDEXFLAG = 0;
 return
 end

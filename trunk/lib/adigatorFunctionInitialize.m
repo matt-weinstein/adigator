@@ -82,7 +82,6 @@ InOps     = InOps(1:NumInVars);
 % with. InVarStrs are their string names (with structure and cell reference
 % extensions).
 if PDflag && ~ADIGATOR.RUNFLAG
-  %ADIGATOR.VARINFO.NAMELOCS(ADIGATOR.VARINFO.LASTOCC >= min(InOps),2) = -FunID;
   ADIGATOR.VARINFO.NAMELOCS(InOps,2) = -FunID;
   PrevAux = FunctionInfo(FunID).PreviousDerivData.AuxInputs;
   AuxInputFlags = zeros(size(PrevAux));
@@ -96,39 +95,12 @@ if PDflag && ~ADIGATOR.RUNFLAG
     end
     % remove the -FunID in column 2 for aux inputs
     ADIGATOR.VARINFO.NAMELOCS(InAuxOp,2) = 0;
-    %ADIGATOR.VARINFO.NAMELOCS(ADIGATOR.VARINFO.LASTOCC == InAuxOp,2) = 0;
   end
   FunctionInfo(FunID).PreviousDerivData.AuxInputFlags = AuxInputFlags;
 end
 if FunctionInfo(FunID).DERNUMBER > 1 && ...
     strcmp(FunctionInfo(FunID).PreviousDerivData.Derivative...
     (FunctionInfo(FunID).DERNUMBER-1).FunType,'Main')
-  %% ~~~~~~~~~~~~~~~~ CHECK INPUTS IF 2ND or HIGHER DERIV ~~~~~~~~~~~~~~ %%
-%   if ~ADIGATOR.RUNFLAG
-%     % Make naming scheme of inputs as if calling function was 2nd deriv
-%   else
-%     InputChecks = FunctionInfo(FunID).PreviousDerivData...
-%       .Derivative(FunctionInfo(FunID).DERNUMBER-1).InputChecks;
-%     for Icount = 1:length(InputChecks)
-%       derivChecks = InputChecks(Icount).deriv;
-%       for Dcount = 1:length(derivChecks)
-%         dername = derivChecks(Dcount).vodname;
-%         for D2count = 1:ADIGATOR.NVAROFDIFF
-%           if strcmp(ADIGATOR.VAROFDIFF(D2count).name,dername)
-%             % Taking another derivative wrt this variable - check that nzlocs
-%             % are defined as they were previously.
-%             inputloc = strcmp(InputChecks(Icount).name,InVarStrs);
-%             oldnzlocs = derivChecks(Dcount).nzlocs;
-%             newnzlocs = InVars{inputloc}.deriv(D2count).nzlocs;
-%             if ~isequal(oldnzlocs,newnzlocs)
-%               error(['input ''',InputChecks(Icount).name,''' should have non-zero ',...
-%                 'derivatives wrt ''',dername,''' in locations defined by ',mat2str(oldnzlocs)]);
-%             end
-%           end
-%         end
-%       end
-%     end
-%   end
 end
 
 if ~ADIGATOR.RUNFLAG
@@ -1042,8 +1014,6 @@ else
 end
 % Print Data References
 for Dcount = 1:ADIGATOR.DERNUMBER
-  %fprintf(fid,['Gator%1.0dIndices = ',MatFileName,'.',FileName,...
-  %  '.Gator%1.0dIndices;\n'],Dcount,Dcount);
   fprintf(fid,['Gator%1.0dData = ',MatFileName,'.',FileName,...
     '.Gator%1.0dData;\n'],Dcount,Dcount);
 end
@@ -1070,16 +1040,6 @@ NumPrevDerivs     = length(PreviousDerivData.Derivative);
 if ~isfield(PreviousDerivData,'OverLoadedData')
   TempDeriv = struct('name',cell(NUMvod,1),'nzlocs',cell(NUMvod,1));
   for Dcount = 1:NumPrevDerivs
-%     DIndexStr = sprintf('Gator%1.0dIndices',Dcount);
-%     iIndexFields = fieldnames(PreviousDerivData.(DIndexStr));
-%     for Icount = 1:length(iIndexFields)
-%       IndexStr = iIndexFields{Icount};
-%       TempFunc.name = [DIndexStr,'.',IndexStr];
-%       TempFunc.value = PreviousDerivData.(DIndexStr).(IndexStr);
-%       TempFunc.size = size(TempFunc.value);
-%       OverLoadedData.(DIndexStr).(IndexStr) = cada([],TempFunc,TempDeriv);
-%     end
-    
     DDataStr = sprintf('Gator%1.0dData',Dcount);
     IDataFields = fieldnames(PreviousDerivData.(DDataStr));
     for Icount = 1:length(IDataFields)

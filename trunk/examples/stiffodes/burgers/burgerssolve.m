@@ -2,7 +2,7 @@ function sol = burgerssolve(n,tspan)
 % solves the burgers ode.. ADiGator differentiates the function with the
 % loops removed, burgersfun_noloop as it is more efficient for AD
 % inputs: n - problem dimension (default of 2.^5)
-%         tspan - time spane (default is [0 2])
+%         tspan - time span (default is [0 2])
 % outputs: sol - solution
 if nargin == 0
   n = 2.^5;
@@ -21,7 +21,7 @@ y0 = [ainit xinit];
 
 % Generate ADiGator Jacobian files using adigatorGenJacFile
 ay = adigatorCreateDerivInput(size(y0),'y');
-output = adigatorGenJacFile('burgersfun_noloop',{1,ay,N},adigatorOptions('overwrite',1));
+output = adigatorGenJacFile('burgersfun',{1,ay,N},adigatorOptions('overwrite',1));
 Jpat = output.JacobianStructure;
 
 % solve ODE

@@ -253,6 +253,6 @@ end
 
 ADIGATOR.VARINFO.LASTOCC([xi.id yi.id],1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-yi = class(yi,'cada');
+yi = cada(yi);
 return
 end

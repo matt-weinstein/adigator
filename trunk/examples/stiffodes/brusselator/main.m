@@ -8,10 +8,10 @@
 % extremely slow.
 % ----------------------- Problem Set Up -------------------------------- %
 fdflag = 1;
-N = 2^9;
-% if N > 100
-%   fdflag = 0;
-% end
+N = 2^3;
+if N > 100
+  fdflag = 0;
+end
 tspan = [0 100];
 y0 = [1+sin((2*pi/(N+1))*(1:N)); repmat(3,1,N)];
 
@@ -19,7 +19,7 @@ y0 = [1+sin((2*pi/(N+1))*(1:N)); repmat(3,1,N)];
 tic
 gt = adigatorCreateAuxInput([1 1]); % aux input for t
 gy = adigatorCreateDerivInput([2*N, 1],'y'); % deriv input for y
-%gout = adigatorGenJacFile('mybrussode',{gt,gy,N});
+gout = adigatorGenJacFile('mybrussode',{gt,gy,N});
 adigatorgentime = toc;
 
 % Get Jacobian sparsity pattern from output of adigator

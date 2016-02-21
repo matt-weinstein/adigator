@@ -6,3 +6,4 @@ function adigatorSetCellEvalFlag(flagval)
 
 global ADIGATOR
 ADIGATOR.CELLEVALFLAG = flagval;
+end

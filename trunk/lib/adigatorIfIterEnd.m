@@ -123,34 +123,7 @@ else
     DoBroRemapping(IfCount,BroCount);
   end
   if BroCount == length(ADIGATOR.IFDATA(IfCount).BROS)
-%     % Check to see if at least one of the statements ran
-%     if ADIGATOR.EMPTYFLAG
-%       IfFlag = 0;
-%       if ADIGATOR.IFDATA(IfCount).ELSEFLAG
-%         for Bcount = 1:BroCount-1
-%           if ADIGATOR.IFDATA(IfCount).BROS(Bcount).RUNFLAG
-%             IfFlag = 1; break
-%           end
-%         end
-%       else
-%         for Bcount = 1:BroCount
-%           if ADIGATOR.IFDATA(IfCount).BROS(Bcount).RUNFLAG
-%             IfFlag = 1; break
-%           end
-%         end
-%       end
-%     elseif ADIGATOR.IFDATA(IfCount).ELSEFLAG
-%       % Check to see if any of the previous cases ran
-%       IfFlag = 0;
-%       for Bcount = 1:BroCount-1
-%         if ADIGATOR.IFDATA(IfCount).BROS(Bcount).RUNFLAG
-%           IfFlag = 1; break
-%         end
-%       end
-%       ADIGATOR.PRINT.INDENT = [ADIGATOR.PRINT.INDENT,'    '];
-%     else
-%       IfFlag = 1;
-%     end
+    % Check to see if at least one of the statements ran
     if ~ADIGATOR.FORINFO.FLAG && ADIGATOR.IFDATA(IfCount).PRINTFLAG && ~ADIGATOR.IFDATA(IfCount).ELSEFLAG
       ElseRemapFlag = 1;
       fprintf(fid,[indent,'else\n']);

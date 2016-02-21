@@ -36,5 +36,4 @@ end
 if SubsFlag == 0
     ADIGATOR.VARINFO.NAMELOCS(VarID,3) = 1;
 end
-return
 end

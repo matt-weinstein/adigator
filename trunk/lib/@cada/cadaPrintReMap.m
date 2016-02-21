@@ -214,7 +214,7 @@ if ~ADIGATOR.EMPTYFLAG
     end
   end
 end
-NewVar = class(NewVar,'cada');
+NewVar = cada(NewVar);
 
 end
 

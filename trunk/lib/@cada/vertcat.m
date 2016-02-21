@@ -194,7 +194,7 @@ for Icount = 1:nargin
   x = varargin{Icount};
   ADIGATOR.VARINFO.LASTOCC(x.id,1) = ADIGATOR.VARINFO.COUNT;
 end
-y = class(y,'cada');
+y = cada(y);
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
 if ADIGATOR.FORINFO.FLAG
   AssignForVertcatData(yNcol,iMrows,y,varargin);
@@ -402,7 +402,7 @@ for Icount = 1:NUMinputs
   ADIGATOR.VARINFO.LASTOCC(x.id,1) = ADIGATOR.VARINFO.COUNT;
 end
 if ~isa(y,'cada')
-  y = class(y,'cada');
+  y = cada(y);
 end
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
 return
@@ -425,7 +425,7 @@ if nnz(x) < numel(x)
   if size(xrows,2) > 1; xrows = xrows.'; xcols = xcols.'; end
   y.func.zerolocs = [xrows,xcols];
 end
-y = class(y,'cada');
+y = cada(y);
 
 return
 end

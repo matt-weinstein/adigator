@@ -159,7 +159,7 @@ if PFLAG
 end
 ADIGATOR.VARINFO.LASTOCC([y.id x.id],1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT                  = ADIGATOR.VARINFO.COUNT+1;
-y = class(y,'cada');
+y = cada(y);
 if ADIGATOR.FORINFO.FLAG
   ForOtherData([xMrow xNcol FMrow FNcol K])
 end

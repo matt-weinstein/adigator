@@ -53,7 +53,7 @@ if nargin == 1
   end
   ADIGATOR.VARINFO.LASTOCC([y.id x.id],1) = ADIGATOR.VARINFO.COUNT;
   ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-  y = class(y,'cada');
+  y = cada(y);
   return
 elseif nargin == 3 || nargin == 5 || nargin == 6
   yrows = varargin{1};  ycols = varargin{2};  x = varargin{3};
@@ -203,7 +203,7 @@ end
 
 ADIGATOR.VARINFO.LASTOCC([y.id x.id],1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-y = class(y,'cada');
+y = cada(y);
 if ADIGATOR.FORINFO.FLAG && nargin > 1
   AssignForSparseData(y,x,isubs);
 end
@@ -233,7 +233,7 @@ end
 
 % Variable OverMapping
 if ~isa(x,'cada')
-  x = class(x,'cada');
+  x = cada(x);
 end
 
 if isempty(ADIGATORFORDATA(INNERLOC).SPARSE(SPcount).VARS)
@@ -441,7 +441,7 @@ fprintf(fid,[indent,funcstr,' = sparse(',RowStr,',',ColStr,',',xStr,...
 ADIGATOR.VARINFO.LASTOCC([y.id x.id],1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
 if ~isa(y,'cada')
-y = class(y,'cada');
+y = cada(y,'cada');
 end
 return
 end

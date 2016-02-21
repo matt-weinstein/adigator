@@ -137,7 +137,7 @@ end
 
 ADIGATOR.VARINFO.LASTOCC(y.id,1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-y = class(y,'cada');
+y = cada(y);
 if ADIGATOR.FORINFO.FLAG && ADIGATOR.RUNFLAG == 1
   ForOtherData(y);
 end
@@ -280,6 +280,6 @@ end
 
 ADIGATOR.VARINFO.LASTOCC(y.id,1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT           = ADIGATOR.VARINFO.COUNT+1;
-y = class(y,'cada');
+y = cada(y);
 return
 end

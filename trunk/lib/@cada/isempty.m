@@ -39,7 +39,7 @@ if length(CallingFile) > 12 && ~isempty(strfind(CallingFile,'adigatortempfunc'))
   
   ADIGATOR.VARINFO.LASTOCC([x.id y.id],1) = ADIGATOR.VARINFO.COUNT;
   ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-  y = class(y,'cada');
+  y = cada(y);
   
 else
   y = false;

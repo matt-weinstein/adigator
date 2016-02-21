@@ -61,7 +61,7 @@ if PFLAG && ~ADIGATOR.EMPTYFLAG
 end
 ADIGATOR.VARINFO.LASTOCC(y.id,1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT           = ADIGATOR.VARINFO.COUNT+1;
-y = class(y,'cadastruct');
+y = cadastruct(y);
 end
 
 function yi = parseinput(xi,xiStr)

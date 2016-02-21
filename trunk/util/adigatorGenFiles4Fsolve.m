@@ -20,7 +20,7 @@ function funcs = adigatorGenFiles4Fsolve(setup)
 %
 % --------------------------- Input Structure --------------------------- %
 %
-% setup is should be a structure with the following fields:
+% setup should be a structure with the following fields:
 %
 % setup.numvar:     length of the variable of differentiation (i.e. x)
 %

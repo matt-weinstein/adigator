@@ -402,39 +402,6 @@ elseif ~isempty(dyind)
       dyRsumlocs = find(dyRsum);
       coldim = length(dyRsumlocs);
 
-%       if coldim == nzy
-%         % There exists only a single element in each column of dyR - do not
-%         % need to perform matrix multiplication
-%         [dzyR_rows,dzyR_cols] = find(dzyR);
-%         % need to find two indices - one to reference off of X and one to
-%         % reference off of non-zeros of DY
-%         % columns of dzyR give columns of dyR
-%         dyRfloorIndCalc = floor((dyind(:,1)-1)./yMrow);
-%         dyRind = [dyind(:,1) - yMrow*dyRfloorIndCalc,...
-%                   yNcol*(dyind(:,2)-1)+dyRfloorIndCalc+1];
-%         
-%         if coldim < yNcol*nv
-%           % Need to reference off of dyRsum to get proper dyRef
-%           dyRsum = full(dyRsum);
-%           dyRrefind = dyRsum(dzyR_cols);
-%           xcolref   = dyRind(dyRrefind,1);
-%         else
-%           dyRindCalc = dyRind(dzyR_cols,:);
-%           dyRrefind  = dyRindCalc(:,2);
-%           xcolref    = dyRindCalc(:,1);
-%         end
-%         
-%         xrowref    = dzyR_rows;
-%         xindref    = (xcolref-1)*xMrow + xrowref;
-%         
-%         TF1 = ['cada',NDstr,'tf1'];
-%         dyRefStr = cadaindprint(dyRrefind(:));
-%         xRefStr  = cadaindprint(xindref(:));
-%         fprintf(fid,[indent,TF1,' = ',x.func.name,'(',xRefStr,');\n']);
-%         fprintf(fid,[indent,derivstr,' = ',TF1,'(:).*',y.deriv(Vcount).name,'(',dyRefStr,');\n']);
-%         return
-%         % THIS GOES SLOWER !?!?!
-%       else
       if coldim < yNcol*nv
         % dyR has some columns which are all zero - do not need to sum
         % these columns

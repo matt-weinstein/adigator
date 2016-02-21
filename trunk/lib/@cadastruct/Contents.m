@@ -7,7 +7,7 @@
 % ----------------------------------------------------------------------- %
 % FILES:
 % adigatorPrintOutputIndices.m - print output derivative indices, calls
-% overloaded cada version
+%                                overloaded cada version
 % adigatorStructAnalyzer.m     - recursively parses cells/structures
 %                                (overloaded cadastruct version)
 % adigatorVarAnalyzer.m        - analyzes variables after they have been
@@ -16,9 +16,6 @@
 % cadaCheckForDerivs.m         - check to see if any of the cada objects
 %                                belonging to the cell/structure have
 %                                derivatives
-% cadaGetStruct.m              - extracts the actual structure/cell array
-% cadaGetStructID.m            - extracts the id of the object
-% cadaIsArray.m                - returns value of .arrayflag field
 % cadaOverMap.m                - builds overmapped objects in overmapping
 %                                evaluation, stores variables when
 %                                necessary, calls cadaPrintReMap when
@@ -29,16 +26,13 @@
 %                                opposite (removing zeros) (cadastruct
 %                                overloaded version)
 % cadaUnionVars.m              - cadastruct overloaded union operator 
-% cadastruct.m                 - cadastruct instantiator/class defs
-% cadastructDecomp.m           - decompose a cadastruct object
+% cadastruct.m                 - cadastruct class definition file
 % ctranspose.m                 - overloaded ctranspose
-% display.m                    - overloaded display
 % horzcat.m                    - overloaded horzcat
 % isequal.m                    - overloaded isequal
 % length.m                     - overloaded length
 % numel.m                      - overloaded numel
 % ppval.m                      - overloaded ppval
-% private                      - overloaded priva
 % repmat.m                     - overloaded repmat
 % reshape.m                    - overloaded reshape
 % size.m                       - overloaded size
@@ -48,6 +42,9 @@
 % transpose.m                  - overloaded transpose
 % vertcat.m                    - overloaded vertcat
 % ----------------------------------------------------------------------- %
-% DIRECTORIES:
-% private                      - private library used by overloaded
-%                                procedures
+% PRIVATE DIRECTORY FILES:
+% adigatorPrintStructAsgn.m - prints out structure assignments recursively
+% cadaloopstructderivref.m  - prints loop iteration dependent derivative
+%                             variable references from within structures
+% cadaloopstructfuncref.m   - prints loop iteration dependent function
+%                             variable references from within structures
