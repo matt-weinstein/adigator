@@ -6,7 +6,7 @@ function varargout = cadamatprint(x,varargin)
 % Distributed under the GNU General Public License version 3.0
 global ADIGATOR ADIGATORDATA
 
-if numel(x) == 1 && nargin == 1
+if isnumeric(x) && numel(x) == 1 && nargin == 1
   varargout{1} = num2str(x,16);
   return
 end

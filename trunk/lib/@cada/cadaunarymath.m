@@ -46,7 +46,7 @@ for Vcount = 1:NUMvod
         if DPFLAG
           if strcmp(callerstr,'uminus')
             fprintf(fid,[indent,derivstr,' = -',x.deriv(Vcount).name,';\n']);
-          elseif strcmp(callerstr,'uplus')
+          elseif strcmp(callerstr,'uplus') || strcmp(callerstr,'full')
             fprintf(fid,[indent,derivstr,' = ',x.deriv(Vcount).name,';\n']);
           elseif strcmp(callerstr,'real')
             fprintf(fid,[indent,derivstr,' = real(',x.deriv(Vcount).name,');\n']);
