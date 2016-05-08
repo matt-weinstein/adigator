@@ -298,10 +298,12 @@ if isempty(ADIGATORFORDATA(INNERLOC).HORZCAT(Hcount).SIZES)
     % Check for numeric input
     if isnumeric(Inputs{Icount})
       TVcount = TVcount+1;
-      Inputs{Icount} = Num2Overloaded(Inputs{Icount},TVcount);
+      Inputs{Icount} = Num2Overloaded(Inputs{Icount});
+    else
+      % Check to make sure input and Overmapped inputs match
+      Inputs{Icount} = cadaPrintReMap(Inputs{Icount},iOver,Inputs{Icount}.id);
     end
-    % Check to make sure input and Overmapped inputs match
-    Inputs{Icount} = cadaPrintReMap(Inputs{Icount},iOver,Inputs{Icount}.id);
+    
   end
   OutFlag = 0; y = []; return
 else
@@ -322,10 +324,12 @@ for Icount = 1:NUMinputs
   % Check for numeric input
   if isnumeric(Inputs{Icount})
     TVcount = TVcount+1;
-    Inputs{Icount} = Num2Overloaded(Inputs{Icount},TVcount);
+    Inputs{Icount} = Num2Overloaded(Inputs{Icount});
+  else
+    % Check to make sure input and Overmapped inputs match
+    Inputs{Icount} = cadaPrintReMap(Inputs{Icount},iOver,Inputs{Icount}.id);
   end
-  % Check to make sure input and Overmapped inputs match
-  Inputs{Icount} = cadaPrintReMap(Inputs{Icount},iOver,Inputs{Icount}.id);
+  
 end
 
 y                = yOver;
