@@ -152,7 +152,7 @@ elseif isinf(FMrow) && isinf(repMrow) && xMrow == 1 && ~isinf(FNcol)
 elseif isinf(FNcol) && isinf(xNcol) && repNcol == 1 && ~isinf(FMrow)
   xNcol = 1; rvec = 0;
 elseif isinf(FNcol) && isinf(repNcol) && xNcol == 1 && ~isinf(FMrow)
-  xNcol = 1; rvec = 2;
+  repNcol = 1; rvec = 2;
 elseif ~isinf(FMrow) && ~isinf(FNcol)
   rvec = 0;
 else
