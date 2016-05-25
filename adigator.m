@@ -74,6 +74,7 @@ ADIGATOR.OPTIONS.OVERWRITE   = opts.overwrite;
 ADIGATOR.OPTIONS.KEYBOARD    = 0;
 ADIGATOR.OPTIONS.PREALLOCATE = 0;
 ADIGATOR.OPTIONS.MAXWHILEITER = opts.maxwhileiter;
+ADIGATOR.OPTIONS.COMPLEX     = opts.complex;
 
 
 %% ~~~~~~~~~~~~~~~~~~~~~~~~~ FILE KEEPING ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ %%

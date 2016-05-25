@@ -53,6 +53,7 @@ if ADIGATOR.RUNFLAG == 1
         xOut.id    = xID;
         xOut.func  = struct('name',[],'size',[0 0],'zerolocs',[],'value',[]);
         xOut.deriv = struct('name',cell(ADIGATOR.NVAROFDIFF,1),'nzlocs',cell(ADIGATOR.NVAROFDIFF,1));
+        xOut = cada(xOut);
       end
     else
       % Just Give back what came in.

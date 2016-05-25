@@ -48,8 +48,8 @@ for Vcount = 1:NUMvod
             fprintf(fid,[indent,derivstr,' = -',x.deriv(Vcount).name,';\n']);
           elseif strcmp(callerstr,'uplus') || strcmp(callerstr,'full')
             fprintf(fid,[indent,derivstr,' = ',x.deriv(Vcount).name,';\n']);
-          elseif strcmp(callerstr,'real')
-            fprintf(fid,[indent,derivstr,' = real(',x.deriv(Vcount).name,');\n']);
+          elseif any(strcmp(callerstr,{'real','conj','imag'}))
+            fprintf(fid,[indent,derivstr,' = ',callerstr,'(',x.deriv(Vcount).name,');\n']);
           else
             if xMrow*xNcol == 1 || ...
                 (xvec==2 && isequal(x.deriv(Vcount).nzlocs(:,1),(1:xNcol).'))
