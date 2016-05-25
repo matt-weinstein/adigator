@@ -240,15 +240,17 @@ global ADIGATOR ADIGATORFORDATA
 INNERLOC  = ADIGATOR.FORINFO.INNERLOC;
 Rcount    = ADIGATORFORDATA(INNERLOC).COUNT.REPMAT;
 ITERCOUNT = ADIGATORFORDATA(INNERLOC).COUNT.ITERATION;
-x.func.size(isinf(x.func.size)) = 1;
-y.func.size(isinf(y.func.size)) = 1;
+% x.func.size(isinf(x.func.size)) = 1;
+% y.func.size(isinf(y.func.size)) = 1;
 % Assign the Sizes
+tmp = [y.func.size.';x.func.size.'];
+tmp(isinf(tmp)) = 1;
 if ITERCOUNT == 1
   ADIGATORFORDATA(INNERLOC).REPMAT(Rcount).SIZES =...
-    [y.func.size.';x.func.size.'];
+    tmp;
 else
   ADIGATORFORDATA(INNERLOC).REPMAT(Rcount).SIZES(:,ITERCOUNT) = ...
-    [y.func.size.';x.func.size.'];
+    tmp;
 end
 
 % Variable OverMapping
