@@ -152,7 +152,7 @@ if ~isempty(x.func.value) && ~isempty(y.func.value)
 else
   spflag = 0;
   if ~isempty(x.func.value)
-    xtemp  = logical(x.func.value);
+    xtemp  = logical(abs(x.func.value));
     spflag = 1;
   elseif ~isempty(x.func.zerolocs)
     xtemp = true(xMrow,xNcol);
@@ -162,7 +162,7 @@ else
     xtemp = true(xMrow,xNcol);
   end
   if ~isempty(y.func.value)
-    ytemp  = logical(y.func.value);
+    ytemp  = logical(abs(y.func.value));
     spflag = 1;
   elseif ~isempty(y.func.zerolocs)
     ytemp = true(yMrow,yNcol);

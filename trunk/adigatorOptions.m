@@ -34,6 +34,10 @@ function options = adigatorOptions(varargin)
 %                  input/output for WHILE loops (default set to 10) -
 %                  increasing this will increase derivative file generation
 %                  times when using WHILE loops
+% COMPLEX:     0 - do not expect any variables to be complex, use 
+%                  non-complex forms of abs, ctranspose, dot (default)
+%              1 - expect variables to be complex, use complex forms of
+%                  ctranspose, abs, dot.
 % ------------------------------------------------------------------------
 %
 % NOTES:    The default value of the OVERWRITE option changes depending
@@ -56,6 +60,7 @@ options.comments  = 1;
 options.overwrite = 0;
 options.optoutput = 0;
 options.maxwhileiter = 10;
+options.complex   = 0;
 if nargin/2 ~= floor(nargin/2)
   error('Inputs to adigatorOptions must come in field/value pairs')
 end
@@ -65,7 +70,8 @@ for i = 1:nargin/2
   field = lower(varargin{2*(i-1)+1});
   value = varargin{2*i};
   switch field
-    case {'auxdata','echo','unroll','comments','overwrite','genpat','optoutput'}
+    case {'auxdata','echo','unroll','comments','overwrite','genpat',...
+        'optoutput','complex'}
       options.(field) = logical(value);
     case 'maxwhileiter'
       options.(field) = value;

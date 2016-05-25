@@ -112,9 +112,16 @@ classdef cada
   
   % Overloaded unary math array operations
   methods
+    
+    
     function y = abs(x)
       % CADA overloaded ABS function
-      y = cadaunarymath(x,1,'abs');
+      global ADIGATOR
+      if ADIGATOR.OPTIONS.COMPLEX
+        y = sqrt(real(x).^2 + imag(x).^2);
+      else
+        y = cadaunarymath(x,1,'abs');
+      end
     end
     function y = acos(x)
       % CADA overloaded ACOS function
@@ -147,6 +154,10 @@ classdef cada
     function y = acscd(x)
       % CADA overloaded ACSCD function
       y = cadaunarymath(x,0,'acscd');
+    end
+    function y = angle(x)
+      % CADA overloaded version of ANGLE
+      y = atan2(imag(x),real(x));
     end
     function y = acsch(x)
       % CADA overloaded ACSCH function
@@ -200,6 +211,10 @@ classdef cada
         numvars = find(ADIGATOR.VARINFO.NAMELOCS(:,1),1,'last');
         cadaCancelDerivs(y.id,numvars);
       end
+    end
+    function y = conj(x)
+    % CADA overloaded CONJ function
+      y = cadaunarymath(x,1,'conj');
     end
     function y = cos(x)
       % CADA overloaded COS function
@@ -274,6 +289,10 @@ classdef cada
     function y = full(x)
       % CADA overloaded FULL function.
       y = cadaunarymath(x,1,'full');
+    end
+    function y = imag(x)
+    % CADA overloaded IMAG function
+      y = cadaunarymath(x,1,'imag');
     end
     function y = log(x)
       % CADA overloaded LOG function
@@ -506,6 +525,28 @@ classdef cada
   
   % Overloaded organizational operations
   methods
+    function y = fliplr(x)
+      % CADA overloaded version of function FLIPLR
+      global ADIGATOR
+      % Size will cancel x's derivatives, do not let it..
+      tmp = ADIGATOR.VARINFO.NAMELOCS;
+      ind = size(x,2):-1:1;
+      ADIGATOR.VARINFO.NAMELOCS = tmp;
+      s.type = '()';
+      s.subs = {':',ind};
+      y = subsref(x,s);
+    end
+    function y = flipud(x)
+      % CADA overloaded version of function FLIPUD
+      global ADIGATOR
+      % Size will cancel x's derivatives, do not let it..
+      tmp = ADIGATOR.VARINFO.NAMELOCS;
+      ind = size(x,1):-1:1;
+      ADIGATOR.VARINFO.NAMELOCS = tmp;
+      s.type = '()';
+      s.subs = {ind,':'};
+      y = subsref(x,s);
+    end
     y = subsref(x,s)
     y = subsasgn(x,s,b)
     y = reshape(x,varargin)
@@ -513,9 +554,12 @@ classdef cada
     y = transpose(x)
     function y = ctranspose(x)
       % CADA overloaded CTRANSPOSE
-      % WARNING!!!! this simply calls transpose - will result in errors in
-      % derivative file if you have complex values
-      y = transpose(x);
+      global ADIGATOR
+      if ADIGATOR.OPTIONS.COMPLEX
+        y = transpose(conj(x));
+      else
+        y = transpose(x);
+      end 
     end
     y = horzcat(varargin)
     y = vertcat(varargin)
@@ -533,6 +577,10 @@ classdef cada
     zi = adigatorEvalInterp2pp(pp,xi,yi)
     function z = dot(x,y,varargin)
       % CADA overloaded DOT - just calls z = sum(x.*y) - lazy.
+      global ADIGATOR
+      if ADIGATOR.OPTIONS.COMPLEX
+        x = conj(x);
+      end
       if nargin == 2
         z = sum(x.*y);
       else
