@@ -217,11 +217,10 @@ if PFLAG
       ',%1.0f,%1.0f);\n'],repMrow,repNcol);
   end
 end
-
 ADIGATOR.VARINFO.LASTOCC([y.id x.id],1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT                  = ADIGATOR.VARINFO.COUNT+1;
 y = cada(y);
-if ADIGATOR.FORINFO.FLAG
+if ADIGATOR.FORINFO.FLAG && ADIGATOR.RUNFLAG == 1
   AssignForRepmatData(y,x);
 end
 return
