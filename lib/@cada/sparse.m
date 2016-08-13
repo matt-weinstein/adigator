@@ -204,7 +204,7 @@ end
 ADIGATOR.VARINFO.LASTOCC([y.id x.id],1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
 y = cada(y);
-if ADIGATOR.FORINFO.FLAG && nargin > 1
+if ADIGATOR.FORINFO.FLAG && nargin > 1 && ADIGATOR.RUNFLAG == 1
   AssignForSparseData(y,x,isubs);
 end
 return

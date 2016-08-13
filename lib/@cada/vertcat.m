@@ -3,6 +3,7 @@ function y = vertcat(varargin)
 %
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
+if nargin == 1; y = varargin{1}; return; end;
 global ADIGATOR
 NUMvod  = ADIGATOR.NVAROFDIFF;
 fid     = ADIGATOR.PRINT.FID;
@@ -196,7 +197,7 @@ for Icount = 1:nargin
 end
 y = cada(y);
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-if ADIGATOR.FORINFO.FLAG
+if ADIGATOR.FORINFO.FLAG && ADIGATOR.RUNFLAG == 1
   AssignForVertcatData(yNcol,iMrows,y,varargin);
 end
 return

@@ -86,7 +86,7 @@ else
   if PFLAG == 1
     fprintf(fid,[indent,funcstr,' = ',x.func.name,'(:);\n']);
   end
-  if ADIGATOR.FORINFO.FLAG
+  if ADIGATOR.FORINFO.FLAG && ADIGATOR.RUNFLAG == 1
     AssgnForNzInds(1:xMrow*xNcol,2,x.func.size.');
   end
 end
