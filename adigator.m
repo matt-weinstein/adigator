@@ -153,10 +153,9 @@ end
 
 %% ~~~~~~~~~~~~~~~~~ GET FLOW CONTROL STRUCTURE ~~~~~~~~~~~~~~~~~~~~~~~~ %%
 % See if there are any other called functions
-MatlabFiles = [matlabroot,filesep,'toolbox',filesep];
 depfunwarning = warning('query','MATLAB:DEPFUN:DeprecatedAPI');
 warning('off','MATLAB:DEPFUN:DeprecatedAPI');
-CalledFunctions = mydepfun(UserFunName,MatlabFiles);
+CalledFunctions = mydepfun(UserFunName);
 warning(depfunwarning.state,'MATLAB:DEPFUN:DeprecatedAPI');
 NUMcf = length(CalledFunctions);
 if NUMcf > 1
@@ -803,7 +802,7 @@ end
 end
 
 %% ~~~~~~~~~~~~~~~~~~~~~~ LOOK FOR CALLED FUNCTIONS ~~~~~~~~~~~~~~~~~~~~ %%
-function CalledFunctions = mydepfun(UserFunName,MatlabFiles)
+function CalledFunctions = mydepfun(UserFunName)
 
 %--------------------------------------------------------------------------%
 % BEGIN: Code Added by Anil V. Rao.  15 October 2015.                      %
@@ -819,8 +818,12 @@ function CalledFunctions = mydepfun(UserFunName,MatlabFiles)
 %mjw - used verLassThan check for version number, also, new function
 %already has recursion built in so the recursive nature is not necessary.
 %   - keeping the old code due to fact that new code is extremely slow.
+%
+% mjw - changed this to look at all cada methods and throw out any
+% functions that have been overloaded.
 %--------------------------------------------------------------------------%
 
+cadaMethods = methods(cada(0,struct(),struct()));
 if verLessThan('matlab','8.6');
   % Original Code in ADIGATOR.M prior to introduction of new code
   % consists of only the ONE line below.
@@ -829,13 +832,14 @@ if verLessThan('matlab','8.6');
   CFtotal = length(CalledFunctions);
   OtherFuncs = cell(CFtotal,1);
   for CFcount = 2:CFtotal
-    if ~isempty(strfind(CalledFunctions{CFcount},MatlabFiles)) || ...
-        ~isempty(strfind(CalledFunctions{CFcount},'adigatorEvalInterp2pp'))...
-        || ~isempty(strfind(CalledFunctions{CFcount},'adigatorGenInterp2pp'))
+    fileloc = strfind(CalledFunctions{CFcount},filesep);
+    if isempty(fileloc); fileloc=0; end;
+    filename = CalledFunctions{CFcount}(fileloc(end)+1:end-2);
+    if any(strcmp(filename,cadaMethods))
       CalledFunctions{CFcount} = [];
       CFtotal = CFtotal-1;
     else
-      OtherFuncs{CFcount} = mydepfun(CalledFunctions{CFcount},MatlabFiles);
+      OtherFuncs{CFcount} = mydepfun(CalledFunctions{CFcount});
       CFtotal = CFtotal+length(OtherFuncs{CFcount});
     end
   end
@@ -883,9 +887,10 @@ else
   % The new format is already recursive - just check through and remove any
   % adigatorEvalInterp2pp/adigatorGenInterp2pp files
   for CFcount = 2:length(CalledFunctions)
-    if ~isempty(strfind(CalledFunctions{CFcount},MatlabFiles)) || ...
-        ~isempty(strfind(CalledFunctions{CFcount},'adigatorEvalInterp2pp'))...
-        || ~isempty(strfind(CalledFunctions{CFcount},'adigatorGenInterp2pp'))
+    fileloc = strfind(CalledFunctions{CFcount},filesep);
+    if isempty(fileloc); fileloc=0; end;
+    filename = CalledFunctions{CFcount}(fileloc(end)+1:end-2);
+    if any(strcmp(filename,cadaMethods))
       CalledFunctions{CFcount} = [];
     end
   end
