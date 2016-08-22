@@ -294,15 +294,15 @@ global ADIGATOR ADIGATORFORDATA
 INNERLOC  = ADIGATOR.FORINFO.INNERLOC;
 Rcount    = ADIGATORFORDATA(INNERLOC).COUNT.REPMAT;
 
-xOver = ADIGATORFORDATA(INNERLOC).REPMAT(Rcount).VARS{2};
-% Check that X is overmapped properly
-x = cadaPrintReMap(x,xOver,x.id);
-
 if isempty(ADIGATORFORDATA(INNERLOC).REPMAT(Rcount).SIZES)
   flag = 0; y = []; return
 else
   flag = 1;
 end
+xOver = ADIGATORFORDATA(INNERLOC).REPMAT(Rcount).VARS{2};
+% Check that X is overmapped properly
+x = cadaPrintReMap(x,xOver,x.id);
+
 CountName = ADIGATORFORDATA(INNERLOC).COUNTNAME;
 fid       = ADIGATOR.PRINT.FID;
 indent    = ADIGATOR.PRINT.INDENT;
