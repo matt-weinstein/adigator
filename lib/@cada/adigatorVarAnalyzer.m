@@ -107,10 +107,12 @@ elseif ADIGATOR.RUNFLAG == 1
     end
     if any(ADIGATOR.VARINFO.NAMELOCS(ADIGATOR.VARINFO.NAMELOCS(x.id,1)==ADIGATOR.VARINFO.NAMELOCS(:,1),3) == -Inf)
       derflag = cadaCheckForDerivs(x);
-      if derflag
+      if derflag && ADIGATOR.DERNUMBER == 1
         error(['variable ''',ADIGATOR.VARINFO.NAMES{ADIGATOR.VARINFO.NAMELOCS(x.id,1)},...
           ''' is either an auxiliary or global variable which was ',...
           're-assigned to have derivative information - this is not allowed.']);
+      elseif derflag
+        ADIGATOR.VARINFO.NAMELOCS(x.id,3) = 1;
       end
     end
     varargout{Vcount} = x;
@@ -134,7 +136,7 @@ else
 %         funcname = funcname(1:end-2);
 %       end
       for Vcount = 1:ADIGATOR.NVAROFDIFF
-        if ~isempty(x.deriv(Vcount).nzlocs)
+        if ~isempty(x.deriv(Vcount).nzlocs) && ADIGATOR.DERNUMBER == 1
           if any(ADIGATOR.VARINFO.NAMELOCS(ADIGATOR.VARINFO.NAMELOCS(xID,1)==ADIGATOR.VARINFO.NAMELOCS(:,1),3) == -Inf)
             error(['variable ''',ADIGATOR.VARINFO.NAMES{ADIGATOR.VARINFO.NAMELOCS(x.id,1)},...
               ''' is either an auxiliary or global variable which was ',...
