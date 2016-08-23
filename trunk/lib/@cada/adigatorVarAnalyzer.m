@@ -136,11 +136,15 @@ else
 %         funcname = funcname(1:end-2);
 %       end
       for Vcount = 1:ADIGATOR.NVAROFDIFF
-        if ~isempty(x.deriv(Vcount).nzlocs) && ADIGATOR.DERNUMBER == 1
+        if ~isempty(x.deriv(Vcount).nzlocs) 
           if any(ADIGATOR.VARINFO.NAMELOCS(ADIGATOR.VARINFO.NAMELOCS(xID,1)==ADIGATOR.VARINFO.NAMELOCS(:,1),3) == -Inf)
-            error(['variable ''',ADIGATOR.VARINFO.NAMES{ADIGATOR.VARINFO.NAMELOCS(x.id,1)},...
-              ''' is either an auxiliary or global variable which was ',...
-              're-assigned to have derivative information - this is not allowed.']);
+            if ADIGATOR.DERNUMBER == 1
+              error(['variable ''',ADIGATOR.VARINFO.NAMES{ADIGATOR.VARINFO.NAMELOCS(x.id,1)},...
+                ''' is either an auxiliary or global variable which was ',...
+                're-assigned to have derivative information - this is not allowed.']);
+            else
+              ADIGATOR.VARINFO.NAMELOCS(x.id,3) = 1;
+            end
           end
           derivname = cadadername(funcname,Vcount);
           if DPflag
@@ -163,10 +167,14 @@ else
       x = Variables{Vcount};
       if any(ADIGATOR.VARINFO.NAMELOCS(ADIGATOR.VARINFO.NAMELOCS(x.id,1)==ADIGATOR.VARINFO.NAMELOCS(:,1),3) == -Inf)
         derflag = cadaCheckForDerivs(x);
-        if derflag
-          error(['variable ''',ADIGATOR.VARINFO.NAMES{ADIGATOR.VARINFO.NAMELOCS(x.id,1)},...
-            ''' is either an auxiliary or global variable which was ',...
-            're-assigned to have derivative information - this is not allowed.']);
+        if derflag 
+          if ADIGATOR.DERNUMBER == 1
+            error(['variable ''',ADIGATOR.VARINFO.NAMES{ADIGATOR.VARINFO.NAMELOCS(x.id,1)},...
+              ''' is either an auxiliary or global variable which was ',...
+              're-assigned to have derivative information - this is not allowed.']);
+          else
+            ADIGATOR.VARINFO.NAMELOCS(x.id,3) = 1;
+          end
         end
       end
       varargout{Vcount} = cadaOverMap(x);
