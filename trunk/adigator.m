@@ -352,7 +352,9 @@ for Fcount = 1:FunCount
   CheckName = FunctionInfo(Fcount).File.Name;
   for F2count = Fcount+1:FunCount
     if strcmp(CheckName,FunctionInfo(F2count).File.Name)
-      error('Currently cannot have two functions with the same names (including sub functions)')
+      error(['Function name ''',CheckName,''' appears to exist as a ',...
+        'function or sub-function in two separate places. This is not ',...
+        'allowed.'])
     end
   end
   FunStrChecks{Fcount} = ['\W',CheckName,'('];
@@ -824,7 +826,8 @@ function CalledFunctions = mydepfun(UserFunName)
 %--------------------------------------------------------------------------%
 
 cadaMethods = methods(cada(0,struct(),struct()));
-if verLessThan('matlab','8.6');
+cadaMethods{end+1} = 'rmfield';
+if verLessThan('matlab','8.6')
   % Original Code in ADIGATOR.M prior to introduction of new code
   % consists of only the ONE line below.
   CalledFunctions = depfun(UserFunName,'-quiet','-toponly');
@@ -845,6 +848,7 @@ if verLessThan('matlab','8.6');
   end
   
   CalledFunctions = CalledFunctions(~cellfun('isempty',CalledFunctions));
+
   if length(CalledFunctions) < CFtotal
     CFcount2 = length(CalledFunctions);
     CalledFunctions{CFtotal,1} = [];
@@ -874,8 +878,9 @@ else
   [CalledFunctions,~] = matlab.codetools.requiredFilesAndProducts(UserFunName);
   CalledFunctions = CalledFunctions(:);
   for kk = 1:length(CalledFunctions)
-    indexOfString = strfind(CalledFunctions{kk},[filesep,UserFunName,'.m']);
-    if ~isempty(indexOfString),
+    indexOfString = regexp(CalledFunctions{kk},[filesep,UserFunName,'.m$'],'once');
+    %indexOfString = strfind(CalledFunctions{kk},[filesep,UserFunName,'.m']);
+    if ~isempty(indexOfString)
       thisIsIt = kk;
       break
     end
@@ -889,12 +894,19 @@ else
   for CFcount = 2:length(CalledFunctions)
     fileloc = strfind(CalledFunctions{CFcount},filesep);
     if isempty(fileloc); fileloc=0; end;
+    % MJW Fix for 2016b including .mat files in CalledFunctions
+    dotLoc  = strfind(CalledFunctions{CFcount},'.');
+    extName = CalledFunctions{CFcount}(dotLoc(end)+1:end);
+    if ~strcmp(extName,'m')
+      CalledFunctions{CFcount} = [];
+      continue
+    end
     filename = CalledFunctions{CFcount}(fileloc(end)+1:end-2);
     if any(strcmp(filename,cadaMethods))
       CalledFunctions{CFcount} = [];
     end
+    
   end
-  
   CalledFunctions = CalledFunctions(~cellfun('isempty',CalledFunctions));
 end
 %--------------------------------------------------------------------------%
