@@ -878,7 +878,13 @@ else
   [CalledFunctions,~] = matlab.codetools.requiredFilesAndProducts(UserFunName);
   CalledFunctions = CalledFunctions(:);
   for kk = 1:length(CalledFunctions)
-    indexOfString = regexp(CalledFunctions{kk},[filesep,UserFunName,'.m$'],'once');
+    if(strcmp(filesep,'\'))
+      indexOfString = regexp(CalledFunctions{kk},...
+        [filesep,filesep,UserFunName,'.m$'],'once');
+    else
+      indexOfString = regexp(CalledFunctions{kk},...
+        [filesep,UserFunName,'.m$'],'once');
+    end
     %indexOfString = strfind(CalledFunctions{kk},[filesep,UserFunName,'.m']);
     if ~isempty(indexOfString)
       thisIsIt = kk;
