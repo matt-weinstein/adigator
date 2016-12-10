@@ -530,10 +530,13 @@ elseif any(FunLoc)
   InputStrs = SeperateOutputStrings(InputStr(~isspace(InputStr)),1);
   NumInputs = length(InputStrs);
   InVarStrs = cell(1,NumInputs);
+  
+  printNewIO = 0;
   for Icount = 1:NumInputs
     VarStr  = sprintf('cadainput%1.0d_%1.0d',FunLoc,Icount);
     InVarStrs{Icount} = [VarStr,';'];
-    if DerNumber == 1 
+    if ~strcmp(VarStr,InputStrs{Icount}) 
+      printNewIO = 1;
       AsgnStr = [VarStr,' = ',InputStrs{Icount},';'];
       fprintf(Tfid,[indent,AsgnStr,'\n']);
       AsgnStr = FindDoinkers(AsgnStr);
@@ -561,7 +564,7 @@ elseif any(FunLoc)
     for Ocount = 1:NumOutput
       OutVarStr = sprintf('cadaoutput%1.0d_%1.0d',FunLoc,Ocount);
       fprintf(Tfid,[indent,OutVarStr,' = adigatorOutputs{%1.0d};\n'],Ocount);
-      if DerNumber == 1 && ~strcmp(OutputStrs{Ocount},'~')
+      if printNewIO && ~strcmp(OutputStrs{Ocount},'~')
         AsgnStr   = [OutputStrs{Ocount},' = ',OutVarStr,';'];
         fprintf(Tfid,[indent,AsgnStr,'\n']);
         SubLoc = regexp(OutputStrs{Ocount},'[\.\(\{]','once');
@@ -583,7 +586,7 @@ elseif any(FunLoc)
     % ----------------------- Single Output ----------------------------- %
     OutVarStr = sprintf('cadaoutput%1.0d_1',FunLoc);
     fprintf(Tfid,[indent,OutVarStr,' = adigatorOutputs{1};\n']);
-    if DerNumber == 1
+    if printNewIO
       FunStri = [FunStri(1:Start-1),OutVarStr,FunStri(End+1:end)];
     else
       FunStri = [];
