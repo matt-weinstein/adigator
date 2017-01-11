@@ -46,6 +46,9 @@ classdef cadastruct
     y = subsref(x,s)
     y = transpose(x)
     y = vertcat(varargin)
+    function y = isfield(x,f)
+      y = isfield(x.val,f);
+    end
   end
   
   % Overloaded Utility Methods
