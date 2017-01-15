@@ -810,7 +810,12 @@ if ssize == 1 && strcmp(s(1).type,'()') && (isa(b,'cada') || isnumeric(b))
 else
   % Need to see if this is supposed to be a structure or if its modifying a
   % CADA variable
-  Dbstuff = dbstack; CallingFile = Dbstuff(2).file;
+  Dbstuff = dbstack; 
+  if length(Dbstuff)>1
+    CallingFile = Dbstuff(2).file;
+  else
+    CallingFile = [];
+  end
   if length(CallingFile) > 16 && strcmp(CallingFile(1:16),'adigatortempfunc')
     % This is being called from user code - convert to a cadastruct
     xname = ADIGATOR.VARINFO.NAMES{ADIGATOR.VARINFO.NAMELOCS(x.id,1)};

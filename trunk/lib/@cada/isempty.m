@@ -1,7 +1,12 @@
 function y = isempty(x)
 % CADA overloaded ISEMPTY function.
 global ADIGATOR
-Dbstuff = dbstack; CallingFile = Dbstuff(2).file;
+Dbstuff = dbstack; 
+if length(Dbstuff)>1
+  CallingFile = Dbstuff(2).file;
+else
+  CallingFile = [];
+end
 if length(CallingFile) > 12 && ~isempty(strfind(CallingFile,'adigatortempfunc'))
 %   if ADIGATOR.FORINFO.FLAG
 %     keyboard
