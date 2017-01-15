@@ -596,7 +596,6 @@ else
 end
 % Empty out the Data spot.
 ADIGATORFORDATA(CSFloc).(FunStr)(CSFcount).(RefStr) = [];
-return
 end
 
 function NewData = ReshapeData(CurForLength,PrevForLength,...
@@ -717,7 +716,6 @@ else
   end
 end
 % RefLength CRinds Inds
-return
 end
 
 function [outEvalStr, outEvalVar] = DoRemapping(VarCounts,ForCount)

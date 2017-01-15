@@ -16,5 +16,4 @@ func = struct('name',funcname,'size',size(x),'zerolocs',[],'value',x);
 deriv = struct('name',cell(NUMvod,1),'nzlocs',cell(NUMvod,1));
 y = cada(VarID,func,deriv);
 ADIGATOR.VARINFO.LASTOCC(VarID,1) = VarID;
-return
 end

@@ -78,5 +78,4 @@ y.deriv = struct('name',cell(NUMvod,1),'nzlocs',cell(NUMvod,1));
 ADIGATOR.VARINFO.LASTOCC([x.id y.id],1) = ADIGATOR.VARINFO.COUNT;
 y = cada(y);
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-return
 end

@@ -163,14 +163,12 @@ y = cada(y);
 if ADIGATOR.FORINFO.FLAG
   ForOtherData([xMrow xNcol FMrow FNcol K])
 end
-return
 end
 
 function IncreaseForOtherCount()
 global ADIGATOR ADIGATORFORDATA
 INNERLOC = ADIGATOR.FORINFO.INNERLOC;
 ADIGATORFORDATA(INNERLOC).COUNT.OTHER = ADIGATORFORDATA(INNERLOC).COUNT.OTHER+1;
-return
 end
 
 function ForOtherData(data)
@@ -186,5 +184,4 @@ if isempty(oldData)
 elseif any(oldData ~= data)
   error('Currenlty diag is not coded such that the inputs may change size or diagonal within a loop')
 end
-return
 end

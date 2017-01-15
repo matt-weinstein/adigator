@@ -1563,7 +1563,6 @@ if NUMloops > 1
   end
 end
 Dependency = logical(Dependency);
-return
 end
 
 function NewInds = RemoveUnneededData(Inds,Lengths,Dependency)
@@ -1684,7 +1683,6 @@ if Dcount < NUMloops && sum(Dependency(Dcount:end)) < length(Dependency(Dcount:e
 else
   NewInds = Inds;
 end
-return
 end
 
 function DerInds = GetSubsrefInds(x,y,inds,ySizes)
@@ -1753,8 +1751,6 @@ if DPFLAG
     end
   end
 end
-
-return
 end
 
 function DerInds = GetSubsasgnInds(x,b,inds,bSizes)
@@ -1833,7 +1829,6 @@ if DPFLAG
     end
   end
 end
-return
 end
 
 function DerInds = GetHorzcatInds(Sizes,Vars)
@@ -1961,7 +1956,6 @@ if DPflag
     end
   end
 end
-return
 end
 
 function DerInds = GetVertcatInds(Sizes,Vars)
@@ -2087,7 +2081,6 @@ if DPflag
     end
   end
 end
-return
 end
 
 function DerInds = GetTransposeInds(Sizes,y,x)
@@ -2160,7 +2153,6 @@ if DPflag
     end
   end
 end
-return
 end
 
 function DerInds = GetRepmatInds(Sizes,y,x)
@@ -2232,7 +2224,6 @@ if DPflag
     end
   end
 end
-return
 end
 
 function DerInds = GetReshapeInds(Sizes,y,x)
@@ -2301,7 +2292,6 @@ if DPflag
     end
   end
 end
-return
 end
 
 function [DerInds,emptyderivchk,emptyfunchk,sizechk,y] = GetStructSubsrefInds(x,y,inds,structrefs)
@@ -2463,7 +2453,6 @@ end
 if ~isempty(structrefs)
   y = cadastruct(yval,yname,yid,yflag);
 end
-return
 end
 
 function [refs,count] = ParseStructForLoop(refs,s,count,x)
@@ -2506,7 +2495,6 @@ elseif iscell(x)
     [refs,count] = ParseStructForLoop(refs,s2,count,x{I});
   end
 end
-return
 end
 
 function DataNameCount = AssignReferenceNames(Data,DATADEP,DATALOCS,...
@@ -2607,7 +2595,6 @@ else
   ADIGATORFORDATA(DATALOCS(1,end)).(FunStr)(DATALOCS(2,end)).(AsgnStr)...
     {AsgnLoc,AsgnFlag+3} = [0,SpFlag];
 end
-return
 end
 
 function DataNameCount = AssignReferenceNamesCat(Data,DATADEP,DATALOCS,...
@@ -2707,5 +2694,4 @@ else
   ADIGATORFORDATA(DATALOCS(1,end)).(FunStr)(DATALOCS(2,end)).(AsgnStr)...
     {AsgnLoc(1),AsgnLoc(2),3} = [0,SpFlag];
 end
-return
 end

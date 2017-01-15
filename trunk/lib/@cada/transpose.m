@@ -83,7 +83,6 @@ y = cada(y);
 if ADIGATOR.FORINFO.FLAG && ADIGATOR.RUNFLAG == 1
   AssignForTransposeData(y,x);
 end
-return
 end
 
 function IncreaseForTransposeCount()
@@ -91,7 +90,6 @@ global ADIGATOR ADIGATORFORDATA
 INNERLOC = ADIGATOR.FORINFO.INNERLOC;
 ADIGATORFORDATA(INNERLOC).COUNT.TRANSPOSE = ...
   ADIGATORFORDATA(INNERLOC).COUNT.TRANSPOSE + 1;
-return
 end
 
 function AssignForTransposeData(y,x)
@@ -140,7 +138,6 @@ else
     ADIGATORFORDATA(INNERLOC).TRANSPOSE(Tcount).VARS{2} = cadaUnionVars(x,xOver);
   end
 end
-return
 end
 
 function [y,flag,x] = ForTranspose(x)
@@ -259,5 +256,4 @@ ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
 if ~isa(y,'cada')
   y = cada(y);
 end
-return
 end

@@ -207,7 +207,6 @@ y = cada(y);
 if ADIGATOR.FORINFO.FLAG && nargin > 1 && ADIGATOR.RUNFLAG == 1
   AssignForSparseData(y,x,isubs);
 end
-return
 end
 
 function IncreaseForSparseCount()
@@ -215,7 +214,6 @@ global ADIGATOR ADIGATORFORDATA
 INNERLOC = ADIGATOR.FORINFO.INNERLOC;
 ADIGATORFORDATA(INNERLOC).COUNT.SPARSE =...
   ADIGATORFORDATA(INNERLOC).COUNT.SPARSE+1;
-return
 end
 
 function AssignForSparseData(y,x,inds)
@@ -269,7 +267,6 @@ else
     end
   end
 end
-return
 end
 
 function y = ForSparse(Inputs)
@@ -443,5 +440,4 @@ ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
 if ~isa(y,'cada')
 y = cada(y,'cada');
 end
-return
 end

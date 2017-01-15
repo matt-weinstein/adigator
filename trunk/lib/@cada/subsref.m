@@ -254,7 +254,6 @@ for scount = 1:ssize;
     error('invalid index reference for CADA')
   end
 end
-return
 end
 
 function [numeric, overloaded, logicflag] = parseIndex(index)
@@ -320,7 +319,6 @@ global ADIGATOR ADIGATORFORDATA
 INNERLOC = ADIGATOR.FORINFO.INNERLOC;
 ADIGATORFORDATA(INNERLOC).COUNT.SUBSREF =...
   ADIGATORFORDATA(INNERLOC).COUNT.SUBSREF + 1;
-return
 end
 
 function AssgnForRefInds(inds,subs,logicflag)
@@ -382,7 +380,6 @@ if OFlag1
 else
   ADIGATORFORDATA(INNERLOC).SUBSREF(REFCOUNT).FLAGS = [Flag1 Flag2];
 end
-return
 end
 
 function SubsrefUnion(x,y)
@@ -436,7 +433,6 @@ if (ADIGATORFORDATA(INNERLOC).SUBSREF(REFCOUNT).FLAGS(1) == 3 || ...
   error(['References which 1. Change size on loop arrays, and 2. switch between',...
     'logical and index references, are not currently allowed.'])
 end
-return
 end
 
 function [y,returnflag] = ForSubsRef(x,s)
@@ -764,6 +760,4 @@ ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
 if ~isa(y,'cada')
   y = cada(y);
 end
-
-return
 end

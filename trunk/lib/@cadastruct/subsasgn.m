@@ -650,7 +650,6 @@ global ADIGATOR ADIGATORFORDATA
 INNERLOC = ADIGATOR.FORINFO.INNERLOC;
 ADIGATORFORDATA(INNERLOC).COUNT.STRUCTASGN =...
   ADIGATORFORDATA(INNERLOC).COUNT.STRUCTASGN + 1;
-return
 end
 
 function AsgnForAsgnOvermap(x,b,yprior,cadaflag,cadareflag)
@@ -752,7 +751,6 @@ else
   ADIGATORFORDATA(INNERLOC).STRUCTASGN(ASGNCOUNT).INDICES...
     (1:length(s),ITERCOUNT) = s;
 end
-return
 end
 
 function [y,returnflag] = ForSubsAsgn(x,s,b)

@@ -94,7 +94,6 @@ end
 ADIGATOR.FUNCTIONLOCATION([y.id x.id],1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
 y = cada(y);
-return
 end
 
 function IncreaseForNzCount()
@@ -102,7 +101,6 @@ global ADIGATOR ADIGATORFORDATA
 INNERLOC = ADIGATOR.FORINFO.INNERLOC;
 ADIGATORFORDATA(INNERLOC).COUNT.NONZEROS =...
   ADIGATORFORDATA(INNERLOC).COUNT.NONZEROS + 1;
-return
 end
 
 function AssgnForNzInds(inds,flag,xsize)
@@ -128,7 +126,6 @@ end
 
 ADIGATORFORDATA(INNERLOC).NONZEROS(NZCOUNT).SIZES = ...
   [ADIGATORFORDATA(INNERLOC).NONZEROS(NZCOUNT).SIZES,xsize];
-return
 end
 
 function y = ForNonzeros(x)
@@ -182,5 +179,4 @@ fprintf(fid,[indent,y.func.name,'(1:length(',tempfuncstr,')) = ',tempfuncstr,';\
 ADIGATOR.FUNCTIONLOCATION([x.id y.id],1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
 y = cada(y);
-return
 end

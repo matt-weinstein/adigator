@@ -332,7 +332,6 @@ end
 ADIGATOR.VARINFO.LASTOCC([x.id y.id z.id xi.id yi.id],1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
 zi = cada(zi);
-return
 end
 
 function [y, yMrow, yNcol] = parseinput(x)
