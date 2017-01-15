@@ -2,7 +2,12 @@ function y = numel(x)
 % CADA overloaded NUMEL function
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
-Dbstuff = dbstack; CallingFile = Dbstuff(2).file;
+Dbstuff = dbstack; 
+if length(Dbstuff) > 1
+  CallingFile = Dbstuff(2).file;
+else
+  CallingFile = [];
+end
 if (length(CallingFile) > 16 && strcmp(CallingFile(1:16),'adigatortempfunc'))
   y = adigatornumel(x);
 else

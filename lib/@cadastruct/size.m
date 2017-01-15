@@ -12,7 +12,12 @@ if nargout == 1 && nargin == 1
   % This is the case that Matlab Workspace will call - If you put a
   % keyboard in this section you are going to crash matlab if you have the
   % workspace open.
-  Dbstuff = dbstack; CallingFile = Dbstuff(2).file;
+  Dbstuff = dbstack; 
+  if length(Dbstuff)>1
+    CallingFile = Dbstuff(2).file;
+  else
+    CallingFile = [];
+  end
   if ADIGATOR.OPTIONS.KEYBOARD
     error(['Cannot use size with nargin = nargout = 1 when you have a',...
       '''keyboard'' within the code - causes an error with the MATLAB WorkSpace.']);
