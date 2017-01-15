@@ -203,7 +203,6 @@ ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
 if ADIGATOR.FORINFO.FLAG && ADIGATOR.RUNFLAG == 1
   AssignForHorzcatData(yMrow,iNcols,y,varargin);
 end
-return
 end
 
 function IncreaseForHorzcatCount()
@@ -211,7 +210,6 @@ global ADIGATOR ADIGATORFORDATA
 INNERLOC = ADIGATOR.FORINFO.INNERLOC;
 ADIGATORFORDATA(INNERLOC).COUNT.HORZCAT =...
   ADIGATORFORDATA(INNERLOC).COUNT.HORZCAT+1;
-return
 end
 
 function AssignForHorzcatData(yMrow,iNcols,y,Inputs)
@@ -278,7 +276,6 @@ else
     end
   end
 end
-return
 end
 
 function [y,OutFlag,Inputs] = ForHorzcat(Inputs)
@@ -421,9 +418,8 @@ if ~isa(y,'cada')
   y = cada(y);
 end
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-
-return
 end
+
 function y = Num2Overloaded(x)
 global ADIGATOR
 NUMvod  = ADIGATOR.NVAROFDIFF;
@@ -443,6 +439,4 @@ if nnz(x) < numel(x)
 end
 
 y = cada(y);
-
-return
 end

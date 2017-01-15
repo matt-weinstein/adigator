@@ -13,7 +13,6 @@ if (length(CallingFile) > 16 && strcmp(CallingFile(1:16),'adigatortempfunc'))
 else
   y = 1;
 end
-return
 end
 
 function y = adigatornumel(x)
@@ -62,7 +61,6 @@ global ADIGATOR ADIGATORFORDATA
 INNERLOC = ADIGATOR.FORINFO.INNERLOC;
 ADIGATORFORDATA(INNERLOC).COUNT.SIZE =...
   ADIGATORFORDATA(INNERLOC).COUNT.SIZE +1;
-return
 end
 
 function AssignForSizes(xSize)
@@ -77,8 +75,6 @@ if ITERCOUNT == 1
 else
   ADIGATORFORDATA(INNERLOC).SIZE(Scount).SIZES(1,ITERCOUNT) = xSize;
 end
-
-return
 end
 
 function y = ForLength(x)
@@ -120,5 +116,4 @@ end
 ADIGATOR.VARINFO.LASTOCC([y.id x.id],1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
 y = cada(y);
-return
 end

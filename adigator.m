@@ -628,7 +628,6 @@ else
     FunctionInfo(Fcount).Iteration.DepFlag = 0;
   end
 end
-
 %% ~~~~~~~~~~~~~~~~~~~~~~~~~~ PRINTING RUN ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ %%
 if ADIGATOR.OPTIONS.ECHO
   disp(['Printing derivatives to file ''',DerFileName,'''']);
@@ -707,7 +706,6 @@ rmpath(adigatorTempDir);
 if ~sflag
   warning('Could not remove old temp directory -- message produced: %s',msg);
 end
-return
 end
 
 %% ~~~~~~~~~~~~~~~~~~~~~~~~~~ FILEKEEPING ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ %%
@@ -732,7 +730,6 @@ if ~sflag
 end
 addpath(adigatorTempDir);
 rehash
-return
 end
 
 %% ~~~~~~~~~~~~~~~~~~~~~~~~~~ INPUT PARSE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ %%
@@ -921,7 +918,6 @@ end
 
 
 % [CalledFunctions,~] = matlab.codetools.requiredFilesAndProducts(UserFunName,'toponly');
-return
 end
 
 %% ~~~~~~~~~~~~~~~~~~~~~~ PARSE FUNCTION INPUT/OUTPUT ~~~~~~~~~~~~~~~~~~ %%
@@ -1033,7 +1029,6 @@ for Ocount = 1:NumOutVars
     error('adigator cannot differentiate functions with varargout outputs')
   end
 end
-return
 end
 
 %% ~~~~~~~~~~~~~~~~~~~~~~~ READ FILE FOR FLOW CONTROL ~~~~~~~~~~~~~~~~~~ %%
@@ -1193,7 +1188,6 @@ while ~isnumeric(cadaFunStrFULL)
   OffSet         = 1;
 end
 FlowInfo = [];
-return
 end
 
 %% ~~~~~~~~~~~~~~ BUILD OVERMAPPED INPUTS TO TEMP FUNCTIONS ~~~~~~~~~~~~ %%
@@ -1310,7 +1304,6 @@ else
   LastDerivNum    = 0;
   DerNumber       = 1;
 end
-return
 end
 
 function OutCell = FindDerivChecks(InMatrix,InNames)

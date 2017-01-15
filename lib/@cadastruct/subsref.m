@@ -364,7 +364,6 @@ ADIGATORFORDATA(INNERLOC).COUNT.STRUCTREF = REFCOUNT;
 %   end
 %   ADIGATORFORDATA(INNERLOC).STRUCTREF(REFCOUNT,1).VARS = [];
 % end
-return
 end
 
 function AsgnForRefOvermap(x,y,cadaflag,cadareflag)
@@ -478,7 +477,6 @@ else
   ADIGATORFORDATA(INNERLOC).STRUCTREF(REFCOUNT).INDICES...
     (1:length(s),ITERCOUNT) = s;
 end
-return
 end
 
 function [y,returnflag] = ForSubsRef(x,s)
@@ -704,5 +702,4 @@ end
 
 ADIGATOR.VARINFO.LASTOCC([xid,yid],1) = yid;
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-return
 end

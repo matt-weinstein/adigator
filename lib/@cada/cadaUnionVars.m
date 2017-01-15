@@ -173,5 +173,4 @@ for Vcount = 1:NUMvod
   end
 end
 z = cada(z);
-return
 end

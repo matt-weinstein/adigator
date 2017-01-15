@@ -145,14 +145,12 @@ else
   y = cada(y);
 end
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-return
 end
 
 function IncreaseForOtherCount()
 global ADIGATOR ADIGATORFORDATA
 INNERLOC = ADIGATOR.FORINFO.INNERLOC;
 ADIGATORFORDATA(INNERLOC).COUNT.OTHER = ADIGATORFORDATA(INNERLOC).COUNT.OTHER+1;
-return
 end
 
 function ForOtherData(y)
@@ -168,7 +166,6 @@ else
   ADIGATORFORDATA(INNERLOC).OTHER(OTHERCOUNT).DATA(1) = max([x(1),y(1)]);
   ADIGATORFORDATA(INNERLOC).OTHER(OTHERCOUNT).DATA(2) = max([x(2),y(2)]);
 end
-return
 end
 
 function y = ForZeros(Inputs,callerstr)
@@ -265,5 +262,4 @@ else
   y = cada(y);
 end
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-return
 end

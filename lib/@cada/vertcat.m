@@ -200,7 +200,6 @@ ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
 if ADIGATOR.FORINFO.FLAG && ADIGATOR.RUNFLAG == 1
   AssignForVertcatData(yNcol,iMrows,y,varargin);
 end
-return
 end
 
 function IncreaseForVertcatCount()
@@ -208,7 +207,6 @@ global ADIGATOR ADIGATORFORDATA
 INNERLOC = ADIGATOR.FORINFO.INNERLOC;
 ADIGATORFORDATA(INNERLOC).COUNT.VERTCAT =...
   ADIGATORFORDATA(INNERLOC).COUNT.VERTCAT + 1;
-return
 end
 
 function AssignForVertcatData(yNcol,iMrows,y,Inputs)
@@ -273,7 +271,6 @@ else
     end
   end
 end
-return
 end
 
 function [y,OutFlag,Inputs] = ForVertcat(Inputs)
@@ -406,7 +403,6 @@ if ~isa(y,'cada')
   y = cada(y);
 end
 ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
-return
 end
 
 function y = Num2Overloaded(x)
@@ -427,6 +423,4 @@ if nnz(x) < numel(x)
   y.func.zerolocs = [xrows,xcols];
 end
 y = cada(y);
-
-return
 end

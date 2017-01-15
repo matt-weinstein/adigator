@@ -223,7 +223,6 @@ y = cada(y);
 if ADIGATOR.FORINFO.FLAG && ADIGATOR.RUNFLAG == 1
   AssignForRepmatData(y,x);
 end
-return
 end
 
 function IncreaseForRepmatCount()
@@ -231,7 +230,6 @@ global ADIGATOR ADIGATORFORDATA
 INNERLOC = ADIGATOR.FORINFO.INNERLOC;
 ADIGATORFORDATA(INNERLOC).COUNT.REPMAT = ...
   ADIGATORFORDATA(INNERLOC).COUNT.REPMAT + 1;
-return
 end
 
 function AssignForRepmatData(y,x)
@@ -286,7 +284,6 @@ else
     end
   end
 end
-return
 end
 
 function [y,flag,x] = ForRepmat(x,Sinputs)
@@ -486,5 +483,4 @@ ADIGATOR.VARINFO.COUNT                  = ADIGATOR.VARINFO.COUNT+1;
 if ~isa(y,'cada')
   y = cada(y);
 end
-return
 end

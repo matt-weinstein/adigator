@@ -199,7 +199,6 @@ global ADIGATOR ADIGATORFORDATA
 INNERLOC = ADIGATOR.FORINFO.INNERLOC;
 ADIGATORFORDATA(INNERLOC).COUNT.SIZE =...
   ADIGATORFORDATA(INNERLOC).COUNT.SIZE +1;
-return
 end
 
 function AssignForSizes(xSize)
@@ -229,7 +228,6 @@ elseif length(xSize) == 2 && isinf(xSize(2))
       'vectorized and the other changes within a loop.']);
   end
 end
-return
 end
 
 function [y, varargout] = ForSize(x,varargin)
@@ -355,6 +353,4 @@ elseif nargout == 1
 else
   error('??? too many outputs')
 end
-
-return
 end

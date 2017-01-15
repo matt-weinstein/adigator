@@ -148,5 +148,4 @@ y.arrayflag = 1;
 
 ADIGATOR.VARINFO.LASTOCC([y.id x.id],1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT                  = ADIGATOR.VARINFO.COUNT+1;
-return
 end

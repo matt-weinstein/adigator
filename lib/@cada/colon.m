@@ -142,14 +142,12 @@ if ADIGATOR.FORINFO.FLAG && ADIGATOR.RUNFLAG == 1
   ForOtherData(y);
 end
 
-return
 end
 
 function IncreaseForOtherCount()
 global ADIGATOR ADIGATORFORDATA
 INNERLOC = ADIGATOR.FORINFO.INNERLOC;
 ADIGATORFORDATA(INNERLOC).COUNT.OTHER = ADIGATORFORDATA(INNERLOC).COUNT.OTHER+1;
-return
 end
 
 function ForOtherData(y)
@@ -169,7 +167,6 @@ else
   end
 end
 
-return
 end
 
 function y = ForColon(varargin)
@@ -281,5 +278,4 @@ end
 ADIGATOR.VARINFO.LASTOCC(y.id,1) = ADIGATOR.VARINFO.COUNT;
 ADIGATOR.VARINFO.COUNT           = ADIGATOR.VARINFO.COUNT+1;
 y = cada(y);
-return
 end

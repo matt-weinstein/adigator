@@ -957,7 +957,6 @@ else
   CallerID = cell2mat(CallerID);
   CallerID = [IterIDstr,'(',CallerID(1:end-3),')'];
 end
-return
 end
 
 function PrintFunctionHeader(FunID,FunctionInfo,InVars,InVarStrs)
@@ -1031,7 +1030,6 @@ for Icount = 1:NumInVars
   cadaOverMap(InVars{Icount});
 end
 
-return
 end
 
 function [OverLoadedData,FunctionInfo] = getOverloadedData(FunctionInfo,FunID,NUMvod)

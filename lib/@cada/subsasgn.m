@@ -848,7 +848,6 @@ else
     error('Inncorrect subsasgn method for type cada');
   end
 end
-return
 end
 
 
@@ -907,7 +906,6 @@ global ADIGATOR ADIGATORFORDATA
 INNERLOC = ADIGATOR.FORINFO.INNERLOC;
 ADIGATORFORDATA(INNERLOC).COUNT.SUBSASGN =...
   ADIGATORFORDATA(INNERLOC).COUNT.SUBSASGN + 1;
-return
 end
 
 function AssignForAsgnInds(inds,subs,scalarflag,logicflag)
@@ -986,7 +984,6 @@ else
   % First assignment
   ADIGATORFORDATA(INNERLOC).SUBSASGN(ASGNCOUNT).FLAGS = [Flag1 Flag2 scalarflag];
 end
-return
 end
 
 function SubsasgnUnion(x,b)
@@ -1050,7 +1047,6 @@ if ~isempty(ADIGATORFORDATA(INNERLOC).SUBSASGN(ASGNCOUNT).SIZES)
 else
   ADIGATORFORDATA(INNERLOC).SUBSASGN(ASGNCOUNT).SIZES = [x.func.size.';bsize.'];
 end
-return
 end
 
 function [y,returnflag] = ForSubsAsgn(x,s,b)
@@ -1465,5 +1461,4 @@ ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+1;
 if ~isa(y,'cada')
   y = cada(y);
 end
-return
 end
