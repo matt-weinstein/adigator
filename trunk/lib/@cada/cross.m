@@ -274,7 +274,7 @@ for Vcount = 1:NUMvod;
       dxLref   = cadaindprint(dxLindin);
       TD2 = ['cada',NDstr,'td2'];
       if xvec
-        fprintf(fid,[indent,TD2,' = ',x.deriv(Vcount).name,'(:',dxLref,');']);
+        fprintf(fid,[indent,TD2,' = ',x.deriv(Vcount).name,'(:,',dxLref,');']);
       else
         fprintf(fid,[indent,TD2,' = ',x.deriv(Vcount).name,'(',dxLref,');']);
       end
@@ -328,7 +328,7 @@ for Vcount = 1:NUMvod;
       dxRref   = cadaindprint(dxRindin);
       TD2 = ['cada',NDstr,'td2'];
       if xvec
-        fprintf(fid,[indent,TD2,' = ',x.deriv(Vcount).name,'(:',dxRref,');']);
+        fprintf(fid,[indent,TD2,' = ',x.deriv(Vcount).name,'(:,',dxRref,');']);
       else
         fprintf(fid,[indent,TD2,' = ',x.deriv(Vcount).name,'(',dxRref,');']);
       end
@@ -382,7 +382,7 @@ for Vcount = 1:NUMvod;
       dyLref   = cadaindprint(dyLindin);
       TD2 = ['cada',NDstr,'td2'];
       if xvec
-        fprintf(fid,[indent,TD2,' = ',y.deriv(Vcount).name,'(:',dyLref,');']);
+        fprintf(fid,[indent,TD2,' = ',y.deriv(Vcount).name,'(:,',dyLref,');']);
       else
         fprintf(fid,[indent,TD2,' = ',y.deriv(Vcount).name,'(',dyLref,');']);
       end
@@ -436,7 +436,7 @@ for Vcount = 1:NUMvod;
       dyRref   = cadaindprint(dyRindin);
       TD2 = ['cada',NDstr,'td2'];
       if xvec
-        fprintf(fid,[indent,TD2,' = ',y.deriv(Vcount).name,'(:',dyRref,');']);
+        fprintf(fid,[indent,TD2,' = ',y.deriv(Vcount).name,'(:,',dyRref,');']);
       else
         fprintf(fid,[indent,TD2,' = ',y.deriv(Vcount).name,'(',dyRref,');']);
       end
