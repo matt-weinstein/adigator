@@ -15,7 +15,7 @@ end
 if nargin == 2
   % y = J:K
   if ADIGATOR.EMPTYFLAG
-    y = cadaEmptyEval(varargin{2},varargin{2});
+    y = cadaEmptyEval(varargin{1},varargin{2});
     return
   elseif ADIGATOR.FORINFO.FLAG && ADIGATOR.RUNFLAG == 2
     y = ForColon(varargin{1},varargin{2});
