@@ -4,6 +4,8 @@ function [flag, FunctionInfo, Outputs, varargout] = adigatorFunctionInitialize(F
 % or any sub-function is initially called.
 % ------------------------ Input Information ---------------------------- %
 % FunID :  function ID - what element of FunctionInfo this func is
+% FunctionInfo: data structure containing all information on the program
+%               being differentiated
 % Inputs:  cell array of the inputs to the function
 % ----------------------- Output Information ---------------------------- %
 % flag:     this is set to 0 or 1, it is set to 0 if the function is to be

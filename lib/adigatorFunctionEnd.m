@@ -5,6 +5,18 @@ function [FunctionInfo, Outputs] = adigatorFunctionEnd(FunID,FunctionInfo,Output
 % adigatorFunctionInitialize if it is determined that we do not need to
 % evaluate a particular function.
 %
+% Inputs:
+%   FunID - integer identifying the function
+%   FunctionInfo - data structure containing all information on the program
+%                  being differentiated
+%   Outputs - cell array containing outputs of the function
+%
+% Outputs:
+%   FunctionInfo - data structure containing all information on the program
+%                  being differentiated
+%   Outputs - cell array containing the (possibly modified) outputs of the 
+%             function
+%
 % Copyright 2011-214 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
 global ADIGATOR

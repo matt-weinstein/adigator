@@ -1,8 +1,41 @@
 function [FORDATA, IFDATA, VARINFO,VARSTORAGE] = adigatorAssignOvermapScheme(FunID,...
     FunAsLoopFlag,FORDATA,IFDATA,VARINFO,BREAKLOCS,CONTLOCS,ERRORLOCS,UNROLL)
 % This function is used to Assign the Overmap scheme for all FOR loops and
-% IF/ELSEIF/ELSE statements. All of the details on the overmapping scheme
-% may be found in the comments of this code.
+% IF/ELSEIF/ELSE statements. This is called after the first empty
+% evaluation of the program to be differentiated. It takes in information
+% mapping out the location of all function variables and flow control
+% statements. It then builds data structures determining when variables
+% must be unioned together, where the union will be stored, when variables
+% must be saved, where they will be saved, and when variables should be
+% loaded from a previously stored location and assigned to the intermediate
+% function's workspace.
+% 
+% All of the details on the overmapping scheme may be found in the comments
+% of this code.
+%
+% Inputs:
+%   FunID - integer identifying which function/subfunction is to be
+%           analyzed
+%   FunAsLoopFlag - binary variable, true implies this is a sub-function
+%                   which is called multiple times and indexing within the
+%                   sub-function will be handled as if each call was a loop
+%                   iteration
+%   FORDATA - global ADIGATORFORDATA data structure built during 
+%             overmapping evaluation of this function
+%   IFDATA - global ADIGATOR.FORDATA data structure built during 
+%            empty evaluation of this function
+%   VARINFO - global ADIGATOR.VARINFO data structure built during
+%             empty evaluation of this function
+%   BREAKLOCS - global ADIGATOR.BREAKLOCS containing information on any
+%               "break" statements
+%   CONTLOCS - global ADIGATOR.CONTLOCS containing information on any
+%               "continue" statements
+%   ERRORLOCS - global ADIGATOR.ERRORLOCS containing information on any
+%               "error" statements
+%   UNROLL    - binary flag denoting whether loops/sub-functions are to be
+%               unrolled or not
+%
+% Outputs:
 %
 % Copyright 2011-214 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0

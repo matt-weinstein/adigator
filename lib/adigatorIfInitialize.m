@@ -2,6 +2,12 @@ function adigatorIfInitialize(IfCount,varargin)
 % This transformation routine is placed prior to an IF/ELSEIF/ELSE set in
 % the intermediate program.
 %
+% Inputs: 
+%   IfCount  - integer identifying the conditional if/elseif/else set
+%   varargin - this is made to contain all conditional variables upon which
+%              this if/elseif/else set is dependent 
+%              (i.e. the if/elseif arguements) 
+%
 % Copyright 2011-214 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
 global ADIGATOR

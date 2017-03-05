@@ -1,6 +1,12 @@
 function adigatorIfLooperi(ifLoopi,IfCount)
 % This is a transformation routine that is used when we are unrolling loops
-% but encounter an IF statement.
+% but encounter an IF statement. It is placed within the "if loop" set by
+% adigatorIfLooper.
+%
+% Inputs: 
+%   ifLoopi  - variable set by adigatorIfLooper which determines what type
+%              evaluation of the conditional statement must be performed.
+%   IfCount  - integer identifying the conditional if/elseif/else set
 %
 % Copyright 2011-214 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
