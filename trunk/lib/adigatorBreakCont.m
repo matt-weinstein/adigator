@@ -2,6 +2,13 @@ function adigatorBreakCont(type,IfCount,BroCount)
 % All user defined BREAKS/CONTINUES are replaced with this function in the
 % intermediate program.
 %
+% Inputs:
+%   type - string defining whether the statement is a 'break' or 'continue'
+%   IfCount  - integer identifying the conditional if/elseif/else set to
+%              which the break/continue belongs
+%   BroCount - integer identifying the branch of the conditional set to
+%              which the break/continue belongs
+%
 % Copyright 2011-214 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
 global ADIGATOR

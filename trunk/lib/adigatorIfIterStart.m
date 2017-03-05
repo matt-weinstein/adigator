@@ -2,6 +2,17 @@ function [outEvalStr, outEvalVar] = adigatorIfIterStart(IfCount,BroCount)
 % This transformation routine is placed prior the the beginning of each
 % IF/ELSEIF/ELSE block in the intermediate program.
 %
+% Inputs: 
+%   IfCount  - integer identifying the conditional if/elseif/else set
+%   BroCount - integer identifying the branch of the conditional set 
+%              (e.g. 1 corresponds to the opening "if" branch)
+%
+% Outputs:
+%   outEvalStr - cell arary of strings to be evaluated on the output in 
+%                order to modify the workspace
+%   outEvalVar - cell array containing variables to be placed into the 
+%                workspace 
+%
 % Copyright 2011-214 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
 global ADIGATOR

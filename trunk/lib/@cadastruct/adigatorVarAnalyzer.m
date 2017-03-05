@@ -1,6 +1,18 @@
 function x = adigatorVarAnalyzer(FunString,x,xStr,subsflag)
-%function varargout = adigatorVarAnalyzer(FunString,x,xStr,subsflag) (overloaded
-%cadstruct version)
+%function varargout = adigatorVarAnalyzer(FunString,x,xStr,subsflag) 
+% (overloaded cadstruct version)
+%
+% This is called after any variable is assigned within the intermediate
+% program.
+%
+% Inputs:
+% FunString - the string which was just evaluated
+% x - the variable which was just assigned to
+% xStr - the name of the variable which was just assigned to
+% subsflag - flag determining whether this was a subs-assignment or not
+%           (true implies it was a subs-assignment)
+% Outputs:
+% x - modified version of input "x"
 %
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0

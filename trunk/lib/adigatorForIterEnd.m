@@ -1,6 +1,17 @@
-function [outEvalStr outEvalVar] = adigatorForIterEnd(ForCount,ForIter)
+function [outEvalStr, outEvalVar] = adigatorForIterEnd(ForCount,ForIter)
 % This transformation routine is placed at the end of each iteration of a
 % FOR loop in the intermediate program.
+%
+% Inputs:
+%   ForCount - integer identifying the FOR loop
+%   ForIter  - integer identifying which iteration of the loop is being
+%              evaluated
+%
+% Outputs:
+%   outEvalStr - cell arary of strings to be evaluated on the output in 
+%                order to modify the workspace
+%   outEvalVar - cell array containing variables to be placed into the 
+%                workspace 
 %
 % Copyright 2011-214 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0

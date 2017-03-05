@@ -2,6 +2,19 @@ function [myLoopVar, outEvalStr, outEvalVar] = adigatorForInitialize(ForCount,Us
 % This transformation routine is called prior to the evaluation of any FOR
 % loop in the intermediate program.
 %
+% Inputs:
+%   ForCount - integer identifying the FOR loop
+%   UserLoopVar - the variable in the user's program to be looped over
+%   whileflag - binary variable (true means this is actually a WHILE loop
+%               UserLoopVar is the arguement of the WHILE loop)
+%
+% Outputs:
+%   myLoopVar - the variable to be looped over in the intermediate program
+%   outEvalStr - cell arary of strings to be evaluated on the output in 
+%                order to modify the workspace
+%   outEvalVar - cell array containing variables to be placed into the 
+%                workspace 
+%
 % Copyright 2011-214 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
 global ADIGATOR ADIGATORFORDATA ADIGATORVARIABLESTORAGE

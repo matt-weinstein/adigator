@@ -1,6 +1,13 @@
 function ifLoop = adigatorIfLooper(IfCount)
 % This transformation routine is called when we are unrolling loops and
-% encounter an IF statement.
+% encounter an IF statement. In some instances it may be required to
+% evaluate the conditional set twice.
+%
+% Inputs: 
+%   IfCount  - integer identifying the conditional if/elseif/else set
+%
+% Outputs:
+%   ifLoop - variable to be looped upon and passed to adigatorIfLooperi
 %
 % Copyright 2011-214 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
