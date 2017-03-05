@@ -8,6 +8,20 @@ function [ForCount, IfCount] = adigatorPrintTempFiles(Ffid,Tfid,FlowInfo,...
 % This routine is called from adigator.m and calls no routines which are not
 % sub-routines of adigatorPrintTempFiles.m itself.
 %
+% Inputs:
+% Ffid - user function file ID (reading from)
+% Tfid - intermediate function file ID (writing to)
+% FlowInfo - data structure containing file locations of all flow control
+% DerNumber - integer identifying what order derivative file this is
+% ForCount  - if non-zero, function is a not the primary function
+% FunStrChecks - cell array containing strings to regexp to determine if a
+%                function call exists on any given line
+%
+% Outputs:
+% ForCount - number of for loops in the function
+% IfCount  - number of if statements in the function
+% 
+%
 % Copyright 2011-214 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
 
@@ -513,21 +527,11 @@ elseif any(FunLoc)
   fprintf(Tfid,[indent,'%% Call to User Function ',...
     FunStrChecks{FunLoc}(3:end-1),' --- (FunID %1.0d)\n'],FunLoc);
   % -------------------- Work on Inputs to Function --------------------- %
-  InputStart = End+1;
-  OpenLocs  = strfind(FunStri(InputStart:end),'(')+InputStart;
-  CloseLocs = strfind(FunStri(InputStart:end),')')+InputStart;
-  NumOpen   = length(OpenLocs);
-
-  if ~isempty(OpenLocs)
-      InputEnd = CloseLocs(find(CloseLocs(1:NumOpen) < OpenLocs,1,'first'))-2;
-      if isempty(InputEnd)
-        InputEnd = CloseLocs(NumOpen+1)-2;
-      end
-  else
-    InputEnd = CloseLocs(1)-2;
-  end
+  InputStart = End+1; 
+  % Get closing bracket for function call to get the input string
+  InputEnd   = adigatorFindMatchingParen(FunStri,End)-1;
   InputStr = FunStri(InputStart:InputEnd);
-  InputStrs = SeperateOutputStrings(InputStr(~isspace(InputStr)),1);
+  InputStrs = SeperateOutputStrings(InputStr,1);
   NumInputs = length(InputStrs);
   InVarStrs = cell(1,NumInputs);
   
@@ -633,8 +637,12 @@ end
 
 function VarStrings = SeperateOutputStrings(VarStr,IOflag)
 % Just seperates output variable strings
-SpaceLocs = ones(1,length(VarStr));
-SpaceLocs(~isspace(VarStr)) = 0;
+% IOflag = 1 implies input
+SpaceLocs = zeros(1,length(VarStr));
+if ~IOflag
+  % If outputs, treat spaces as seperators
+  SpaceLocs(isspace(VarStr)) = 1;
+end
 CommaLocs = strfind(VarStr,',');
 SpaceLocs(CommaLocs) = -1;
 CharLocs  = 1:length(VarStr);
@@ -644,28 +652,29 @@ ParenLoc1 = strfind(VarStr,'(');
 if ~isempty(ParenLoc1)
   % Remove any entries of my zero/comma vector that are in
   % between parenthesis
-  ParenLoc2 = strfind(VarStr,')');
   for Pcount = 1:length(ParenLoc1)
-    SpaceLocs(CharLocs > ParenLoc1(Pcount) & CharLocs<ParenLoc2(Pcount)) = 0;
+    CloseLoc = adigatorFindMatchingParen(VarStr,ParenLoc1(Pcount));
+    SpaceLocs(CharLocs > ParenLoc1(Pcount) & CharLocs<CloseLoc) = 0;
   end
 end
 CurlyLoc1 = strfind(VarStr,'{');
 if ~isempty(CurlyLoc1)
   % Remove any entries of my zero/comma vector that are in
   % between curlies
-  CurlyLoc2 = strfind(VarStr,'}');
   for Ccount = 1:length(CurlyLoc1)
-    SpaceLocs(CharLocs > CurlyLoc1(Ccount) & CharLocs<CurlyLoc2(Ccount)) = 0;
+    CloseLoc = adigatorFindMatchingParen(VarStr,CurlyLoc1(Ccount));
+    SpaceLocs(CharLocs > CurlyLoc1(Ccount) & CharLocs<CloseLoc) = 0;
   end
 end
 if IOflag
+  % This is an input
   SquareLoc1 = strfind(VarStr,'[');
   if ~isempty(SquareLoc1)
     % Remove any entries of my zero/comma vector that are in
     % between square brackets
-    SquareLoc2 = strfind(VarStr,']');
     for Ccount = 1:length(SquareLoc1)
-      SpaceLocs(SpaceLocs > SquareLoc1(Ccount) & SpaceLocs<SquareLoc2(Ccount)) = 0;
+      CloseLoc = adigatorFindMatchingParen(VarStr,SquareLoc1(Ccount));
+      SpaceLocs(CharLocs > SquareLoc1(Ccount) & CharLocs<CloseLoc) = 0;
     end
   end
 end
@@ -696,7 +705,6 @@ VarStrings = cell(NumOutVars,1);
 for Vcount = 1:NumOutVars
   VarStrings{Vcount} = strtrim(VarStr(VarLocs(Vcount)+1:VarLocs(Vcount+1)-1));
 end
-
 end
 
 function [Statement,whileflag] = getIfForStatement(Ffid,Location)

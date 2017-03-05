@@ -3,6 +3,14 @@ function [FunStr,NUMFunStr] = adigatorSeperateFunLines(FunStrFull)
 % This function seperates function lines when multiple commands are given
 % on the same line
 %
+% Inputs:
+% FunStrFull - full line read from a file (possibly containing multiple
+%             commands)
+% 
+% Outputs:
+% FunStr - cell array of individual commands
+% NUMFunStr - number of individual commands
+%
 % Copyright 2011-214 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
 
@@ -26,26 +34,13 @@ if ~strcmp(FunStrFull(1),'%')
   if ~isempty(FunStrLocs)
     SquareLocs1 = strfind(FunStrFull,'[');
     if ~isempty(SquareLocs1)
-      SquareLocs2 = strfind(FunStrFull,']');
       NUMSQL = length(SquareLocs1);
       for Scount = 1:NUMSQL
         % Need to find where bracket with Scount closes
-        if Scount < NUMSQL
-          for Ccount = Scount:NUMSQL-1
-            if SquareLocs2(Ccount) < SquareLocs1(Ccount+1)
-              CloseLoc = Ccount;
-              break
-            end
-            if Scount == NUMSQL-1
-              CloseLoc = NUMSQL;
-            end
-          end
-        else
-          CloseLoc = Scount;
-        end
+        CloseLoc = adigatorFindMatchingParen(FunStrFull,SquareLocs1(Scount));
         for S2count = 1:length(FunStrLocs)
           if FunStrLocs(S2count) > SquareLocs1(Scount) &&...
-              FunStrLocs(S2count) < SquareLocs2(CloseLoc)
+              FunStrLocs(S2count) < CloseLoc
             FunStrLocs(S2count) = 0;
           end
         end
@@ -54,26 +49,13 @@ if ~strcmp(FunStrFull(1),'%')
     end
     SquareLocs1 = strfind(FunStrFull,'{');
     if ~isempty(SquareLocs1)
-      SquareLocs2 = strfind(FunStrFull,'}');
       NUMSQL = length(SquareLocs1);
       for Scount = 1:NUMSQL
         % Need to find where bracket with Scount closes
-        if Scount < NUMSQL
-          for Ccount = Scount:NUMSQL-1
-            if SquareLocs2(Ccount) < SquareLocs1(Ccount+1)
-              CloseLoc = Ccount;
-              break
-            end
-            if Scount == NUMSQL-1
-              CloseLoc = NUMSQL;
-            end
-          end
-        else
-          CloseLoc = NUMSQL;
-        end
+        CloseLoc = adigatorFindMatchingParen(FunStrFull,SquareLocs1(Scount));
         for S2count = 1:length(FunStrLocs)
           if FunStrLocs(S2count) > SquareLocs1(Scount) &&...
-              FunStrLocs(S2count) < SquareLocs2(CloseLoc)
+              FunStrLocs(S2count) < CloseLoc
             FunStrLocs(S2count) = 0;
           end
         end
