@@ -171,6 +171,16 @@ elseif ADIGATOR.RUNFLAG == 1
   outEvalStr = [];
   outEvalVar = [];
   
+elseif ADIGATORFORDATA(ForCount).MAXLENGTH == 0
+  % --------------------------------------------------------------------- %
+  %                  Printing Run - Loop Never Runs                       %
+  % --------------------------------------------------------------------- %
+  % Dont ned to run this loop. Set exit sequence
+  ADIGATOR.VARINFO.COUNT = ADIGATORFORDATA(ForCount).END+1;
+  ADIGATOR.PREOPCOUNT    = ADIGATOR.VARINFO.COUNT;
+  myLoopVar = [];
+  outEvalVar = [];
+  outEvalStr = [];
 else
   % --------------------------------------------------------------------- %
   %                           Printing Run                                %

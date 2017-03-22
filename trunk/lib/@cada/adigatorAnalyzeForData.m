@@ -46,6 +46,10 @@ NDstr         = sprintf('%1.0d',ADIGATOR.DERNUMBER);
 %                EMBEDDED FOR LOOP ITERATION SIZES                        %
 % ----------------------------------------------------------------------- %
 ADIGATORFORDATA(FORCOUNT).MAXLENGTH = ADIGATORFORDATA(FORCOUNT).FOR(1).LENGTHS;
+if isempty(ADIGATORFORDATA(FORCOUNT).MAXLENGTH)
+  % Guard against loop that does not run
+  ADIGATORFORDATA(FORCOUNT).MAXLENGTH = 0;
+end
 OuterLoopMaxLength = ADIGATORFORDATA(FORCOUNT).MAXLENGTH;
 for Fcount = 2:length(ADIGATORFORDATA(FORCOUNT).FOR)
   % -------------------- Check for Dependencies ------------------------- %
@@ -56,11 +60,11 @@ for Fcount = 2:length(ADIGATORFORDATA(FORCOUNT).FOR)
   end
   % Set MAXLENGTH field of ADIGATORFORDATA
   ADIGATORFORDATA(FORLOCS(1,end)).MAXLENGTH = max(ForLengths(:));
-%   NUMloops    = size(FORLOCS,2)-1;
-%   FORLENGTHS  = zeros(1,NUMloops);
-%   for F2count = 1:NUMloops
-%     FORLENGTHS(F2count) = ADIGATORFORDATA(FORLOCS(1,F2count)).MAXLENGTH;
-%   end
+  if isempty(ForLengths)
+    % Guard against loop that does not run
+    ADIGATORFORDATA(FORLOCS(1,end)).MAXLENGTH = 0;
+  end
+
   [FORLENGTHS,WHILEFLAGS] = GetForLengths(ADIGATORFORDATA,FORLOCS(:,1:end-1));
 
   FORDEP = GetDataDependencies(ForLengths,FORLENGTHS);
