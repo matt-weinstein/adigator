@@ -29,6 +29,14 @@ y.id = ADIGATOR.VARINFO.COUNT;
 [funcstr,DPFLAG] = cadafuncname();
 y.func  = struct('name',funcstr,'size',[FMrow FNcol],...
   'zerolocs',[],'value',x.func.value.');
+
+% Replace any Inf sizes with a 1 for function/deriv mapping.
+if yvec == 1
+  FMrow = 1; xNcol = 1; 
+elseif yvec == 2 
+  FNcol = 1; xMrow = 1; 
+end
+
 if ~isempty(x.func.zerolocs)
   xtemp = true(xMrow,xNcol);
   xtemp(x.func.zerolocs) = false;
@@ -39,7 +47,7 @@ end
 if isfield(x.func,'logicref')
   y.func.logicref = x.func.logicref([2 1]);
 end
-if yvec == 1; FMrow = 1; elseif yvec == 2; FNcol = 1; end
+
 
 % ------------------Build Derivative Properties-----------------------%
 xref = zeros(FNcol,FMrow); xref(:) = 1:FMrow*FNcol;
