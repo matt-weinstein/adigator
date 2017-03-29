@@ -8,5 +8,5 @@
 % burgersfun.m         - original burgers function taken from burgersode.m 
 %                        file
 % burgersfun_noloop.m  - modified burgers function, (loops removed)
-% burgerssolve.m       - solves burgers ODE supplying derivatives with
+% main.m               - solves burgers ODE supplying derivatives with
 %                        ADiGator - ADiGator differentiates the noloop file

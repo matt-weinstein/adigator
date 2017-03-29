@@ -4,10 +4,15 @@
 %
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
-options = optimset('Algorithm','interior-point','MaxFunEvals',50000,...
-  'GradObj','on','GradConstr','on','Display','iter');
-time = zeros(4,1);
+
+solveflag = exist('fmincon','file');
+if solveflag
+  options = optimset('Algorithm','interior-point','MaxFunEvals',50000,...
+    'GradObj','on','GradConstr','on','Display','iter');
+end
+
 numintervals = [5,10,20,40];
+time = zeros(length(numintervals),1);
 tic
 % -------------- Vectorized Derivatives of Dynamics File ---------------- %
 % We want to take the derivatives of the dynamics file since it is a file
@@ -28,7 +33,7 @@ time(1) = toc;
 % Note, this is done outside of the loop - since its vectorized we only
 % need to create this file once.
 
-for i = 1:4
+for i = 1:length(numintervals)
 tic;
 % ---------------------- Set Up the Problem ----------------------------- %
 if i == 1
@@ -73,9 +78,16 @@ gtf = adigatorCreateDerivInput([1 1],...
 adigator('vect_cons',{gx,gf,gtf,probinfo},'vect_cons_z',adigatorOptions('overwrite',1));
 % We create a wrapper for this file in vect_conswrap.m
 % --------------------------- Call fmincon ------------------------------ %
-[z,fval] = ...
-  fmincon(@(x)basic_objwrap(x,probinfo),guess,[],[],[],[],...
-  lowerbound,upperbound,@(x)vect_conswrap(x,probinfo),options);
+if solveflag
+  [z,fval] = ...
+    fmincon(@(x)basic_objwrap(x,probinfo),guess,[],[],[],[],...
+    lowerbound,upperbound,@(x)vect_conswrap(x,probinfo),options);
+else
+  % No optimization toolbox, just test that functions work
+  z = guess;
+  [fval,G] = basic_objwrap(z,probinfo);
+  [C,Ceq,JC,JCeq] = vect_conswrap(z,probinfo);
+end
 
 % --------------------------- Extract Solution -------------------------- %
 t = tau(:).*fval;
