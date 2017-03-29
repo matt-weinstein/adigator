@@ -1,4 +1,4 @@
-function DCALmain(tf,noiseflag)
+function main(tf,noiseflag)
 % Simulate a 2-link robot with DCAL controller using ADiGator to
 % 1. Find third time derivative of desired trajectory
 % 2. Find time derivative of Yd, the desired trajectory matrix
@@ -7,7 +7,8 @@ function DCALmain(tf,noiseflag)
 % NOTE: this problem has a mass matrix and could be coded more efficiently,
 % control parameters likely not optimal either..
 % inputs: tf  - final time (default 10)
-%         noiseflag - binary to add noise (default 0)
+%         noiseflag - binary to add noise (default 0) - in hindsight, noise
+%         not handled well
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
 global probinfo
@@ -57,8 +58,8 @@ qd = qd.';
   
 % Cant put random variables into ode or will never be able to integrate,
 % we define a random noise prior to the simulation and interpolate off of
-% this to simulate noise.
-probinfo.noise = (rand(2,N) - rand(2,N)).*.05;
+% this to simulate noise. This isn't exactly correct..
+probinfo.noise = randn(2,N).*.05;
 probinfo.time  = t;
 
 fprintf('\nRunning simulation with following parameters:\n');

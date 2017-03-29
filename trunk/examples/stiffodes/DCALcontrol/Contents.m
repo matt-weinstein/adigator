@@ -5,7 +5,7 @@
 %
 % ----------------------------------------------------------------------- %
 % FILES:
-% DCALmain.m   - sets up the DCAL controller problem for 2 link robot -
+% main.m       - sets up the DCAL controller problem for 2 link robot -
 %                differentiates getqd, getYd, and TwoLinkSys with ADiGator
 % getqd.m      - desired trajectory file
 % getYd.m      - desired trajectory matrix file

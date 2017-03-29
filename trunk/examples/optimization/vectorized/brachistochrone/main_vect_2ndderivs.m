@@ -5,10 +5,15 @@
 %
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
-options = optimset('Algorithm','interior-point','MaxFunEvals',50000,...
-  'GradObj','on','GradConstr','on','Display','iter');
-time = zeros(4,1);
+
+solveflag = exist('fmincon','file');
+if solveflag
+  options = optimset('Algorithm','interior-point','MaxFunEvals',50000,...
+    'GradObj','on','GradConstr','on','Display','iter');
+end
+
 numintervals = [5,10,20,40];
+time = zeros(length(numintervals),1);
 tic
 % -------------- Vectorized Derivatives of Dynamics File ---------------- %
 % We want to take the derivatives of the dynamics file since it is a file
@@ -43,7 +48,7 @@ I2 = dyn_out2{1}.dY.deriv.nzlocs(:,1); J2 = dyn_out2{1}.dY.deriv.nzlocs(:,2);
 
 
 
-for i = 1:4
+for i = 1:length(numintervals)
 start = tic;
 % ---------------------- Set Up the Problem ----------------------------- %
 if i == 1
@@ -114,7 +119,7 @@ gdf = adigatorCreateDerivInput([numel(II1), 1],...
   struct('vodname','z','vodsize',[length(guess),1],...
   'nzlocs',[II2,JJ2])); % df has derivatives wrt z defined by [II2 JJ2]
 gdtf = 1; % dtf has no derivative wrt z
-glambda = adigatorCreateAuxInput(Coutput{1}.size);
+glambda = adigatorCreateAuxInput(Coutput{1}.func.size);
 % Call adigator
 gH2 = adigator('vect_laggrad',{gx,gdx,gf,gdf,gtf,gdtf,glambda,probinfo},...
   'vect_laggrad_z',adigatorOptions('overwrite',1));
@@ -122,13 +127,24 @@ gH2 = adigator('vect_laggrad',{gx,gdx,gf,gdf,gtf,gdtf,glambda,probinfo},...
 % ------------------------ Define Hessian File -------------------------- %
 % We wrote a wrapper for vect_laggrad_z and called it vect_laggradwrap.m -
 % this will create the Lagrangian Hessian from vect_laggrad_z.
-options = optimset(options,'Hessian','user-supplied','HessFcn',...
-  @(z,lambda)vect_laggradwrap(z,lambda,probinfo));
+if solveflag
+  options = optimset(options,'Hessian','user-supplied','HessFcn',...
+    @(z,lambda)vect_laggradwrap(z,lambda,probinfo));
+end
 
 % --------------------------- Call fmincon ------------------------------ %
+if solveflag
 [z,fval,exitflag,output,lambda] = ...
   fmincon(@(x)basic_objwrap(x,probinfo),guess,[],[],[],[],...
   lowerbound,upperbound,@(x)vect_conswrap(x,probinfo),options);
+else
+  % No optimization toolbox, just test that functions work
+  z = guess;
+  [fval,G] = basic_objwrap(z,probinfo);
+  [C,Ceq,JC,JCeq] = vect_conswrap(z,probinfo);
+  lambda.eqnonlin = ones(length(Ceq),1);
+  [H,G2] = vect_laggradwrap(z,lambda,probinfo);
+end
 
 % --------------------------- Extract Solution -------------------------- %
 t = tau(:).*fval;
