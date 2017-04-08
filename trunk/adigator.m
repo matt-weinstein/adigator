@@ -3,9 +3,9 @@ function [Outputs,varargout] = adigator(UserFunName,UserFunInputs,DerFileName,va
 % on a user's function file.
 %
 % ------------------------------ Usage ---------------------------------- %
-% function adigator(UserFunName,UserFunInputs,DerFileName)
+% adigator(UserFunName,UserFunInputs,DerFileName)
 %                   or
-% function adigator(UserFunName,UserFunInputs,DerFileName,Options)
+% adigator(UserFunName,UserFunInputs,DerFileName,Options)
 %
 % ------------------------ Input Information ---------------------------- %
 % UserFunName: String name of the user function to be differentiated
@@ -737,7 +737,7 @@ function [x, xt] = ParseUserFunInputs(x,changeflag)
 global ADIGATOR
 nvod = ADIGATOR.NVAROFDIFF;
 xt   = x;
-if isa(x,'cada')
+if isa(x,'adigatorInput') || isa(x,'cada')
   if ~changeflag
     for Vcount = 1:length(x.deriv)
       vodname = x.deriv(Vcount).vodname;

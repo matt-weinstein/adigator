@@ -45,8 +45,8 @@ function output = adigatorGenHesFile(UserFunName,UserFunInputs,varargin)
 %     output.HessianFile  = 'myfun_Hes'
 %     output.HessianStructure = sparse ones and zeros.
 % The generated Hessian/gradient files have the same input structure as the
-% original user function. The output of of Hessian file is [Hes, Grd, Fun].
-% The output of of gradient file is [Grd, Fun].
+% original user function. The output of Hessian file is [Hes, Grd, Fun].
+% The output of gradient file is [Grd, Fun].
 %
 % ----------------------- Additional Information -------------------------
 % The Hessian is built as a sparse matrix under the condition that
@@ -94,7 +94,7 @@ end
 derflag = 0;
 for I = 1:numel(UserFunInputs)
   x = UserFunInputs{I};
-  if isa(x,'cada')
+  if isa(x,'adigatorInput')
     if ~isempty(x.deriv)
       if derflag > 0
         error('adigatorGenHesFile is only used for single derivative variable input')
