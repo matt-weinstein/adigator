@@ -53,6 +53,5 @@ if nargout == 2
   % Want to build seed matrix as well
   x(c==0) = [];
   c(c==0) = [];
-  nx = length(x);
-  S = sparse(x,c,ones(nx,1),n,nc);
+  S = sparse(x,c,1,n,nc);
 end

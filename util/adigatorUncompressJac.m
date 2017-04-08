@@ -16,5 +16,5 @@ function J = adigatorUncompressJac(Jpat,c,JSnz)
 
 [m,n] = size(Jpat);
 [i,j] = find(Jpat);
-order = nonzeros(sparse(i,c(j),1:length(i)),m,n);
+order = nonzeros(sparse(i,c(j),1:length(i),m,n));
 J = sparse(i,j,JSnz(order),m,n);
