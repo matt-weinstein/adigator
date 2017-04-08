@@ -40,7 +40,7 @@ function output = adigatorGenJacFile(UserFunName,UserFunInputs,varargin)
 %     output.JacobianFile = 'myfun_Jac'
 %     output.JacobianStructure = sparse ones and zeros.
 % The generated Jacobian file has the same input structure as the original
-% user function. The output of of Jacobian file is [Jac, Fun].
+% user function. The output of Jacobian file is [Jac, Fun].
 %
 % ----------------------- Additional Information -------------------------
 % The Jacobian is built as a sparse matrix under the condition that
@@ -87,7 +87,7 @@ end
 derflag = 0;
 for I = 1:numel(UserFunInputs)
   x = UserFunInputs{I};
-  if isa(x,'cada')
+  if isa(x,'adigatorInput')
     if ~isempty(x.deriv)
       if derflag > 0
         error('adigatorGenJacFile is only used for single derivative variable input')

@@ -1,11 +1,10 @@
 function x = adigatorCreateDerivInput(xsize,derivinfo)
-% function x = adigatorCreateDerivInput(xsize,derivinfo)
-% 
-% This function creates an input,x, which has derivatives that is to be 
-% used with the function source-to-derivative source transformation
-% function, adigator.
+% ADiGator derivative input variable creation routine.
 %
-% Input Information:
+% ------------------------------ Usage ---------------------------------- %
+% x = adigatorCreateDerivInput(xsize,derivinfo)
+%
+% ------------------------ Input Information ---------------------------- %
 % xsize = [mx my]
 %       where mx and my are the row and column dimensions, respectively, of
 %       the input x.    
@@ -39,10 +38,11 @@ function x = adigatorCreateDerivInput(xsize,derivinfo)
 % string name in .vodname together with .vodsize = xsize, .nzlocs =
 % [(1:mx*my).' (1:mx*my).'].
 %
-% Simple Example:
-% If we are to differentiate a function, y = myfun(x,a), with respect to the
-% input x, where x is a vector of length 3, and a is some auxiliary input,
-% we would do so as follows: (Assuming input a is previously defined)
+% --------------------------- Simple Example ---------------------------- %
+% If we are to differentiate a function, y = myfun(x,a), with respect to
+% the input x, where x is a vector of length 3, and a is some auxiliary
+% input, we would do so as follows: (Assuming input a is previously
+% defined)
 %
 % % Define the input size
 % xsize = [3 1];
@@ -159,3 +159,4 @@ else
     'array with fields: vodname, vodsize, nzlocs'])
 end
 x = cada(0,func,deriv);
+x = adigatorInput(func,deriv);
