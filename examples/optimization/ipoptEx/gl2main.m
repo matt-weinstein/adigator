@@ -44,8 +44,10 @@ Hs = feval(funcs.hessianstructure);
 
 v = rand(n,1);
 
-% % Call ipopt - will error here if ipopt not installed
-options.ipopt.tol = sqrt(eps);
-options.lb = -Inf*ones(n,1);
-options.ub = Inf*ones(n,1);
-[z, info] = ipopt(z0,funcs,options);
+% % Call ipopt 
+if exist('ipopt','file')
+  options.ipopt.tol = sqrt(eps);
+  options.lb = -Inf*ones(n,1);
+  options.ub = Inf*ones(n,1);
+  [z, info] = ipopt(z0,funcs,options);
+end

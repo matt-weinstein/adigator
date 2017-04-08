@@ -1,6 +1,8 @@
 function x = adigatorStructAnalyzer(x,xStr,subsflag)
-% function x = adigatorStructAnalyzer(x,xStr,subsflag)
-% CADASTRUCT overloaded version
+% CADASTRUCT overloaded version of adigatorStructAnalyzer
+%
+% Called to recursively parse structure/cell objects and call
+% adigatorVarAnalyzer on each of the CADA objects.
 
 global ADIGATOR
 if isa(x,'cadastruct') && ~x.arrayflag

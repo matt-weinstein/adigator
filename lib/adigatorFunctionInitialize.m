@@ -1,5 +1,7 @@
-function [flag, FunctionInfo, Outputs, varargout] = adigatorFunctionInitialize(FunID,FunctionInfo,Inputs)
-% function [flag, Outputs] = adigatorFunctionInitialize(FunID,Inputs)
+function [flag, FunctionInfo, Outputs, prevDerivData] = ...
+  adigatorFunctionInitialize(FunID,FunctionInfo,Inputs)
+% [flag, FunctionInfo, Outputs, prevDerivData] = ...
+%       adigatorFunctionInitialize(FunID,FunctionInfo,Inputs)
 % This function is called from the evaluating files when the main function
 % or any sub-function is initially called.
 % ------------------------ Input Information ---------------------------- %
@@ -10,10 +12,15 @@ function [flag, FunctionInfo, Outputs, varargout] = adigatorFunctionInitialize(F
 % ----------------------- Output Information ---------------------------- %
 % flag:     this is set to 0 or 1, it is set to 0 if the function is to be
 %           evaluated, 1 if the function is not to be evaluated.
+% FunctionInfo: modified data structure containing all information on the 
+%           program being differentiated
 % Outputs:  these are either the actual inputs to the function or the
 %           outputs of the function. If flag = 1, then these are the
 %           outputs (the function didnt need to be run), if flag = 0, then
 %           these are the inputs.
+% prevDerivData: if this is function was created using adigator, then
+%           prevDerivData is made to contain the static data saved to the
+%           .mat file when the function was generated
 %
 % Copyright 2011-214 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
@@ -48,9 +55,9 @@ if ADIGATOR.OPTIONS.PREALLOCATE
   ADIGATOR.STRUCASGN = FunctionInfo(FunID).STRUCASGN;
   Outputs = Inputs; flag = 0;
   if FunctionInfo(FunID).DERNUMBER > 1
-    varargout{1} = FunctionInfo(FunID).PreviousDerivData;
+    prevDerivData = FunctionInfo(FunID).PreviousDerivData;
   else
-    varargout = cell(1);
+    prevDerivData = [];
   end
   return
 end
@@ -639,9 +646,9 @@ end
 if FunctionInfo(FunID).DERNUMBER > 1
   %% ~~~~~~ LOAD IN PREVIOUS DERIV DATA IF 2ND OR HIGHER CALL ~~~~~~~~~~ %%
   if ~flag
-    [varargout{1},FunctionInfo] = getOverloadedData(FunctionInfo,FunID,ADIGATOR.NVAROFDIFF);
+    [prevDerivData,FunctionInfo] = getOverloadedData(FunctionInfo,FunID,ADIGATOR.NVAROFDIFF);
   else
-    varargout = cell(1);
+    prevDerivData = [];
   end
 end
 if ADIGATOR.OPTIONS.UNROLL

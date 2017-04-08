@@ -1,9 +1,19 @@
 function options = adigatorOptions(varargin)
-% function options = adigatorOptions(field1,value1,field2,value2,...)
+% ADiGator Options Structure Generator: Called in order set/modify default
+% ADiGator options.
+% 
+% ------------------------------ Usage ---------------------------------- %
+% options = adigatorOptions(field1,value1,field2,value2,...)
 %
-% This function sets the various options for the file generation calls to
-% adigator, adigatorGenFiles4gpops2, adigatorGenJacFile,
-% adigatorGenHesFile, adigatorGenFiles4Ipopt, adigatorGenFiles4Fmincon
+% ------------------------ Input Information ---------------------------- %
+% field:  string name of option to be modified
+% value:  value to set option to
+%
+% ----------------------- Output Information ---------------------------- %
+% options: structure to be passed to adigator, or any of the utility
+%          ADiGator generation routines (adigatorGenJacFile,
+%          adigatorGenHesFile, adigatorGenFiles4Fmincon,
+%          adigatorGenFiles4Ipopt, adigatorGenFiles4gpops2)
 %
 %                                OPTIONS:  
 % ------------------------------------------------------------------------

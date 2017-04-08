@@ -1,6 +1,12 @@
 function yi = interp1(varargin)
+% CADA overloaded INTERP1
+%
+%
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
+%
+% See also: polyfun/interp1
+
 global ADIGATOR
 NUMvod  = ADIGATOR.NVAROFDIFF;
 fid     = ADIGATOR.PRINT.FID;

@@ -1,6 +1,8 @@
 function zi = adigatorEvalInterp2pp(pp,xi,yi)
-% function ZI = adigatorEvalInterp2pp(pp,XI,YI)
-% OVERLOADED VERSION
+% CADA overloaded version of adigatorEvalInterp2pp
+% 
+% Syntax: ZI = adigatorEvalInterp2pp(pp,XI,YI)
+%
 % This function is used to evaluate the 2-D piecewise polynomials generated
 % using the adigatorGenInterp2pp function. Since MATLAB does not have a
 % built in 2-D polynomial evaluation command, this file will need to be in

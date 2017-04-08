@@ -11,11 +11,11 @@
 % basic_laggradwrap.m    - lagrangian gradient wrapper file for non-vect
 % basic_objwrap.m        - objective wrapper for non-vect
 % dynamics.m             - dynamics function
-% main_basic_1stderivs.m - solve with 1st derivatives, non-vect
-% main_basic_2ndderivs.m - solve with 2nd derivatives, non-vect
+% main_basic_1stderivs.m - solve with 1st derivatives, non-vectorized
+% main_basic_2ndderivs.m - solve with 2nd derivatives, non-vectorized
 % main_noderivs.m        - solve with no supplied derivatives
-% main_vect_1stderivs.m  - solve with 1st derivatives, non-vect
-% main_vect_2ndderivs.m  - solve with 2nd derivatives, non-vect
+% main_vect_1stderivs.m  - solve with 1st derivatives, vectorized
+% main_vect_2ndderivs.m  - solve with 2nd derivatives, vectorized
 % setupproblem.m         - problem setup - initial guess and collocation
 % vect_cons.m            - constraint function for use with vect
 % vect_conswrap.m        - constraint wrapper for use with vect

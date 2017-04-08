@@ -1,6 +1,5 @@
 function x = adigatorVarAnalyzer(FunString,x,xStr,subsflag)
-%function varargout = adigatorVarAnalyzer(FunString,x,xStr,subsflag) 
-% (overloaded cadstruct version)
+% CADASTRUCT version of adigatorVarAnalyzer
 %
 % This is called after any variable is assigned within the intermediate
 % program.

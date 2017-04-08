@@ -1,11 +1,18 @@
 classdef cada
   % cada classdef file for use with the ADiGator package.
   %
+  % The cada class is used internally by the ADiGator algorithm in order to
+  % overload mathematical and organizational operations. It is not intended
+  % to be used outside of the ADiGator algorithm.
+  %
   % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
   % Distributed under the GNU General Public License version 3.0
   properties
+    % Unique integer identifier
     id
+    % Function information (size, name of function variable, etc.)
     func
+    % Derivative information (locations, name of derivative variable)
     deriv
   end
   
@@ -55,7 +62,7 @@ classdef cada
   end
   
   
-  methods (Access = private)
+  methods 
     % Generalized derivative procedures
     [y,varargout] = cadaEmptyEval(varargin)
     y = cadaunarymath(x,zeroflag,callerstr)
@@ -63,20 +70,6 @@ classdef cada
     y = cadacreatearray(callerstr,varargin)
     z = cadabinaryarraymath(x,y,xzeroflag,yzeroflag,callerstr)
   end 
-  
-  % Private methods in private folder
-  methods (Access = private)
-    % Matrix operation derivative procedures
-    %nzlocs = cadainversederiv(x,ytemp,Vcount,derivstr,DPFLAG)
-    %nzlocs = cadamtimesderiv(x,y,xtemp,ytemp,Vcount,derivstr,DPFLAG,caller)
-    %nzlocs = cadamtimesderivvec(x,y,xtemp,ytemp,Vcount,derivstr,DPFLAG,zvec)
-    
-    % Utility functions
-    % cadaCancelDerivs(varid,numvars)
-    %[z,zxind,zyind,xflag,yflag] = cadaunion(x,y,m,n)
-    %[yName,yInds] = cadaRepDers(xName,xInds,ySize,Vcount,DPFLAG)
-    %y = cadaRemoveRowsCols(x,ySize)
-  end
   
   % Overloaded array creation operations
   methods

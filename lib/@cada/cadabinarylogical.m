@@ -1,5 +1,8 @@
 function z = cadabinarylogical(x,y,callerstr)
-% Called by: and, or, xor, eq, ge, gt, le, lt, ne
+% cadaunarylogical routine called by overloaded binary logical operations:
+%      and, or, xor, eq, ge, gt, le, lt, ne
+%
+% Assumed syntax: z = callerstr(x,y);
 %
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0

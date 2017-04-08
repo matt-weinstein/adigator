@@ -1,10 +1,10 @@
 function varargout = adigatorVarAnalyzer(FunString,varargin)
-%function varargout = adigatorVarAnalyzer(FunString,varargin)
-%(non-overloaded)
-% This module is the NON-Overloaded Version of adigatorVarAnalyzer. This is
-% called from the temporary functions after a line of user code has
-% been evaluated in order to analyze the outputs. As this is the non-overloaded
-% version, it will only be called if all inputs are non-overloaded.
+% This module is the NON-Overloaded Version of adigatorVarAnalyzer. 
+%
+% This is called from the temporary functions after a line of user code has
+% been evaluated in order to analyze the outputs. As this is the
+% non-overloaded version, it will only be called if all inputs are
+% non-overloaded.
 % -----------------------Input Information------------------------------- %
 % FunString - the actual User's line of code which has just been evaluated
 % varargin  - Information on all of the outputs from the user line of code

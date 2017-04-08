@@ -1,6 +1,6 @@
 function [FORDATA, IFDATA, VARINFO,VARSTORAGE] = adigatorAssignOvermapScheme(FunID,...
     FunAsLoopFlag,FORDATA,IFDATA,VARINFO,BREAKLOCS,CONTLOCS,ERRORLOCS,UNROLL)
-% This function is used to Assign the Overmap scheme for all FOR loops and
+% This function is used to assign the overmap scheme for all FOR loops and
 % IF/ELSEIF/ELSE statements. This is called after the first empty
 % evaluation of the program to be differentiated. It takes in information
 % mapping out the location of all function variables and flow control

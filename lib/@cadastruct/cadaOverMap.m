@@ -1,10 +1,10 @@
 function xOut = cadaOverMap(x,varargin)
-%function varargout = cadaOverMap(x,varargin)
-% Structure version
-% this function Drives the Overmapping of Variables in For loops. If in the
-% pre-printing run, it creates the OverMap by calling UnionVars. If in the
+% CADASTRUCT version of cadaOverMap
+%
+% This function drives the overmapping of variables in For loops. If in the
+% pre-printing run, it creates the overmap by calling UnionVars. If in the
 % printing run, it checks that the variable is properly overmapped. This is
-% in the Overloaded folder because x is always overloaded.
+% in the overloaded folder because x is always overloaded.
 % ------------------------ Input Information ---------------------------- %
 % x:        variable to be overmapped in the FOR loop
 % varargin: if there is a direct assignment, then this contains the .id

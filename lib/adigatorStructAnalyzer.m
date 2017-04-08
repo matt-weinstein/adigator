@@ -1,6 +1,8 @@
 function x = adigatorStructAnalyzer(x,xStr,~)
-% function x = adigatorStructAnalyzer(x,xStr,subsflag)
-% Non-overloaded version - only called for structures or strings
+% Non-overloaded adigatorStructAnalyzer - only called for structures or strings
+% 
+% Called to recursively parse structure/cell objects and call
+% adigatorVarAnalyzer on each of the CADA objects.
 % 
 % Inputs:
 % x - variable which was just created

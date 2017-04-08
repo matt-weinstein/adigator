@@ -1,13 +1,21 @@
 classdef cadastruct
-  % cadastruct classdef file for use with the ADiGator  package.
+  % cadastruct classdef file for use with the ADiGator package.
+  %
+  % This class was introduced in order to adigator to handle cell and
+  % structure array references/assignments. It is used internally by the
+  % ADiGator algorithm and is not intended for general use.
   %
   % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
   % Distributed under the GNU General Public License version 3.0
   
   properties
+    % Unique integer ID
     id 
+    % Name of the cell/structure in the printed derivative file
     name 
+    % Structure/cell data containing CADA objects
     val
+    % Flag stating whether data is cell/structure array or scalar structure
     arrayflag
   end
   
@@ -34,9 +42,6 @@ classdef cadastruct
     y = horzcat(varargin)
     z = isequal(x,y,varargin)
     y = length(x)
-    function y = numel(varargin)
-      y = 1;
-    end
     yi = ppval(pp,xi)
     y = repmat(x,varargin)
     y = reshape(x,varargin)
@@ -47,7 +52,13 @@ classdef cadastruct
     y = transpose(x)
     y = vertcat(varargin)
     function y = isfield(x,f)
+      % CADASTRUCT overloaded ISFIELD function
       y = isfield(x.val,f);
+    end
+    function y = numel(varargin)
+      % CADASTRUCT overloaded NUMEL - always returns 1, cannot be used to
+      % determine number of elements of cell/structure array
+      y = 1;
     end
   end
   
@@ -65,15 +76,19 @@ classdef cadastruct
   % Access Methods
   methods
     function val = cadaGetStruct(y)
+      % Value access for cadastruct
       val = y.val;
     end
     function val = cadaGetStructID(y)
+      % ID access for cadastruct
       val = y.id;
     end
     function aflag = cadaIsArray(x)
+      % Checks if object corresponds to a structure/cell array
       aflag = x.arrayflag;
     end
     function [val, name, id, arrayflag] = cadastructDecomp(x)
+      % Accesses all cadastruct data
       val       = x.val;
       name      = x.name;
       id        = x.id;

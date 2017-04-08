@@ -1,9 +1,8 @@
 function adigatorPrintOutputIndices(x)
-%function adigatorPrintOutputIndices(x)
-% This module is used to print the derivative mapping to file after all of
-% the derivative computations have been printed. The indices and sizes this
-% file prints allows the derivative variables which have been printed to
-% file to be mapped into their proper Jacobians/Hessians/higher-orders
+% Prints the derivative mapping to file after all of the derivative
+% computations have been printed. The indices and sizes this file prints
+% allows the derivative variables which have been printed to file to be
+% mapped into their proper Jacobians/Hessians/higher-orders.
 %
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0

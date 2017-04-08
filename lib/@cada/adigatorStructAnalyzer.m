@@ -1,6 +1,14 @@
 function x = adigatorStructAnalyzer(x,xStr,subsflag)
-% function x = adigatorStructAnalyzer(x,xStr,subsflag)
-% CADA overloaded version
+% CADA overloaded version of adigatorStructAnalyzer
+%
+% Other versions are called to recursively parse structure/cell objects and
+% call adigatorVarAnalyzer on each of the CADA objects. The fact that this
+% has been called implies that the CADA object lives within a
+% cell/structure, thus there are a few special cases that are checked for
+% prior to callling adigatorVarAnalyzer.
+%
+% Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
+% Distributed under the GNU General Public License version 3.0
 global ADIGATOR
 NUMvod  =   ADIGATOR.NVAROFDIFF;
 xID = x.id;

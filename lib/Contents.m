@@ -13,6 +13,8 @@
 %                                 in intermediate program, cadastruct
 %                                 objects contain cell/structure arrays
 %                                 which also contain cada objects.
+% adigatorInput                 - class to define adigator input variables
+%
 % ----------------------------------------------------------------------- %
 % FILES:
 % adigatorAssignImpVarNames.m   - adds new row to ADIGATOR.VARINFO.NAMELOCS

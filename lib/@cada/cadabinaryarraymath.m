@@ -1,12 +1,17 @@
 function z = cadabinaryarraymath(x,y,xzeroflag,yzeroflag,callerstr)
 % Binary math function - any binary mathematical functions should call this
 % function in order to print the derivative. The derivative of each calling
-% function must be defined in the getdzdx/getdzdy sub-functions.
+% function must be defined in the getdzdx/getdzdy sub-functions. 
+%
+% The assumed syntax is z = callerstr(x,y).
+% 
+% Zero flags are defined such that:
 % xzeroflag => if x(i) = 0, then [dz/dy](i,:) = 0
 % yzeroflag => if y(i) = 0, then [dz/dx](i,:) = 0;
 %
 % Copyright 2011-2014 Matthew J. Weinstein, Michael Patterson and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
+
 global ADIGATOR
 if ADIGATOR.EMPTYFLAG
   z = cadaEmptyEval(x,y);
