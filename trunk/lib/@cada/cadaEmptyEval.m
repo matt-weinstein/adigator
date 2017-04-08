@@ -1,6 +1,6 @@
 function [y,varargout] = cadaEmptyEval(varargin)
 % This serves to simply increase ADIGATOR.VARINFO.COUNT and assign stuff
-% to ADIGATOR.VARINFO.LASTOCC when in empty evalatuions
+% to ADIGATOR.VARINFO.LASTOCC when in empty evaluations
 %
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0

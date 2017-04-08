@@ -2,7 +2,7 @@ function nzlocs = cadainversederiv(x,ytemp,Vcount,derivstr,DPFLAG)
 % This function does the Derivative Calculations for Matrix Inverse, thus,
 % mldivide, mrdivide, and inv call this function for matrix derivatives.
 % Letting y = inv(x), the derivative of the inverse is calculated using the
-% fact that I = y*x, thus dI = dy*x + y*x = 0 => dy = -y*dx*y
+% fact that I = y*x, thus dI = dy*x + y*dx = 0 => dy = -y*dx*y
 %
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0

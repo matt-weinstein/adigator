@@ -1,6 +1,7 @@
 function [ForCount, IfCount] = adigatorPrintTempFiles(Ffid,Tfid,FlowInfo,...
   DerNumber,ForCount,FunStrChecks)
-% adigatorPrintTempFiles(Ffid,FlowInfo)
+% [ForCount, IfCount] = adigatorPrintTempFiles(Ffid,Tfid,FlowInfo,...
+%   DerNumber,ForCount,FunStrChecks)
 % This function is used to make blocks of temporary functions, which
 % contain lines of user code interspersed with statements which call
 % adigatorVarAnalyzer in order to read and print out the derivative function 

@@ -1,6 +1,8 @@
 function y = cadaPrintReMap(x,y,varID)
-% NewVar = cadaPrintReMap(x,OverVar,varID)
-% y = x -> y (remap of x to y)
+% CADASTRUCT version of cadaPrintReMap
+%
+% Recursively looks through object to find CADA variables and call CADA
+% version of cadaPrintReMap.
 %
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0

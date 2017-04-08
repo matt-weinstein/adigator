@@ -1,10 +1,11 @@
-function NewVar = cadaPrintReMap(x,OverVar,VarCount)
-% NewVar = cadaPrintReMap(x,OverVar,varID)
-% Function prints out ReMapping of x to OverVar, where OverVar is what
+function NewVar = cadaPrintReMap(x,OverVar,varID)
+% Function prints out remapping of x to OverVar, where OverVar is what
 % the variable needs to be, and x is what the variable currently is.
 %
 % Note: this is also called if want to remove overmapping (i.e. x is the
 % overmapped variable, and OverVar is what it needs to be)
+%
+% Syntax: NewVar = cadaPrintReMap(x,OverVar,varID)
 %
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
@@ -14,15 +15,15 @@ if ~isa(OverVar,'cada') && isempty(OverVar)
   NewVar = x;
   return
 elseif ~isa(x,'cada') && isempty(x)
- NewVar = emptyallocate(OverVar,VarCount);
+ NewVar = emptyallocate(OverVar,varID);
  return
 end
-NewVar.id   = VarCount;
+NewVar.id   = varID;
 NewVar.func = OverVar.func;
 
 
-[funcstr,DPflag] = cadafuncname(VarCount);
-if ~VarCount
+[funcstr,DPflag] = cadafuncname(varID);
+if ~varID
   funcstr = x.func.name;
 end
 NewVar.func.name = funcstr;
@@ -79,8 +80,8 @@ end
 NewVar.deriv = OverVar.deriv;
 for Vcount = 1:ADIGATOR.NVAROFDIFF
   if ~isempty(OverVar.deriv(Vcount).nzlocs)
-    if VarCount
-      derivstr = cadadername(funcstr,Vcount,VarCount);
+    if varID
+      derivstr = cadadername(funcstr,Vcount,varID);
     else
       derivstr = x.deriv(Vcount).name;
     end
@@ -164,8 +165,8 @@ for Vcount = 1:ADIGATOR.NVAROFDIFF
   elseif ~isempty(x.deriv(Vcount).nzlocs)
     % New var doesnt have derivs but x does - we want to remove deriv
     % field.
-    if VarCount
-      derivstr = cadadername(funcstr,Vcount,VarCount);
+    if varID
+      derivstr = cadadername(funcstr,Vcount,varID);
     else
       derivstr = x.deriv(Vcount).name;
     end

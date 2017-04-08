@@ -1,5 +1,6 @@
 function varargout = adigatorVarAnalyzer(FunString,varargin)
-%function varargout = adigatorVarAnalyzer(FunString,varargin) (overloaded)
+% CADA overloaded version of adigatorVarAnalyzer
+%
 % This module is the Overloaded Version of adigatorVarAnalyzer. This is
 % called from the intermediate functions after a line of user code has
 % been evaluated in order to analyze the outputs. As this is the overloaded

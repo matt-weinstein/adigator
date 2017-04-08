@@ -3,6 +3,11 @@ function y = cadaunarymath(x,zeroflag,callerstr)
 % function in order to print the derivative. The derivative of each calling
 % function must be defined in the getdydx sub-function.
 %
+% The assumed syntax is y = callerstr(x);
+%
+% Zero flag is defined such that:
+% zeroflag => if x(i) = 0, then [dy/dx](i,:) = 0
+%
 % Copyright 2011-2014 Matthew J. Weinstein, Michael Patterson and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
 global ADIGATOR

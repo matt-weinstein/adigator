@@ -1,7 +1,9 @@
 function varargout = size(x,varargin)
-% CADASTRUCT overloaded LENGTH
+% CADASTRUCT overloaded SIZE routine
+%
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
+
 global ADIGATOR
 % just make a dummy CADA variable and use CADA length
 NUMvod = ADIGATOR.NVAROFDIFF;

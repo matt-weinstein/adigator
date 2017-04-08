@@ -1,5 +1,6 @@
-% ADiGator overloaded @cada class - all doubles of original program
-% replaced by objects of cada class in intermediate program
+% ADiGator overloaded @cada class 
+% All numeric objects of original program replaced by objects of cada class
+% in intermediate program during ADiGator source transformation.
 %
 % Copyright 2011-2015 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
@@ -44,6 +45,8 @@
 %                                opposite (removing zeros) (cada overloaded
 %                                version)
 % cadaUnionVars.m              - cada overloaded union operator 
+% colon.m                      - overloaded colon
+% cross.m                      - overloaded cross
 % diag.m                       - overloaded diag
 % horzcat.m                    - overloaded horzcat
 % interp1.m                    - overloaded interp1
@@ -53,6 +56,8 @@
 % isequal.m                    - overloaded isequal
 % isequalwithequalnans.m       - overloaded isequalwithequalnans
 % length.m                     - overloaded length
+% max.m                        - overloaded max
+% min.m                        - overloaded min
 % mldivide.m                   - overloaded mldivide
 % mpower.m                     - overloaded mpower
 % mrdivide.m                   - overloaded mrdivide

@@ -1,6 +1,7 @@
 function adigatorPrintOutputIndices(x)
-
-
+% Parses through object to call CADA version of adigatorPrintOutputIndices
+%
+% See also: cada/adigatorPrintOutputIndices
 ParsePrint(x.id,x.val,x.name);
 end
 

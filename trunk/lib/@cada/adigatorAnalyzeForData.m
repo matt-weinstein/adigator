@@ -1,5 +1,6 @@
 function adigatorAnalyzeForData(FORCOUNT,dummyVar) %#ok<INUSD>
-%function adigatorAnalyzeForData(FORCOUNT,StartVars)
+% Analyzes reference/assignment data for flow control.
+% 
 % This routine is called from either the main adigator file (in this case it
 % is being called for a user sub-function) or the
 % adigatorFlowControlAnalyzer0 (called for an outer FOR loop in the main
@@ -10,6 +11,8 @@ function adigatorAnalyzeForData(FORCOUNT,dummyVar) %#ok<INUSD>
 % function, if either the sizes of the inputs/outputs or the
 % reference/assignment indices (if applicable) change size, then some
 % additional information must be printed.
+%
+% adigatorAnalyzeForData(FORCOUNT,StartVars)
 % ----------------------- Input Information ----------------------------- %
 % FORCOUNT:   the element of the ADIGATORFORDATA structure array we are
 %             looking at

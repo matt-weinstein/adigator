@@ -1,5 +1,8 @@
 function y = cadaunarylogical(x,callerstr,dim)
-% Called by: logical, not, any, all, isempty
+% cadaunarylogical routine called by overloaded unary logical operations:
+%     logical, not, any, all, isempty
+%
+% Assumed syntax: y = callerstr(x,dim);
 %
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
