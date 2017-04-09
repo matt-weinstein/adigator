@@ -12,3 +12,8 @@
 % optimization    - examples for optimization (and system of equations) 
 %                   problems
 % stiffodes       - examples of solving stiff ODEs
+%
+% ----------------------------------------------------------------------- %
+% FILES:
+% runAllExamples.m - routine which runs all examples included in the
+%                    adigator package
