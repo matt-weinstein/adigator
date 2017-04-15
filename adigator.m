@@ -639,8 +639,10 @@ ADIGATOR.RUNFLAG         = 2;
 ADIGATOR.FILE.FUNID      = 0;
 ADIGATOR.FILE.PARENTID   = [];
 ADIGATOR.PRINT.FLAG      = 1;
+ADIGATOR.EMPTYFLAG       = 0;
 
 % Call Main Function
+
 FunctionInfo(1).Iteration.CallCount = 0;
 [FunctionInfo, Outputs] = adigatortempfunc1(FunctionInfo,UserFunInputs);
 
@@ -665,6 +667,7 @@ if ~ADIGATOR.OPTIONS.UNROLL
       OverInputs = FunctionInfo(Fcount).Input.StrucVars;
       OverInputs = cadaGetOverVars(Fcount,FunctionInfo,OverInputs);
     end
+    ADIGATOR.EMPTYFLAG = 0;
     FuncStr  = sprintf('adigatortempfunc%1.0d',Fcount);
     FuncCall = str2func(FuncStr);
     FunctionInfo = feval(FuncCall,FunctionInfo,OverInputs);
