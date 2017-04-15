@@ -35,7 +35,8 @@ end
 %                            PARSE INPUTS                                 %
 % ----------------------------------------------------------------------- %
 PDflag = FunctionInfo(FunID).DERNUMBER > 1 && ADIGATOR.DERNUMBER == 1;
-if (ADIGATOR.RUNFLAG == 2 && ~FunctionInfo(FunID).Iteration.CallCount) ||...
+if (ADIGATOR.RUNFLAG == 2 && ~FunctionInfo(FunID).Iteration.CallCount ...
+    && ~ADIGATOR.EMPTYFLAG) ||...
     (ADIGATOR.RUNFLAG && ADIGATOR.OPTIONS.UNROLL)
   % Printing this function, set these so we can get proper naming
   if ADIGATOR.OPTIONS.UNROLL && ~isempty(ADIGATOR.FILE.PARENTID)
@@ -498,7 +499,7 @@ elseif ADIGATOR.RUNFLAG == 1
 else
   %% ~~~~~~~~~~~~~~~~~~~~~~~~ PRINTING RUN ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ %%
   CallCount = FunctionInfo(FunID).Iteration.CallCount;
-  if ~CallCount
+  if ~CallCount && ~ADIGATOR.EMPTYFLAG
     %                     Printing this Function                          %
     % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ %
     
@@ -559,10 +560,9 @@ else
   elseif ADIGATOR.EMPTYFLAG
     % ------------------------ Empty Run -------------------------------- %
     Outputs = FunctionInfo(FunID).Output.EmptyVars;
-    ADIGATOR.FILE.FUNID    = FunID;
-    ADIGATOR.FILE.PARENTID = [ADIGATOR.FILE.PARENTID FunID];
-    [FunctionInfo, Outputs] = adigatorFunctionEnd(FunID,FunctionInfo,Outputs);
     flag = 1;
+    ADIGATOR.VARINFO.COUNT = ADIGATOR.VARINFO.COUNT+length(Outputs);
+    ADIGATOR.PREOPCOUNT    = ADIGATOR.VARINFO.COUNT;
   else
     %                     Printing a Parent Function                      %
     % ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ %
