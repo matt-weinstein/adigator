@@ -165,7 +165,8 @@ end
 
 
 FunctionInfo = struct('File',{},'Input',{},'Output',{},'VARINFO',...
-  {},'FORDATA',{},'DERNUMBER',{},'Iteration',{},'PreviousDerivData',{});
+  {},'FORDATA',{},'DERNUMBER',{},'Iteration',{},'PreviousDerivData',{},...
+  'FunAsLoopFlag',{});
 FunCount  = 0; 
 DataCount = 0;
 FunFlowInfo = cell(NUMcf,1);
@@ -202,6 +203,7 @@ for CFcount = 1:NUMcf
   FunctionInfo(FunCount).Input.Names         = InNames;
   FunctionInfo(FunCount).Output.Names        = OutNames;
   FunctionInfo(FunCount).Iteration.CallCount = 0;
+  FunctionInfo(FunCount).FunAsLoopFlag       = 0;
   
   % -----Check to see if this is a previously created Derivative File---- %
   MajorLineCount = EvalMajorLineCount; fseek(FID,FunEvalLoc,-1);
@@ -294,6 +296,7 @@ for CFcount = 1:NUMcf
       FunctionInfo(FunCount).Input.Names         = InNames;
       FunctionInfo(FunCount).Output.Names        = OutNames;
       FunctionInfo(FunCount).Iteration.CallCount = 0;
+      FunctionInfo(FunCount).FunAsLoopFlag       = 0;
       
       if PrevDerFlag
         % Parent of this sub-function is a previously created derivative
@@ -645,6 +648,10 @@ if ~ADIGATOR.OPTIONS.UNROLL
   FunctionInfo(1).Iteration.CallCount = 1;
   % Call Sub-Functions
   for Fcount = 2:FunCount
+    if FunctionInfo(Fcount).Iteration.CallCount == 0
+      % Function which never gets called, just skip it.
+      continue
+    end
     % Need to get Overmapped Inputs
     FunctionInfo(Fcount).Iteration.CallCount = 0;
     if FunctionInfo(Fcount).FunAsLoopFlag

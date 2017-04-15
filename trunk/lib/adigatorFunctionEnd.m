@@ -177,15 +177,19 @@ elseif ADIGATOR.OPTIONS.UNROLL && FunID > 1
   end
 elseif ADIGATOR.RUNFLAG == 1
   %% ~~~~~~~~~~~~~~~~~~~~~~~~~ OVERMAP RUN ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ %%
-  CallCount = FunctionInfo(FunID).Iteration.CallCount;
-  IterCount = FunctionInfo(FunID).Iteration.IterID(CallCount);
-  FunctionInfo(FunID).Output.Vars(:,IterCount)      = Outputs;
-  FunctionInfo(FunID).Output.StrucVars(:,IterCount) = OutVars;
-  SameFlag = any(FunctionInfo(FunID).Iteration.IterID(1:end-1) == FunctionInfo(FunID).Iteration.IterID(end));
-  if FunctionInfo(FunID).FunAsLoopFlag && ~SameFlag
-    adigatorForIterEnd(1,IterCount);
+  if ~ADIGATOR.EMPTYFLAG
+    CallCount = FunctionInfo(FunID).Iteration.CallCount;
+    IterCount = FunctionInfo(FunID).Iteration.IterID(CallCount);
+    FunctionInfo(FunID).Output.Vars(:,IterCount)      = Outputs;
+    FunctionInfo(FunID).Output.StrucVars(:,IterCount) = OutVars;
+    SameFlag = any(FunctionInfo(FunID).Iteration.IterID(1:end-1) == FunctionInfo(FunID).Iteration.IterID(end));
+    if FunctionInfo(FunID).FunAsLoopFlag && ~SameFlag
+      adigatorForIterEnd(1,IterCount);
+    end
+    FunctionInfo = StoreGlobalVars(FunID,FunctionInfo,IterCount);
+  else
+    FunctionInfo = StoreGlobalVars(FunID,FunctionInfo,0);
   end
-  FunctionInfo = StoreGlobalVars(FunID,FunctionInfo,IterCount);
   
   if ADIGATOR.FORINFO.FLAG
     for Ocount = 1:NumOutVars
@@ -205,7 +209,7 @@ elseif ADIGATOR.RUNFLAG == 1
   end
 else
   %% ~~~~~~~~~~~~~~~~~~~~~~~~ PRINTING RUN ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ %%
-  if ~FunctionInfo(FunID).Iteration.CallCount
+  if ~FunctionInfo(FunID).Iteration.CallCount && ~ADIGATOR.EMPTYFLAG
     % ------------------- Printing This Function ------------------------ %
     if FunID == 1
       for Ocount = 1:NumOutVars
@@ -225,6 +229,8 @@ else
     SaveDataFile(FunID,FunctionInfo);
     fprintf(ADIGATOR.PRINT.FID,'end\n');
     Outputs = cadaAssignOutputs(FunctionInfo(FunID).Output.Names,OutVarStrs,OutVars);
+  elseif ADIGATOR.EMPTYFLAG
+    FunctionInfo = StoreGlobalVars(FunID,FunctionInfo,0);
   else
     % ------------------- Printing Parent Function ---------------------- %
     
