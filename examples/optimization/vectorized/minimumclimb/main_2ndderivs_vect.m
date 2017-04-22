@@ -9,7 +9,7 @@
 %
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
-solveflag = 0;
+solveflag = exist('fmincon','file');
 if solveflag
 options = optimset('Algorithm','interior-point','MaxFunEvals',50000,...
   'GradObj','on','GradConstr','on','Display','iter','MaxIter',1000);
