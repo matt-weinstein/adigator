@@ -1,10 +1,10 @@
-ADiGator Version 1.3
+ADiGator Version 1.4
 
 A Source Transformation via Operator Overloading Tool for the Automatic Differentiation of Mathematical Functions Defined by MATLAB Code
 
 Please see ADiGatorUserGuide.pdf for User's Guide.
 
-Copyright 2011-2016 Matthew J. Weinstein and Anil V. Rao
+Copyright 2011-2017 Matthew J. Weinstein and Anil V. Rao
 Distributed under the GNU General Public License version 3.0
 Please see COPYING.txt for full License.
 
@@ -12,6 +12,15 @@ Contact Info:
 weinstein87@gmail.com
 
 Release Notes:
+V 1.4 4/22/17
+-Fix for matlab 2016b changing matlab.codetools.requiredFilesAndProducts to also return .mat files. Was causing issues with 2nd derivatives.
+-General code cleanup of comments and examples.
+-Added adigatorInput class rather than using cada objects to define inputs - only used to define derivative/auxiliary adigator input variables.
+-Added adigatorFindMatchingParen.m - finds matching pair for a parenthesis, curly or square bracket. Modified some old code to use this for parsing function I/O and also for finding multiple commands written on the same line. Users likely experienced some issues when performing multiple catonations on the same line (either erroring out while attempting to generate a temporary function, or getting an invalid expression statement within the temporary function), particularly if doing so on an input to a function. This should fix those issues.
+-Fixed a couple of minor bugs for cada/cross and cada/transpose in the vectorized mode.
+-Made some changes to handle dead code better, particularly loops which never run, and sub-functions which never get called.
+-Changed check in adigatorPrintTempFiles to print out cada#input# and cada#output# assignments in temp functions based upon names read from user file rather than derivative number - was a bug where sub-function numbers change if mixing different adigator generated files, should fix that.
+
 V 1.3 8/21/16
 -Fixed a couple of bugs using vectorized repmat.
 -Fixed a bug where horzcat/vertcat were not handling numeric inputs properly when called from within a loop.
