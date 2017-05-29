@@ -5,6 +5,7 @@
 % Distributed under the GNU General Public License version 3.0
 clear all
 clc
+fprintf ('AdiGator example: %s\n', mfilename ('fullpath')) ;
 n = 2^8;
 xstart = rand(n,1);
 solveflag = exist('fsolve','file');

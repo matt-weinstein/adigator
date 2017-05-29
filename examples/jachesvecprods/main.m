@@ -7,6 +7,7 @@
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
 clc
+fprintf ('AdiGator example: %s\n', mfilename ('fullpath')) ;
 % Will use f(x) = arrow(x) and g(x) = arrowsum(x) = sum(f(x));
 % Consider x = v*t, t scalar
 n = 2^10;

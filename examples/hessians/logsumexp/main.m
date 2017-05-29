@@ -4,6 +4,7 @@
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
 clc
+fprintf ('AdiGator example: %s\n', mfilename ('fullpath')) ;
 n = 2^5;
 
 x_x = adigatorCreateDerivInput([n 1],'x');
