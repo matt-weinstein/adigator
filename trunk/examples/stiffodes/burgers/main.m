@@ -4,6 +4,7 @@ function sol = main(n,tspan)
 % inputs: n - problem dimension (default of 2.^5)
 %         tspan - time span (default is [0 2])
 % outputs: sol - solution
+fprintf ('AdiGator example: %s\n', mfilename ('fullpath')) ;
 if nargin == 0
   n = 2.^5;
 end

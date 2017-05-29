@@ -8,6 +8,7 @@
 % creation will still be performed.
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
+fprintf ('AdiGator example: %s\n', mfilename ('fullpath')) ;
 clear all
 xi = [-1,1];
 solveflag = exist('fmincon','file');

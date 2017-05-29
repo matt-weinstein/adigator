@@ -11,6 +11,7 @@ function main(tf,noiseflag)
 %         not handled well
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
+fprintf ('AdiGator example: %s\n', mfilename ('fullpath')) ;
 global probinfo
 if nargin == 0
   tf = 10;

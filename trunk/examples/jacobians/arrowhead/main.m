@@ -3,6 +3,7 @@
 % see the effects of increasing problem size.
 % Copyright 2011-2014 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
+fprintf ('AdiGator example: %s\n', mfilename ('fullpath')) ;
 N = 100;
 numeval = 20;
 x = rand(N,1);

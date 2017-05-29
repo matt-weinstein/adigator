@@ -6,6 +6,7 @@
 % sparsity matrix using adigator. You can play with N and tspan, but be
 % weary that N > 100 will make the non-compressed finite differencing
 % extremely slow.
+fprintf ('AdiGator example: %s\n', mfilename ('fullpath')) ;
 % ----------------------- Problem Set Up -------------------------------- %
 fdflag = 1;
 N = 2^3;
