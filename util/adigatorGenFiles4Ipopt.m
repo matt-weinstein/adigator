@@ -323,7 +323,7 @@ if order == 2
     conD2 = conout2.dx.deriv.nzlocs;
     
     if isempty(conD2)
-      printf(Hfid,'conHes = sparse([],[],[],%1.0d,%1.0d);\n',n,n);
+      fprintf(Hfid,'conHes = sparse([],[],[],%1.0d,%1.0d);\n',n,n);
     else
       fprintf(Hfid,['con = ',ConD2FileName,'(',dInVarStr,');\n']);
       % Project constraint 2nd derivs into m x n*n matrix to multiply through
