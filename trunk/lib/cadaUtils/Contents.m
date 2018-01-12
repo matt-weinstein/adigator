@@ -5,9 +5,9 @@
 %
 % ----------------------------------------------------------------------- %
 % FILES:
+% cadaCheckForDerivs.m  - dummy routine to be called on non-overloaded
+%                         variables, always returns false
 % cadadername.m         - get derivative variable name for printing
 % cadafuncname.m        - get function variable name for printing
 % cadaindprint.m        - store indices/generate variable name
 % cadamatprint.m        - store data/generate variable name
-
-
