@@ -44,10 +44,7 @@ elseif isa(x,'cada')
     'value',y);
   if PFLAG
     if yMrow*yNcol == 1
-      ystr = num2str(y,16);
-      if length(ystr) > 15
-        ystr = cadamatprint(y);
-      end
+      ystr = cadamatprint(y);
       ytemp.func.name = ystr;
     else
       ytemp.func.name = cadamatprint(y);
@@ -67,10 +64,7 @@ else
     'value',x);
   if PFLAG
     if xMrow*xNcol == 1
-      xstr = num2str(x,16);
-      if length(xstr) > 15
-        xstr = cadamatprint(x);
-      end
+      xstr = cadamatprint(x);
       xtemp.func.name = xstr;
     else
       xtemp.func.name = cadamatprint(x);

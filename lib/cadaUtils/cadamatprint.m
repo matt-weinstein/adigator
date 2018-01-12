@@ -7,7 +7,11 @@ function varargout = cadamatprint(x,varargin)
 global ADIGATOR ADIGATORDATA
 
 if isnumeric(x) && numel(x) == 1 && nargin == 1
-  varargout{1} = num2str(x,16);
+  nStr = num2str(x,16);
+  if strcmp(nStr(1),'-')
+    nStr = ['(',nStr,')'];
+  end
+  varargout{1} = nStr;
   return
 end
 ADIGATORDATA.DATACOUNT = ADIGATORDATA.DATACOUNT+1;
