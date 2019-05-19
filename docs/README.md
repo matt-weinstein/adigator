@@ -87,7 +87,8 @@ Bug fixes:
 * fixed some issues with variables not being pre-allocated prior to loops - NOTE: if you are using vectorized mode (GPOPS2 continuous functions), you should ALWAYS pre-allocate vectorized variables, if you don’t, adigator doesn’t know the vectorized dimension when pre-allocating and this can cause some errors.
 * were some errors being generated with adigatorPrintTempFiles was calling genErrorLink routine, these should all be fixed
 * made it so that you can have 
-``` y = calcs ... %comment
+```
+y = calcs ... %comment
 morecalcs; %without error
 ```
 * Update 12/10/14 -- mtimes derivs had a minor bug, wasn't projecting properly when result of c(x)=a(x)*b(x) was a scalar and a,b vectors.
@@ -113,20 +114,23 @@ V0.4 6/12/14 mjw
 There were a few more changes with the ever difficult structure/cell array referencing/assignments within loops:
   * If had something like si = struct(i).a; and si had a field assigned a string then stuff was messing up, this should be fixed, same with assignment version
   * If you have a statement like
-```for i =1:n
+```
+for i =1:n
     si = s(i);
 end
 ```
 where s is a structure array, I can't allow for you to keep the loop rolled in the derivative file, since the reference looks like s is an array and I have to look for cell/structure references from the source code level. This needs to be replaced by "si = s(i).a" or "si = s{i}" (need to change the way you store stuff), if you attempt to do it the "wrong" way an error message should be produced which explains this. Same goes for assignment counterpart.
   * If you had
-```s = struct('f',cell(3,1));
+```
+s = struct('f',cell(3,1));
 for i = 1:3
     s(i).f = somestructure;
 end
 ```
 and pre-allocated like a good person, the assignment was getting messed up, fixed this for all test cases I tried.
 * Regarding interp1 and ppval - I made it so that you can do something like
-```for i = 1:n
+```
+for i = 1:n
     y(i).val = ppval(data(i).pp,x);
 end
 ```
@@ -137,12 +141,14 @@ end
 ```
 it will not let you keep this rolled, will need to apriori generate the polys and make them inputs to your function.
 * Regarding interp2 - the way I handle interp2 is that I actually generate the 2D piecewise polynomials and write the derivative code in terms of the adigatorEvalInterp2pp command. This command is equivalent to using ppval except MATLAB has no way of generating the coefficients automatically. In this release I allowed for you to create a 2D piecewise poly using adigatorGenInterp2pp and make it an input to your program and make your program dependent upon adigatorEvalInterp2pp. So, if you have a function
-```function y = myfunc(x,y,data)
+```
+function y = myfunc(x,y,data)
     y = interp2(data.X,data.Y,data.Z,x,y,'spline')
 end
 ```
 you can now replace that with a function
-```function y = myfunc(x,data)
+```
+function y = myfunc(x,data)
     y = interp2(data.pp2,x,y);
 end
 ```
