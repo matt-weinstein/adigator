@@ -19,7 +19,7 @@
 %
 % ----------------------------------------------------------------------- %
 % DIRECTORIES:
-% doc      - readme, licensing, user's guide and reference papers
+% docs     - readme, licensing, user's guide and reference papers
 % examples - various example problems
 % lib      - ADiGator library of source transformation routines, overloaded
 %            classes, etc
