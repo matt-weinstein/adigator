@@ -16,12 +16,10 @@
 % adigatorOptions.m          - function for setting adigator options
 %                              structure
 % startupadigator.m          - path setup for adigator toolbox
-% COPYING.txt                - licensing info
-% README.md                  - readme
 %
 % ----------------------------------------------------------------------- %
 % DIRECTORIES:
-% doc      - user's guide and reference papers
+% doc      - readme, licensing, user's guide and reference papers
 % examples - various example problems
 % lib      - ADiGator library of source transformation routines, overloaded
 %            classes, etc
