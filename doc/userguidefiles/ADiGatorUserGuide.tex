@@ -1,0 +1,1060 @@
+\documentclass[10pt,pdftex]{article}
+% \documentclass{esub2acm}
+% \documentclass[acmtoms]{acmtrans2m}
+\usepackage{array,subfig,verbatim}
+\usepackage[T1]{fontenc}
+\usepackage{framed,fancybox}
+\usepackage{multicol}
+\usepackage{amsmath,amsfonts,latexsym,graphics,graphicx,epsfig,enumerate,color,colortbl,hhline,psfrag}
+\usepackage{fancyvrb}
+\usepackage{alltt,rotating, amsbsy}
+\usepackage{tikz,xfrac}
+\usepackage{etoolbox}
+\let\bbordermatrix\bordermatrix
+\patchcmd{\bbordermatrix}{8.75}{4.75}{}{}
+\patchcmd{\bbordermatrix}{\left(}{\left[}{}{}
+\patchcmd{\bbordermatrix}{\right)}{\right]}{}{}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=blue,
+    urlcolor=blue}
+\usetikzlibrary{shapes,shadows,arrows,backgrounds,shapes.geometric,calc,positioning,decorations.pathreplacing}
+
+% \usepackage[framed,bw,final]{mcode}
+%\usepackage[framed,final]{mcode}
+\newenvironment{shadedframe}{%
+  \def\FrameCommand{\fcolorbox{black}{shadecolor}}%
+% \MakeFramed {\addtolength{\hsize}{-\width}\FrameRestore}}
+  \MakeFramed {\FrameRestore}}
+{\endMakeFramed}
+
+%\markboth{M.~J.~Weinstein, and A.~V.~Rao}{A Source Transformation and Operator Overloaded Method for Computing Derivatives in MATLAB}
+\renewcommand{\Im}{\operatorname{Im}}
+% \renewcommand{\Re}{\operatorname{Re}}
+\newcommand{\im}{\mathop{\mathrm{Im}}}
+\newcommand{\bs}[1]{\mathop{\boldsymbol{#1}}}
+\newcommand{\D}{\displaystyle}
+\if@symbold\else\def\d{\,\mathrm{d}}\fi
+\def\e{\mathop{\mathrm{e}}\nolimits}
+
+\renewcommand{\labelitemi}{$\bullet$}
+
+
+%\title{{\bf \Huge GatorAD}\\
+%A Source Transformation via Operator Overloading Toolbox for the Automatic Differentiation of Mathematical Functions in MATLAB}
+
+\oddsidemargin=0in
+\evensidemargin=0in
+\topmargin=1in
+\hoffset=0in
+\voffset=-1.5in
+\textheight=9in
+\textwidth=6.5in
+% \definecolor{shadecolor}{gray}{0.97}
+\definecolor{shadecolor}{cmyk}{0.1,0.061,0,0}
+\FrameRule=0.75pt
+\FrameSep=1pt
+\setlength{\fboxrule}{\FrameRule}
+\setlength{\fboxsep}{\FrameSep}
+\newcommand{\C}[1]{{\cal {#1}}}
+\newcommand{\comma}{\hspace{3pt},}
+\newcommand{\period}{\hspace{3pt}.}
+\newcommand{\tr}{^{\sf T}}
+
+%\author{Matthew J. Weinstein\thanks{Ph.D.~Candidate,
+%    Department of Mechanical and Aerospace Engineering, E-mail:
+%    mweinstein@ufl.edu.} \\ Anil~V.~Rao\thanks{Assistant Professor,
+%    Department of Mechanical and Aerospace Engineering.  E-mail:
+%    anilvrao@ufl.edu.  Associate Fellow, AIAA.  Corresponding Author.} \\ \\ {\em University of
+%    Florida} \\ {\em Gainesville, FL 32611}}
+
+\date{}
+\begin{document}
+\begin{titlepage}
+\begin{center}
+\includegraphics[scale=.5]{derivgator_notitle.jpg}\\
+\vspace{1 cm}
+\resizebox{!}{1.4cm}{
+{\Huge \bf ADiGator V1.4}}\\
+\vspace{1 cm}
+{\large A Source Transformation via Operator Overloading \\ Toolbox for the Automatic Differentiation of \\Mathematical Functions in MATLAB}\\
+ \vspace{1 cm}
+ {\bf \LARGE Matthew J. Weinstein\\ \vspace{10pt} Anil V. Rao}
+\end{center}
+\end{titlepage}
+
+\renewcommand{\baselinestretch}{1}
+\normalsize
+\normalfont
+
+\input{shortcuts2.tex}
+%\makeatletter 
+%\renewcommand\@biblabel[1]{${}^{#1}$\hspace{0pt}} \makeatother
+
+\renewcommand{\baselinestretch}{1}
+
+\normalsize
+\normalfont
+\clearpage
+\tableofcontents
+\clearpage
+\section{Introduction}
+\emph{ADiGator} is a MATLAB automatic differentiation package which transforms user function files into derivative function files. These derivative function files are written completely in terms of the native MATLAB commands and thus may be evaluated on numeric input values to calculate the numeric derivative of the output with respect to a defined variable of differentiation. These numeric evaluations may be performed as many times as desired without generating a new derivative file, as long as the input sizes and derivative sparsity patterns are not to change. In the event that a user wishes to obtain derivatives of the same function file, but evaluated on different input sizes and/or derivative sparsity patterns, then a new derivative file must be generated. The package is particularly appealing for applications where the same derivative must be found at multiple different points, i.e. non-linear root finding/optimization, stiff ode integration, etc. For details on the methodology behind the algorithm and the overloaded class which is used, the user is referred to \cite{Weinstein2014}, and \cite{Patterson2013}, which can be seen \href{http://vdol.mae.ufl.edu/JournalPublications/TOMS-2013-0067.pdf}{here} and \href{http://vdol.mae.ufl.edu/JournalPublications/TOMS-2011-0055.pdf}{here}, respectively.
+In the following user's guide we will explain how to use the \emph{ADiGator} package. For more information on Automatic Differentiation in general, please refer to  \cite{Griewank1}. For an explanation on the mathematical notations used within this guide, please see the \hyperlink{Appendix}{Appendix}.
+\section{Installation}
+The \emph{ADiGator} package is written entirely in MATLAB and thus should be usable on any operating system as long as MATLAB is installed. The code has been tested in MATLAB versions 7.11 through 8.2. To install the package, one needs to unpack the zip file and add two directories to the MATLAB path. This may be done as follows:
+\begin{enumerate}
+\item Unpack the zip file into a convenient location - ensure that the folder permissions are set to read and write.
+\item Within MATLAB, change the current directory to the location which the zip file was unpacked.
+\item Run the file \texttt{startupadigator}, you can do this by typing \texttt{startupadigator} in the MATLAB command window.
+\item (optional) If you wish to not do this each time you restart MATLAB, then type \texttt{savepath} in the MATLAB command window.
+\item (optional) To run a set of example problems, change to the `examples' directory and type `runAllExamples'.
+\end{enumerate}
+\section{Using the {adigator} Function to Generate Derivative Files}\label{Sec:Using}
+In order to obtain a numeric derivative the user must first generate a derivative file using the \emph{ADiGator} package and may then evaluate the generated file numerically to obtain a derivative. It is stressed that after the file is generated, the software is no longer being used. Furthermore, it is noted that the derivative files are generated for a fixed input size to the user's function file. Thus, as long as the input sizes do not change, the same derivative file may be used to evaluate the derivative at multiple points. We will now explain in detail the commands required to transform a user function file into a derivative function file and then explain how to evaluate the generated derivative file. We will then demonstrate both the generation and evaluation of a derivative file using a simple example.
+\subsection{Generating Derivative Files}
+The derivative files may be generated in a three step process, where first the user must write the function file to be differentiated, second the user must define the inputs to the function file and identify which inputs contain derivative information, and then finally the transformation is initialized by using the \texttt{adigator} command. In this section we present these three steps.
+\subsubsection{The User Function File}
+In order to generate derivative files, we first need a function file of which we are to differentiate. This user written function file should be written such that one or more of the inputs is to have derivatives with respect to some \emph{variable of differentiation} (VOD), where it is desired to determine the derivatives of the outputs of the file with respect to the same variable of differentiation. The primary restrictions placed on the input/output scheme of these functions is that 1.~there is at least one input/output and 2.~one of the inputs (or a field of an input structure or an element of an input cell array) has derivatives with respect to the VOD. For more user function file coding restrictions please refer to Section \ref{Sec:Restrictions}.
+\subsubsection{Identifying the User Function Inputs}\label{SubSec:Inputs}
+Prior to calling the main transformation routine, \texttt{adigator}, the user must define the inputs to the function which they just created. Here we define three different types of inputs and explain how they are to be identified:
+
+\begin{itemize}
+
+
+\item {\bf Derivative Inputs}: This refers to any input arrays which are to have derivatives with respect to the VOD - the user must use the \texttt{adigatorCreateDerivInput} command to generate these inputs. The syntax of the \texttt{adigatorCreateDerivInput} is as follows:\\
+\centerline{\texttt{x = adigatorCreateDerivInput(xsize,derivinfo)}}
+where
+\begin{itemize}
+\item \texttt{xsize} = $[m,n]$ is the size of the input array
+\item \texttt{derivinfo} gives information on the derivatives, this may be defined in one of two ways:\\
+\begin{enumerate}
+\item If the input being created is the variable of differentiation (and thus has a derivative equal to the $mn \times mn$ identity matrix) then \texttt{derivinfo} can simply be set to a string name which you wish to call the VOD.
+\item Otherwise, \texttt{derivinfo} must be a structure array defining the VOD to which the input has derivatives with respect to, as well as the possible non-zero locations of the \emph{unrolled} Jacobian of the input with respect to the VOD. These fields must be:
+\begin{itemize}
+\item \texttt{derivinfo.vodname} = string name which uniquely defines the VOD
+\item \texttt{derivinfo.vodsize} = $[p,q]$, the size of the VOD
+\item \texttt{derivinfo.nzlocs} = $[\bfi,\bfj]$, where $\bfi,\bfj \in \bbZ_+^{nz}$ define the row and column locations of the non-zero elements of the $mn \times pq$ Jacobian of the input with respect to the VOD. Note: these should be in the natural MATLAB indexing order, that is, if the user has built the unrolled Jacobian in MATLAB and called it \texttt{Jac}, then $\bfi$ and $\bfj$ could be found by \texttt{[I,J] = find(Jac)}. 
+\end{itemize}
+Please see the \hyperlink{Appendix}{Appendix} for further clarification on the term ``unrolled Jacobian''.
+\end{enumerate}
+\end{itemize}
+\item {\bf Unknown Auxiliary Inputs}: This refers to any input arrays to the user function which do not contain derivatives with respect to the VOD, but are not a fixed, known, numeric value. That is, they may change numeric values on any given call to the user function file. - the user must use the \texttt{adigatorCreateAuxInput} command to generate these inputs. The syntax for this is as follows:\\
+\centerline{\texttt{x = adigatorCreateAuxInput(xsize)}},
+where \texttt{xsize} = $[m,n]$ is the size of the input array. \\
+NOTE: An alternative to defining Unknown Auxiliary Inputs is discussed in Section \ref{Sec:Options} by using the \texttt{auxdata} option.
+\item {\bf Known Auxiliary Inputs}: This refers to any input arrays to the user function which have a fixed, known, numeric value. These inputs should simply be assigned their fixed value.
+\end{itemize}
+Here we note that the above three types of inputs only refer to numeric arrays, and that, if a user function was written to take a structure input with numeric fields, then the structure should be built, and the aforementioned inputs should be assigned to the proper fields. Likewise, if an input is to be a cell array, then the cell array should be built and the aforementioned input types should be assigned to the appropriate elements of the cell array.
+\subsubsection{Calling the Derivative File Generation}
+After having created the function file to be differentiated and creating all derivative/unknown auxiliary/known auxiliary inputs, the user may now use the \texttt{adigator} command to generate the derivative file. The syntax for this call is as follows:\\
+\centerline{\texttt{Outputs = adigator(UserFunFileName,Inputs,DerivFileName)}}\\
+\centerline{or}\\
+\centerline{\texttt{Outputs = adigator(UserFunFileName,Inputs,DerivFileName,options)}}
+where
+\begin{itemize}
+\item \texttt{UserFunFileName} = string name of the user function to be differentiated
+\item \texttt{Inputs} = $1 \times N$ cell array, where $N$ denotes the number of inputs to the user function and element $i$ contains input $i$ to the user's function file
+\item \texttt{DerivFileName} = string name which the derivative file is to be called
+\item \texttt{Outputs} = $1 \times M$ cell array, where $M$ denotes the number of outputs of the user's function file. Cell $i$ will contain the size and possible non-zero derivative locations of the $i^{th}$ output.
+\item \texttt{options}(optional) = option structure which can be generated using the \texttt{adigatorOptions} function as defined in Section \ref{Sec:Options}.
+\end{itemize}
+Using this command will then generate the derivative file, \texttt{DerivFileName.m}, as well as a MATLAB binary file, \texttt{DerivFileName.mat}, where \texttt{DerivFilename} is as the user specified.
+\subsection{Evaluating the Generated Derivative File}
+As previously stated, after the derivative files have been generated, the \emph{ADiGator} software is no longer needed, but rather only the generated \texttt{.m} and \texttt{.mat} files are needed to compute the numeric derivative.\footnote{The only exception to this is when differentiating a file which calls \texttt{interp2}. In this case, the file will also depend upon the ADiGator function \texttt{adigatorEvalInterp2pp}.} While the input/output structure of the generated derivative function file is similar to the input/output structure of the user defined function file, it is not exactly the same. We now look at how both the input and output structures change.
+\subsubsection{Derivative File Input}
+The only difference between the user function file input scheme and the generated derivative file input scheme is that, for any {\bf Derivative Inputs}, these inputs must now be given as structures with a \emph{function field} and \emph{derivative field}. Suppose that a {\bf Derivative Input} was defined as a $m \times n$ array with $nz$ possible non-zero derivatives with respect to a VOD which was given the name \texttt{'vod'}. Then the input to the derivative file for this variable would have the following two fields:
+\begin{itemize}
+\item \emph{function field}: this field will always be given the name \texttt{.f} and must be assigned the $m \times n$ numeric array corresponding to the function values.
+\item \emph{derivative field}: this field will be given a name corresponding to the defined VOD name, if the VOD name was given as \texttt{'vod'}, then the field would be \texttt{.dvod}, if the VOD name was given as \texttt{'x'}, then the field would be \texttt{.dx}, etc.~ Furthermore, this field must be assigned a column vector of length $nz$ corresponding to the possible non-zero derivatives of the input with respect to the VOD.
+\end{itemize}
+Any inputs defined as {\bf Unknown Auxiliary Inputs} may be assigned any numeric values, as long as the array is the same size as was given to the \texttt{adigatorCreateAuxInput} command, and any inputs defined as {\bf Known Auxiliary Inputs} should be assigned the values which were assigned prior to the call to \texttt{adigator}.
+
+\subsubsection{Derivative File Output}
+Similar to any {\bf Derivative Inputs}, all outputs of the derivative file which correspond to numeric array outputs of the function file will now be structures with different fields. Each will contain a \emph{function field}, \texttt{.f} containing the values of the function, and if the output contains derivatives with respect to the VOD, then it will also be assigned the following three fields:
+\begin{itemize}
+\item \emph{derivative value field}: (for example \texttt{.dx} if the VOD name is \texttt{'x'}) This will contain a column vector of length $nz$ corresponding to the possible non-zero elements of the output with respect to the VOD.
+\item \emph{derivative size field}: (for example \texttt{.dx\_size} if the VOD name is \texttt{'x'})
+This will contain the size of the derivative matrix, for example, if the output variable is a vector of length $m$ and the VOD is a vector of length $n$, then this will be assigned the value $[m,n]$.
+\item \emph{derivative location field}: (for example \texttt{.dx\_location} if the VOD name is \texttt{'x'})
+This will contain a $nz \times d$ integer array of indices which map the values stored in the \emph{derivative value field} into an array of the size stored in the \emph{derivative size field}. Here we note that $d$ is equal to the length of the size stored in the derivative size field, and that column $i$ ($i = 1,\dots,d$) of the location field gives the locations for the $i^{th}$ dimension of the derivative array.
+\end{itemize} 
+
+\subsection{Illustrative Example}
+For this example, assume we have written some function, \texttt{y = myfun(x,k,N)}, where we wish to take the derivative of $\bfy \in \bbR^4$ with respect to the input $\bfx \in \bbR^3$, and that the input $\bfk \in \bbR^3$ is a vector of unknown auxiliary values and the input $N = 3$ is a fixed value. Prior to generating the derivative file, we would first need to identify our inputs. Supposing we wish to give our VOD the name \texttt{'x'}, we could define our {\bf Derivative Input} in one of two ways. The first, simpler way would be:
+\begin{verbatim}
+    x = adigatorCreateDerivInput([3 1],'x');
+\end{verbatim}
+or, to the same end, we could do
+\begin{verbatim}
+    derivinfo.vodname = 'x';
+    derivinfo.vodsize = [3 1];
+    derivinfo.nzlocs  = [1 1; 2 2; 3 3];
+    x = adigatorCreateDerivInput([3 1],derivinfo);
+\end{verbatim}
+Next, we need to define our inputs for $\bfk$ and $N$, so we would do this as
+\begin{verbatim}
+    k = adigatorCreateAuxInput([3 1]);
+    N = 3;
+\end{verbatim}
+We now have our inputs defined and may generate the derivative code. Supposing we wished to name the derivative file \texttt{'myderiv'}, we would call \texttt{adigator} as
+\begin{verbatim}
+   adigator('myfun',{x,k,N},'myderiv');
+\end{verbatim}
+This would then generate the files \texttt{myderiv.m} and \texttt{myderiv.mat}. In order to now evaluate the derivative we need to redefine our inputs for $\bfx$ and $\bfk$. We would do this as follows:
+\begin{verbatim}
+    x = struct('f',rand(3,1),'dx',ones(3,1);
+    k = rand(3,1);
+\end{verbatim}
+where we are assigning random values to $\bfx$ and $\bfk$. Furthermore, we note  that the derivative of $\bfx$ with respect to $\bfx$ is the $3\times 3$ identity matrix, and that the non-zero elements are given by a vector of ones (the value assigned to \texttt{x.dx}). We could then evaluate the derivative file by
+\begin{verbatim}
+    y = myderiv(x,k,N);
+\end{verbatim}
+then \texttt{y.f} would be a vector of length 4. Supposing that the derivative of $\bfy$ has the sparsity pattern given by
+\begin{equation}
+\text{struct}(\bfJ\bfy(\bfx)) = \bbordermatrix{~ & x_1 & x_2 & x_3 \cr
+y_1 & \bullet & \bullet & \bullet \cr
+y_2 & ~ & \bullet & ~ \cr
+y_3 & ~ & ~ & \bullet \cr
+y_4 & \bullet & \bullet & ~}
+\end{equation}
+then \texttt{y.dx} would be a column vector of length 7, \texttt{y.dx\_size} would be assigned \texttt{[4, 3]} and \texttt{y.dx\_location} would be \texttt{[1 1;4 1;1 2;2 2;4 2;1 3;3 3]}. Furthermore, if we wished to build a sparse MATLAB array corresponding to the Jacobian, $\bfJ\bfy(\bfx)$,  we could do so using the MATLAB \texttt{sparse} command as follows:
+\begin{verbatim}
+    Jac = sparse(y.dx_location(:,1),y.dx_location(:,2),y.dx,y.dx_size(1),y.dx_size(2));
+\end{verbatim}
+If we wished to build a non-sparse MATLAB array corresponding to the Jacobian,  $\bfJ\bfy(\bfx)$, we could do so using  a linear index as follows:
+\begin{verbatim}
+    Jac = zeros(y.dx_size);
+    index = sub2ind(y.dx_size,y.dx_location(:,1),y.dx_location(:,2));
+    Jac(index) = y.dx;
+\end{verbatim}
+Here it is stressed that this file may be evaluated as many times as desired using different values assigned to \texttt{x.f} and \texttt{k}, which will produce different values of \texttt{y.f} and \texttt{y.dx}, but \texttt{y.dx\_size} and \texttt{y.dx\_location} will always be the same.
+\section{ADiGator Options}\label{Sec:Options}
+The \emph{ADiGator} package currently has different options which may given to the \texttt{adigator} command. In order to build the options structure use the following command:\\
+\centerline{\texttt{options = adigatorOptions(field1,value1,field2,value2,...)}}
+A list of all options, values, and descriptions is given in Table \ref{Tab:Options}.
+
+\begin{table}[h]
+\caption{Options for ADiGator \label{Tab:Options}}
+\center
+\begin{tabular}{|c|c|p{12cm}|}
+\hline
+\multicolumn{1}{|c|}{Option Field} & Value & \multicolumn{1}{c|}{Description}  \\ \hline
+{\bf AUXDATA} & 1 & {\bf Known Auxiliary Inputs} (as defined in Section \ref{SubSec:Inputs})  will always have the same sparsity patterns as given to \texttt{adigator}, but their non-zero values may change. 
+\\ \cline{2-3}
+~ & 0 & {\bf Known Auxiliary Inputs} will always have the same numeric values (default) \\ \hline
+{\bf ECHO} & 1 & Echo to MATLAB command screen during the transformation process (default) \\ \cline{2-3}
+~ & 0 & Do not echo to MATLAB command screen \\ \hline
+{\bf UNROLL} & 1 & When this is set, any loops and/or sub-functions encountered will be unrolled in the generated derivative file \\ \cline{2-3}
+~ & 0 & keep loops and sub-functions rolled in the derivative file (default) \\ \hline
+{\bf COMMENTS} & 1 & Print  comments to the derivative file giving the lines of user code which correspond to printed derivative statements (default) \\ \cline{2-3} 
+~ & 0 & Do not print the comments. \\ \hline
+{\bf OVERWRITE} & 1 & If a \texttt{DerivFileName} is given to \texttt{adigator} such that a file already exists with the given name, setting this option will automatically overwrite the file. \\ \cline{2-3} 
+~ & 0 & If this option is set, \texttt{adigator} will error out rather than overwrite the derivative file. (default)\\ \hline
+{\bf MAXWHILEITER} & $k > 0$ & For use with \texttt{while} loops. The maximum number of iterations, $k$, that the algorithm will attempt to find a static loop iteration during file generation. (default is $k = 10$).\\ \hline
+{\bf COMPLEX} & 0 & Binary flag for turning on and off complex variable handling. If set to 1, the tool will expect complex variables and thus use the complex forms of ctranspose, abs, dot, etc. Otherwise, it will assume no complex numbers exist in the user's program.\\ \hline
+\end{tabular}
+\end{table}
+
+\section{Generating Derivative Files and Wrapper Files via Black Box ADiGator Commands}
+As seen in Section \ref{Sec:Using}, the call to the \texttt{adigator} routine can be somewhat complicated. Moreover, the derivative files which are generated have a very distinct input/output structure. The complexity of the \texttt{adigator} command together with the input/output structure of the generated files allows one to differentiate files which have complex input/output structures and to specifically define their problem.
+That being said, it is often the case that the user simply wants to generate a Jacobian file, Hessian file, etc.~and is forced to create wrapper files for the \texttt{adigator} generated files.
+For this reason, some ``black box'' file generation routines have been added. These routines simply take information from the user, call the \texttt{adigator} routine one or more times, and then writes a wrapper file(s) with a basic input/output structure. In this section, the various black box routines are described.
+
+\subsection{adigatorGenJacFile}
+\underline{When to use}: You wish to compute the Jacobian of a function with respect to one of its inputs.\\\\
+\underline{User Function Input Restrictions}: One of the inputs must be the variable of differentiation (cannot be embedded within a cell/structure). The file may only have a single output.\\\\
+\underline{Generated Jacobian File Info}: The Jacobian wrapper file which is generated has the name of the user's function with \texttt{\_Jac} appended. It takes the same inputs as the original file, but returns both the Jacobian and original function value. The Jacobian is always computed and returned as the first output.\\\\
+\begin{tabular}{l|l}
+{\bf Usage} & \begin{tabular}{l}
+ \texttt{output = adigatorGenJacFile(UserFunName,UserFunInputs)}\end{tabular} \\ \hline
+{\bf Input Info} & \begin{tabular}{l}
+\texttt{UserFunName} - string name of file to be differentiated\\
+\texttt{UserFunInputs} - cell array of inputs to user's function\\
+The cell element of \texttt{UserFunInputs} corresponding to the variable of differentiation must \\be created via \texttt{adigatorCreateDerivInput}.\\
+All other inputs must be fixed.
+\end{tabular}\\ \hline
+{\bf Output Info} & \begin{tabular}{l}
+\texttt{output.FunctionFile} - same as \texttt{UserFunName}, ex: \texttt{`myfun'}\\
+\texttt{output.JacobianFile} - string name of generated Jacobian file, ex: \texttt{`myfun\_Jac'}\\
+\texttt{output.JacobianStructure} - sparse ones and zeros defining Jacobian sparsity pattern
+\end{tabular}\\ \hline
+{\bf Examples} & \begin{tabular}{l}
+\texttt{examples/jacobians/arrowhead/}\\
+\texttt{examples/jacobians/polydatafit/}\\
+\texttt{examples/stiffodes/brusselator/}
+\end{tabular}
+\end{tabular}
+\subsection{adigatorGenHesFile}
+\underline{When to use}: You wish to compute the Hessian of a function with respect to one of its inputs.\\\\
+\underline{User Function Input Restrictions}: One of the inputs must be the variable of differentiation (cannot be embedded within a cell/structure). The file may only have a single output.\\\\
+\underline{Generated Gradient File Info}: The Gradient wrapper file which is generated has the name of the user's function with \texttt{\_Grd} appended. It takes the same inputs as the original file, but returns both the Gradient and original function value. The Gradient is always computed and returned as the first output.\\\\
+\underline{Generated Hessian File Info}: The Hessian wrapper file which is generated has the name of the user's function with \texttt{\_Hes} appended. It takes the same inputs as the original file, but returns the Hessian together with the Gradient and original function value. The Hessian is always computed and returned as the first output, followed by the gradient and function.\\\\
+\begin{tabular}{l|l}
+{\bf Usage} & \begin{tabular}{l}
+ \texttt{output = adigatorGenHesFile(UserFunName,UserFunInputs)}\end{tabular} \\ \hline
+{\bf Input Info} & \begin{tabular}{l}
+\texttt{UserFunName} - string name of file to be differentiated\\
+\texttt{UserFunInputs} - cell array of inputs to user's function\\
+The cell element of \texttt{UserFunInputs} corresponding to the variable of differentiation must \\be created via \texttt{adigatorCreateDerivInput}.\\
+All other inputs must be fixed.
+\end{tabular}\\ \hline
+{\bf Output Info} & \begin{tabular}{l}
+\texttt{output.FunctionFile} - same as UserFunName, ex: \texttt{`myfun'}\\
+\texttt{output.GradientFile} - string name of generated Gradient file, ex: \texttt{`myfun\_Grd'}\\
+\texttt{output.HessianFile} - string name of generated Gradient file, ex: \texttt{`myfun\_Hes'}\\
+\texttt{output.HessianStructure} - sparse ones and zeros defining Hessian sparsity pattern
+\end{tabular}\\ \hline
+{\bf Examples} & \begin{tabular}{l}
+\texttt{examples/hessians/logsumexp/}
+\end{tabular}
+\end{tabular}
+\subsection{adigatorGenFiles4Fsolve}
+\underline{When to use}: You wish to compute the Jacobian of a function with respect to its first input to be used with \texttt{fsolve}. (\texttt{fsolve} is provided in the MATLAB optimization package and is used for solving a system of non-linear equations)\\\\
+\underline{User Function Input Restrictions}: The first input must be the variable of differentiation. One extra variable is allowed for auxiliary data if desired.\\\\
+\underline{Generated Jacobian File Info}: The Jacobian wrapper file which is generated has the name of the user's function with \texttt{\_Jac} appended. It takes the same inputs as the original file. If only one output is requested, the file only computes the original function. If two outputs are requested, the file computes the Jacobian and original function.\\\\
+\begin{tabular}{l|l}
+{\bf Usage} & \begin{tabular}{l}
+ \texttt{funcs = adigatorFiles4Fmincon(setup)}\end{tabular} \\ \hline
+{\bf Input Info} & \begin{tabular}{l}
+\texttt{setup.function} - string name of file to be differentiated\\
+\texttt{setup.numvar} - length of the variable of differentiation\ \\
+\texttt{setup.auxdata} - (optional) if the user function has an auxdata input, then it should\\ be included here\\
+\end{tabular}\\ \hline
+{\bf Output Info} & \begin{tabular}{l}
+\texttt{funcs.jacobian} - Jacobian file function handle - if \texttt{auxdata} specified, it\\ is fixed in this handle. 
+\end{tabular}\\ \hline
+{\bf Examples} & \begin{tabular}{l}
+\texttt{examples/optimization/fsolveEx/}
+\end{tabular}
+\end{tabular}
+
+\subsection{adigatorGenFiles4Fminunc}
+\underline{When to use}: You wish to compute the gradient and/or Hessian of an objective function with respect its first input and supply gradient/Hessian to \texttt{fminunc}. (\texttt{fminunc} is provided in the MATLAB optimization package and is used for solving unconstrained optimization problems)\\\\
+\underline{User Function Input Restrictions}: The first input must be the variable of differentiation. One extra variable is allowed for auxiliary data if desired.\\\\
+\underline{Generated Gradient File Info}: The gradient wrapper file which is generated has the name of the user's function with \texttt{\_Grd} appended. It takes the same inputs as the original file. If only one output is requested, the file only computes the objective. If two outputs are requested, the file computes the gradient and objective.\\\\
+\underline{Generated Hessian File Info}: The Hessian wrapper file which is generated has the name of the user's function with \texttt{\_Hes} appended. It takes the same inputs as the original file. If only one output is requested, the file only computes the original function. If two outputs are requested, the file computes the gradient and objective. If three outputs are requested, the file computes the Hessian, gradient, and objective.\\\\
+\begin{tabular}{l|l}
+{\bf Usage} & \begin{tabular}{l}
+ \texttt{funcs = adigatorGenFiles4Fminunc(setup)}\end{tabular} \\ \hline
+{\bf Input Info} & \begin{tabular}{l}
+\texttt{setup.objective} - string name of user's objective function\\
+\texttt{setup.numvar} - length of the variable of differentiation\ \\
+\texttt{setup.order} - 1 or 2\\
+\texttt{setup.auxdata} - (optional) if the user function has an auxdata input, then it should\\ be included here\\
+\end{tabular}\\ \hline
+{\bf Output Info} & \begin{tabular}{l}
+\texttt{funcs.gradient} - gradient file function handle (if \texttt{setup.order} = 1)\\
+\texttt{funcs.hessian} - Hessian file function handle (if \texttt{setup.order} = 2)\\
+If \texttt{auxdata} specified, it is fixed in the function handle.\\
+The gradient file will not be generated if \texttt{setup.order}=2.
+\end{tabular}\\ \hline
+{\bf Examples} & \begin{tabular}{l}
+\texttt{examples/optimization/fminuncEx/}
+\end{tabular}
+\end{tabular}
+\subsection{adigatorGenFiles4Fmincon}
+\underline{When to use}: You wish to compute an objective gradient/constraint Jacobian/Lagrangian Hessian for use with \texttt{fmincon}. (\texttt{fmincon} is provided in the MATLAB optimization package and is used for solving constrained optimization problems)\\\\
+\underline{User Function Input Restrictions}: The first input must be the variable of differentiation. One extra variable is allowed for auxiliary data if desired. If auxiliary data is used in objective function, same auxiliary data structure should be passed to constraint function (and vice verse).\\\\
+\underline{Generated Objective Gradient File Info}: The gradient wrapper file which is generated has the name of the user's objective function with \texttt{\_Grd} appended. It takes the same inputs as the original file. If only one output is requested, the file only computes the objective. If two outputs are requested, the file computes the gradient and objective.\\\\
+\underline{Generated Constraint Gradient File Info}: The gradient wrapper file which is generated has the name of the user's constraint function with \texttt{\_Grd} appended. It takes the same inputs as the original file. If only two outputs are requested, the file only computes the constraints. If four outputs are requested, the file computes the constraint gradients and constraints.\\\\
+\underline{Generated Lagrangian Hessian File Info}: The Hessian wrapper file which is generated has the name of the user's objective function with \texttt{\_Hes} appended. It takes the same inputs as the original file, with the addition of a variable of NLP multipliers. The file always computes and returns just the Lagrangian Hessian.\\\\
+\begin{tabular}{l|l}
+{\bf Usage} & \begin{tabular}{l}
+ \texttt{funcs = adigatorGenFiles4Fmincon(setup)}\end{tabular} \\ \hline
+{\bf Input Info} & \begin{tabular}{l}
+\texttt{setup.objective} - string name of user's objective function\\
+\texttt{setup.constraint} - (optional) string name of user's constraint function\\
+\texttt{setup.numvar} - length of the variable of differentiation\ \\
+\texttt{setup.order} - 1 or 2\\
+\texttt{setup.auxdata} - (optional) if the objective/constraint function has an auxdata input,\\ then it should be included here\\
+\end{tabular}\\ \hline
+{\bf Output Info} & \begin{tabular}{l}
+\texttt{funcs.objgrad} - objective gradient function handle\\
+\texttt{funcs.consgrad} - constraint gradient function handle (if \texttt{setup.constraint}) specified)\\
+\texttt{funcs.hessian} - Lagrangian Hessian file function handle (if \texttt{setup.order} = 2)\\
+If \texttt{auxdata} specified, it is fixed in all function handles.\\
+\end{tabular}\\ \hline
+{\bf Examples} & \begin{tabular}{l}
+\texttt{examples/optimization/fminconEx/}
+\end{tabular}
+\end{tabular}
+\subsection{adigatorGenFiles4Ipopt}
+\underline{When to use}: You wish to compute an objective gradient/constraint Jacobian/Lagrangian Hessian for use with \emph{IPOPT} MEX file. ({\em IPOPT} \cite{Biegler1,Biegler2} is an open source NLP solver, information on the MATLAB interface, including precompiled MEX files, may be found \href{http://projects.coin-or.org/Ipopt/wiki/MatlabInterface}{here})\\\\
+\underline{User Function Input Restrictions}: The first input must be the variable of differentiation. One extra variable is allowed for auxiliary data if desired. If auxiliary data is used in objective function, same auxiliary data structure should be passed to constraint function (and vice verse).\\\\
+\underline{Generated Objective Gradient File Info}: The gradient wrapper file which is generated has the name of the user's objective function with \texttt{\_Grd} appended. It takes the same inputs as the original file and only returns the gradient.\\\\
+\underline{Generated Constraint Jacobian File Info}: The Jacobian wrapper file which is generated has the name of the user's constraint function with \texttt{\_Jac} appended. It takes the same inputs as the original file and returns the sparse constraint Jacobian.\\\\
+\underline{Generated Lagrangian Hessian File Info}: The Hessian wrapper file which is generated has the name of the user's objective function with \texttt{\_Hes} appended. It takes the same inputs as the original file, with the addition of two NLP multiplier variables, on for the objective, and one for the constraints. The file always computes and returns the sparse Lagrangian Hessian.\\\\
+\begin{tabular}{l|l}
+{\bf Usage} & \begin{tabular}{l}
+ \texttt{funcs = adigatorGenFiles4Fmincon(setup)}\end{tabular} \\ \hline
+{\bf Input Info} & \begin{tabular}{l}
+\texttt{setup.objective} - string name of user's objective function\\
+\texttt{setup.constraint} - (optional) string name of user's constraint function\\
+\texttt{setup.numvar} - length of the variable of differentiation\ \\
+\texttt{setup.order} - 1 or 2\\
+\texttt{setup.auxdata} - (optional) if the objective/constraint function has an auxdata input,\\ then it should be included here\\
+\end{tabular}\\ \hline
+{\bf Output Info} & \begin{tabular}{l}
+The \texttt{funcs} structure is the required structure of function handles for the \texttt{ipopt} call.\\
+\texttt{funcs.objective} - objective function handle\\
+\texttt{funcs.gradient} - objective gradient function handle\\
+\texttt{funcs.constraints} - constraints function handle (if \texttt{setup.constraint} specified)\\
+\texttt{funcs.jacobian} - constraint Jacobian function handle (if \texttt{setup.constraint} specified)\\
+\texttt{funcs.jacobianstructure} - constraint Jacobian sparsity handle (if applicable)\\
+\texttt{funcs.hessian} - Lagrangian Hessian function handle (if \texttt{setup.order} = 2)\\
+\texttt{funcs.hessianstructure} - Lagrangian Hessian sparsity handle (if \texttt{setup.order} = 2)\\
+If \texttt{auxdata} specified, it is fixed in all function handles.\\
+\end{tabular}\\ \hline
+{\bf Examples} & \begin{tabular}{l}
+\texttt{examples/optimization/ipoptEx/}
+\end{tabular}
+\end{tabular}
+\section{User Function File Coding Restrictions}\label{Sec:Restrictions}
+The \emph{ADiGator} package generates derivative code by both reading the user's code and evaluating sections of the user's code on overloaded {\bf cada} objects. This allows it to generate stand-alone derivative files, but due to the complexity of the process, certain coding restrictions are placed on the files which it can differentiate. These are mostly in place for two reasons, 1. that the package can follow the flow of the user's code and track all variables from within it, and 2. that the code has enough information to print valid derivative calculations. In this section we go over the various coding requirements which the user should follow to ensure that their function files are differentiable using \emph{ADiGator}.
+\subsection{Known Numeric Values}\label{SubSec:Numeric}
+The overloaded class which the package uses to perform the actual derivative computations is based off of having fixed, known sizes and sparsity patterns. For this reason the user's code must be written such that, given how the inputs are defined and given to the \texttt{adigator} command, all variables created within the user program must have a fixed size. As an example, consider a user function \texttt{y = myfun(x,N)} which contains the statement \texttt{y = zeros(N,1)}. If one were to identify the input \texttt{N} as an {\bf Unknown Auxiliary Input}, then this would produce an error as this says that the variable \texttt{y} may take on \emph{any} size. If, however, the input \texttt{N} was defined as a {\bf Known Auxiliary Input} with value 10, then the derivative code would be generated as if the variable \texttt{N} was always 10. Similarly, all referencing/assignment indices must be known values, i.e. if the user code contains a statement \texttt{y(J) = x(I);}, then \texttt{adigator} must know the values of both \texttt{I} and \texttt{J}. Furthermore, these values must not change when evaluating the derivative file, or else the derivative calculations will be invalid. The sole exception to this rule is the use of unknown logical referencing and assignment, but this too has certain syntax requirements which are covered in Section \ref{SubSec:Logical}.
+
+\subsection{Flow Control}
+A great deal of work has gone into the ability of the \emph{ADiGator} package to be able to maintain the flow of the user's program within the derivative program. In this section we present the four different types of MATLAB flow control and how the \emph{ADiGator} package deals with them.
+\subsubsection{Conditional \texttt{if} Statements}
+The user should be able to write any conditional \texttt{if} statements within their program, and any \emph{possible} branches of the conditional block will be transcribed to the derivative program. For example, if a user function \texttt{y = myfun(x)} is given to \texttt{adigator}, the input \texttt{x} is defined as a {\bf Derivative Input} with size [10, 1], and the function contains the following:
+\begin{verbatim}
+    if x(1) > 1
+        {calcs1}
+    elseif length(x) > 10
+        {calcs2}
+    else
+        {calcs3}
+    end
+\end{verbatim} 
+then \texttt{adigator} would see that \texttt{x(1)} may be any value, thus the first branch may or may not happen, that \texttt{length(x) = 10}, and thus the second branch would never happen, so the derivative code would be produced along the lines of:
+\begin{verbatim}
+    if x(1) > 1
+        {deriv calcs1}
+    else
+        {deriv calcs3}
+    end
+\end{verbatim}
+All outputs of conditional fragments should, however, be the same size no matter which branch is taken.
+\subsubsection{\texttt{for} Loop Statements}
+The user may write any \texttt{for} loop statements as long as the loop is set to run for a fixed, known, number of iterations. The default way of handling loops is to keep them rolled in the derivative program (that is, write out the loop), but the user may use the UNROLL option if they wish to unroll the loop. There are tradeoffs which occur when either rolling or unrolling. Namely, if the user chooses to unroll a loop which runs for many iterations, then the generated files can become extremely large as unrolling the loop will make the package print out derivative calculations for each iteration of the loop. Unrolling the loop, however, sometimes can result in a more efficient derivative file, especially if the variables within the loop change size on each iteration of the loop. Here we also note that the use of \texttt{break} and \texttt{continue} statements is allowed within loops \emph{only} if the loops are to be rolled in the derivative file.
+
+\subsubsection{\texttt{while} Loop Statements}
+With the release of {\em ADiGator} V1.0, \texttt{while} loops may be used in the user code under certain restrictions.
+Namely, the \texttt{while} loops should not contain any iteration dependent conditional statements or organizational operations.
+The primary purpose of allowing \texttt{while} loops is for performing Newton-type iterations and thus the following code is fine:
+\begin{verbatim}
+    count = 0;
+    xk    = x;
+    fk    = myfun(xk);
+    Jk    = myjac(xk);
+    	while norm(fk) > 1e-6 && count < 100
+    	    count = count+1;
+    	    xk    = xk - Jk\fk;
+    	    fk    = myfun(xk);
+    	    Jk    = myjac(xk);
+    	end
+\end{verbatim}
+If a \texttt{while} loop contains any organizational operations which are dependent upon \texttt{while} loop iterations, then the code cannot be differentiated and the \texttt{while} loop should be replaced with a \texttt{for/if/break} sequence.
+For example, the following \texttt{while} loop
+\begin{verbatim}
+    count = 1;
+    xi = x(1);
+    	while xi < 0
+        count = count+1;
+        xi = x(count);
+    end
+\end{verbatim}
+{\em cannot} be differentiated due to the iteration dependent reference operation (\texttt{x(count)}). It should be replaced with the \texttt{for} loop:
+\begin{verbatim}
+    	for count = 1:length(x)
+        xi = x(count);
+        if xi >= 0
+            break
+        end
+    end
+\end{verbatim}
+The algorithm will attempt to find a static loop iteration where input sparsity patterns are equal to output sparsity patterns. There exists a maximum number of iterations for which it will attempt to find said fixed iteration. The user may change this maximum iteration limit using the \texttt{adigatorOptions} command (option \texttt{MAXWHILEITER}).
+
+\subsubsection{\texttt{switch} Statements}
+\texttt{Switch} statements are not currently allowed, please use \texttt{if} statements instead.
+\subsubsection{Short Circuit \texttt{AND/OR}}
+Here we note that using the short-circuit \texttt{and} (\texttt{\&\&}) and short-circuit \texttt{or} (\texttt{||}) are allowed, but they will be replaced with the non-short-circuit \texttt{and} (\texttt{\&}) and non-short-circuit \texttt{or} (\texttt{|}) commands in the intermediate program. Thus, if the user has a line of code such as
+\begin{verbatim}
+   if {statement1} && {statement2}
+\end{verbatim}
+this will be replaced by
+\begin{verbatim}
+  if {statement1} & {statement2}
+\end{verbatim}
+thus, if evaluating \texttt{statement2} will produce an error given that \texttt{statement1} is false, then the program will not be able to be differentiated. Similarly, if the short-circuit \texttt{or} command is used such that evaluating the second statement produces an error given that the first statement is true, then the program will not be able to be differentiated.
+\subsection{Functions and Sub-Functions}
+The user's main function file given to the \texttt{adigator} command is allowed to call as many other functions/sub-functions as desired.
+Each called function will be opened, read, and treated as if it were a \texttt{for} loop, thus if the UNROLL option is set 1 and a sub-function is called multiple times, then multiple sub-functions will be printed to the derivative file.
+ The restrictions on called functions and sub-functions are as follows. First, the function must be in the MATLAB path. Second, called functions and sub-functions should not share the same name, this will produce an error. Third, functions should not call themselves from within their own methods, this can create an infinite loop within the \emph{ADiGator} algorithm and cause an error.
+Fourth, currently only \emph{one} function call is allowed per line, if the user has multiple function calls on the same line then an error will be produced. 
+Finally, each function called must have at least one input and one output. 
+The use of the \texttt{feval} command is frowned upon here, but will work in some cases. Namely, if the function being called by the \texttt{feval} command contains no flow control and is not called from within flow control statements.
+\subsubsection{MEX Functions NOT Allowed}
+Unfortunately {\em ADiGator} cannot differentiate functions which contain calls to MEX files as 
+the algorithm is based off of reading code written in the MATLAB language.
+\subsubsection{Functions Outputting Different Number of Outputs (or Different Size Cell/Structure Arrays) Based on a User Flag}
+Often times user's will have function files which are to perform differently depending upon some set user flag, where, perhaps the flag tells the function which model is being used. If, for instance, one model returns an output structure array with one element, and the other model returns an structure array with two elements, then the {\em ADiGator} algorithm is likely to error when attempting to union the two outputs together. An example of this would be:
+\begin{verbatim}
+  if userflag
+      y(1).v = f(x);
+      y(2).v = g(x);
+  else
+      y.v = h(x);
+  end
+\end{verbatim}
+where the structure \texttt{y} is an output. This is likely to produce an error as the two different branches essentially are made to solve two completely different systems. So, at this point in time, it is best to create two different function files, one for each case, and to then generate two different derivative files via {\em ADiGator}.
+
+\subsection{Non-Input Auxiliary Data: Global/Persistent Variables and the Load Command}
+A user may wish to obtain auxiliary problem data using either global variables or the MATLAB \texttt{load} command. Both of these are acceptable, with some stipulations. Namely, if either is used, they should \emph{only} be used to give auxiliary data to the user's function file, they should \emph{not} be used to pass variables between called functions in the program being differentiated. The \emph{ADiGator} package treats all global variables and loaded in variables as if they are {\bf Known Numeric Inputs}, and thus all global parameters should be set to the values that they will be at the time of derivative evaluation. The last restriction is that, when using the \texttt{load} command, it must be of the syntax \texttt{var = load(.)} and not simply \texttt{load(.)}, as for the second case the algorithm would be unable to track what data was brought into the program.
+Additionally, for the time being persistent variables are not allowed, these are best replaced by global variables with the load sequence being performed outside of the function file.
+
+\subsection{Unknown Logical Referencing/Assignment}\label{SubSec:Logical}
+As stated in Section \ref{SubSec:Numeric}, the \emph{ADiGator} algorithm is based off of having fixed, known, variable sizes. This presents an issue when dealing with unknown logical referencing and assignments, as the result of a logical reference may take on a number of different sizes depending upon the reference index. To account for this, we require that, if an unknown logical reference/assignment index is used, the same indexing variable must be used for both a reference and assignment. That is, the logical reference/assignment must be of the form:
+\begin{verbatim}
+    ind = x > 1;
+    y(ind) = x(ind);
+\end{verbatim}
+Furthermore, if any binary mathematical array operations (+,-,etc.) are to be performed on a variable resulting from a logical reference, then both inputs to the binary operation must be result from a logical reference of the same index. For example,
+\begin{verbatim}
+    ind = x > 1 & x <2;
+    zi = x(ind).*y(ind);
+    z(ind) = zi;
+\end{verbatim}
+is valid,
+\begin{verbatim}
+    z(x > 1 & x <2) = x(x > 1 & x <2).*y(x > 1 & x <2)
+\end{verbatim}
+is not, even though they perform the same operations.
+
+\section{Higher Order Derivatives}
+A nice outcome from the fact that the \emph{ADiGator} algorithm creates stand-alone derivative code (aside from evaluation speed) is that the method is fully repeatable. Thus, the user may create $n^{th}$ order derivative files. In order to do this, the process is repeated just as shown in Section \ref{Sec:Using}, except now you are differentiating a previously created derivative file. To illustrate, suppose we wished to take a second derivative of a function \texttt{y = myfun(x)}, with respect to the input \texttt{x}, where $\bfx \in \bbR^{10}$, and we want to call our VOD \texttt{'x'}. We would first create the first derivative file as follows:
+\begin{verbatim}
+    x = adigatorCreateDerivInput([10 1],'x');
+    adigator('myfun',{x},'myderiv1');
+\end{verbatim}
+If we then wished to take a second derivative with respect to $\bfx$, we would need to define a new input as the input structure to \texttt{myderiv1} is different from \texttt{myfun}. This would be done as:
+\begin{verbatim}
+    x = struct('f',x,'dx',ones(10,1));
+\end{verbatim}
+which says that the input \texttt{x.f} has the same derivatives as we defined previously, and that the input \texttt{x.dx} is a vector of ones which has no derivatives with respect to $\bfx$ (the second derivative of $\bfx$ with respect to itself is zero). We can then generate the second derivative file using the command
+\begin{verbatim}
+    adigator('myderiv1',{x},'myderiv2');
+\end{verbatim}
+In order to evaluate this function, \texttt{myderiv2}, we note that the input is exactly the same as the input to \texttt{myderiv1} since we have defined no new derivatives. So, we could evaluate it at a set of random points using the commands:
+\begin{verbatim}
+    x.f = rand(10,1);
+    y = myderiv2(x);
+\end{verbatim}
+Now, assuming the output has second order derivatives, the output \texttt{y} would have the following fields: \texttt{.f, .dx, .dx\_size, .dx\_location, .dxdx, .dxdx\_size, .dxdx\_location} corresponding to the function value, first derivative value, first derivative array size, first derivative mapping indices, second derivative value, second derivative array size, and second derivative mapping indices, respectively. Assuming the output \texttt{y.f} is a scalar, we could then build a sparse Gradient and Hessian using the commands:
+\begin{verbatim}
+    Grad = sparse(ones(length(y.dx),1),y.dx_location,y.dx,1,y.dx_size);
+    Hes = sparse(y.dxdx_location(:,1),y.dxdx_location(:,2),y.dxdx,y.dxdx_size(1),y.dxdx_size(2));
+\end{verbatim}
+This process may be repeated as many times as desired.
+
+Here we note that the \emph{ADiGator} algorithm is cognizant of when it is differentiating a function which it created, thus a bunch of embedded structures are not required for the inputs/outputs of the higher order derivative files. Furthermore, it knows what derivatives were taken on previous transformations and identifies these using the string name given to the variable of differentiation. This allows the user to take derivatives with respect to different variables if it is desired, but if the same VOD name is used as a previous transformation, then the given {\bf Derivative Inputs} should reflect those given in the previous transformation.
+
+Here we also note that the user can write functions which call previously created derivative files and then differentiate the new file and that the algorithm will still recognize the previously created derivative files as their own and differentiate accordingly.
+
+\section{Differentiating Vectorized Code}
+The use of the vectorized differentiation is for problems of the form $\bff(\bfx(s))$, where $s$ is a scalar, independent variable. It is easiest to think of $s$ as being a representation of time such that $\bff$ at $s = t$ is only a function of $\bfx$ at $s = t$. If this is the case, and a user's code is written such that it computes the values of $\bff$ at a set of time points, given the inputs of $\bfx$ at a set of time points, then the code may be differentiated in a vectorized manner. More specifically, if the code is written to compute $\bfF(\bfX(\bfs)): \bbR^{N \times n} \rightarrow \bbR^{N \times m}$, where
+\begin{equation}
+\bfX(\bfs) = \left[ \begin{array}{ccc}
+x_1(s_1) & \cdots & x_n(s_1)\\
+x_1(s_2) & \cdots & x_n(s_2)\\
+\vdots & \ddots & \vdots \\
+x_1(s_N) & \cdots & x_n(s_N)
+\end{array}\right], \quad
+\bfF(\bfX(\bfs)) = \left[ \begin{array}{ccc}
+f_1(\bfx(s_1)) & \cdots & f_m(\bfx(s_1))\\
+f_1(\bfx(s_2)) & \cdots & f_m(\bfx((s_2))\\
+\vdots & \ddots & \vdots \\
+f_1(\bfx(s_N)) & \cdots & f_m(\bfx((s_N))
+\end{array}\right],
+\end{equation}
+where it is important that the code be written such that $N$ may be \emph{any} positive integer. When this is the case, we compute the Jacobian $\bfJ\bff(\bfx(s))$, but do so such that the non-zero elements of $\bfJ\bff(\bfx(s))$ are computed for $N$ values of $s$, where, again, $N$ may take on any integer value.
+
+\subsection{Illustrative Example of Vectorized Differentiation}
+In order to differentiate in the vectorized mode the user must simply identify their vectorized inputs. To do this, the vectorized dimension is just given the value \texttt{Inf}. So, if the user has a function, \texttt{Y = myfun(X)}, of the above form with $n = 3$, $m = 4$, then to generate the {\bf Derivative Input}, the following command would be used:
+\begin{verbatim}
+    X = adigatorCreateDerivInput([Inf 3],'X');
+\end{verbatim}
+To then create a vectorized derivative file, \texttt{myderiv}, we would call
+\begin{verbatim}
+    adigator('myfun',{X},'myderiv');
+\end{verbatim}
+In order to now evaluate the file \texttt{myderiv} we must define the function field of \texttt{X.f} and the derivative field \texttt{X.dX}. Supposing we wish to evaluate at a set of random function inputs at $N =10$ values of $s$, we would define the function field as
+\begin{verbatim}
+    x.f = rand(10,3);
+\end{verbatim}
+Now, here we note that the derivative field needs to be of the dimension $N \times nz$, where $nz$ corresponds to the number of non-zeros of the input Jacobian (in this case $\bfJ\bfx((\bfx(s))$), and $N$ corresponds to the vectorized dimension. In this case, $nz = 3$, and
+\begin{equation}
+\frac{\partial x_i(s)}{\partial x_j(s)} = \left\{ \begin{array}{cl}
+1, & i = j\\
+0, & i \neq j
+\end{array}\right.
+\quad \forall s
+\end{equation}
+thus the derivative field should be defined as
+\begin{verbatim}
+    x.dX = ones(10,3);
+\end{verbatim}
+We may then evaluate the derivative function using the command
+\begin{verbatim}
+    y = myderiv(x);
+\end{verbatim}
+Now, the output fields of \textbf{y} will have the same form as in the non-vectorized case, with a few exceptions. First, the values assigned to \texttt{y.dX\_size}  and \texttt{y.dX\_location} are the size and non-zero locations of the Jacobian $\bfJ\bfy(\bfx(s))$ evaluated at a single time point. Next, the derivative values stored in \texttt{y.dX} are stored in an array of size $N \times nz$, where $nz$ is the number of possible non-zero derivatives in the Jacobian $\bfJ\bfy(\bfx(s))$ evaluated at a single point. So, to build the Jacobian $\bfJ\bfy(\bfx(s))$ evaluated at $s = s_1$, we could do so as
+\begin{verbatim}
+Jac1 = sparse(y.dX_location(:,1),y.dX_location(:,2),y.dX(1,:),y.dX_size(1),y.dX_size(2));
+\end{verbatim}
+
+\subsection{Projecting Vectorized Derivatives into an Unrolled Jacobian}
+Now, if we let $x_i(\bfs)$ ($i = 1,\dots,n$) and $f_j(\bfX(\bfs))$ ($j = 1,\dots,m$) be column vectors of length $N$, where the $k^{th}$ elements are $x_i(s_k)$  and $f_j(\bfx(s_k))$ ($k = 1,\dots,N$), respectively, we can then define
+\begin{equation}
+\bfx^\dag(\bfs) = \left[ \begin{array}{c}
+x_1(\bfs) \\ x_2(\bfs) \\ \vdots \\ x_n(\bfs)
+\end{array}\right], \quad 
+\bff^\dag(\bfx^\dag(\bfs)) = \left[ \begin{array}{c}
+f_1(\bfX(\bfs)) \\ f_2(\bfX(\bfs)) \\ \vdots \\ f_m(\bfX((\bfs))
+\end{array}\right].
+\end{equation}
+Now, supposing the user wished to build the unrolled Jacobian $\bfJ\bff^\dag(\bfx^\dag(\bfs))$, we have supplied the function \texttt{adigatorProjectVectLocs}, which takes the output locations of the non-zeros of the Jacobian $\bfJ\bff(\bfx(s))$, together with the length of the vectorized dimension, $N$, to build the non-zero locations of the unrolled Jacobian $\bfJ\bff^\dag(\bfx^\dag(\bfs))$. For the above example, we could build the unrolled Jacobian follows:
+\begin{verbatim}
+    [I,J] = adigatorProjectVectLocs(10,y.dX_location(:,1),y.dX_location(:,2));
+    Jacdag = sparse(I,J,y.dX,y.dX_size(1)*10,y.dX_size(2)*10);
+\end{verbatim}
+Here we note that one should be careful when using this command as it will only be correct if the input's first dimension is vectorized and the output's first dimension is vectorized. That is, $\bfx^\dag(\bfs)$ would correspond to \texttt{x.f(:)}  and $\bff^\dag(\bfx^\dag(\bfs))$ would correspond to \texttt{y.f(:)} in our example, due to how we have arranged the data.
+
+\subsection{Vectorized Coding Restrictions}
+The first vectorized coding restriction is that, if the vectorized dimension of the input is $N$, then all vectorized variables must be of size $N \times n$, where $n$ must be a known value (and not equal to $N$). Furthermore, one may not sum over any vectorized dimension, as this results in derivatives of the output being dependent upon all points in time. Similarly, referencing off of the vectorized dimension, but not taking the entire row/column is not allowed, e.g.~if \texttt{X} is of size $N \times 3$, you cannot perform \texttt{xi = X(1,:)}, but you can perform \texttt{xi = X(:,1)}. Finally, you are not allowed to loop on a vectorized dimension, e.g.~ if \texttt{Y} is of size $1 \times N$, you may not do \texttt{for yi = 1:Y}. It is noted here that unknown logical referencing/assignments are coded up for vectorized dimensions and that these may be used (in accordance with the guidelines given in Section \ref{SubSec:Logical}) instead of a \texttt{for} loop if you need to search through the vectorized dimension.
+
+\section{Generating Files for GPOPS II}
+{\em GPOPS II} is a commercial MATLAB optimal control software which utilizes direct collocation methods to solve optimal control problems.
+The creators of {\em ADiGator} have collaborated with those of {\em GPOPS II} in order to allow for {\em ADiGator} to supply first- and second-order derivatives to {\em GPOPS II}.
+In order to generate the derivative files using {\em ADiGator} please see the file \texttt{adigatorGenFiles4gpops2}.
+This function utilizes the vectorized and non-vectorized modes in order to generate the derivative files required by {\em GPOPS II} given the \texttt{setup} structure which is used by the \texttt{gpops2} function.
+Like all {\em ADiGator} generated files, these generated files will not need to be changed unless the user changes their continuous or endpoint functions.
+
+\section{Debugging}
+During the transformation from user code to derivative code, the \emph{ADiGator} algorithm never actually evaluates the user's code, but rather copies various parts of it, writes them to another file, and then evaluates that file. This can sometimes make debugging difficult, particularly because the MATLAB error messages do not point to the user's file with the errors. Rather, they will usually point to a user's line of code which was copied to another file. We are working on a way to point to the user's file, but for now the user will need to deal with the inconvenience.
+In this section we will go over some of the common errors that may occur when using the \emph{ADiGator} software.
+\subsection{Error in User Code or Inputs to ADiGator}
+Prior to performing any transformation, the algorithm first attempts to evaluate the user's function numerically on what it believes to be the inputs.
+If you receive the error
+\begin{verbatim}
+   Error in initial test evaluation of user file on given input info
+\end{verbatim}
+then one of two things has occurred: either there is an error in the user's file or the inputs to the user's file have not been properly given to \texttt{adigator}. To debug this, you should first ensure that your function evaluates on numeric inputs without errors. If you are still receiving the error, then refer to Section \ref{SubSec:Inputs} for the proper input scheme.
+\subsection{Non-Overloaded Functions}
+The algorithm evaluates the user's statements on an overloaded {\bf cada} class, so, if the user's code contains calls to functions which are not overloaded an error will be produced as
+\begin{verbatim}
+    Undefined function 'somefunction' for input arguments of type 'cada'.
+\end{verbatim}
+In this case, the only way to use that function within the user's code is to overload the function. If the calculation in question may be performed prior to the user's code (i.e. you do not need to take derivatives of the function), then this is a simple solution. If however, the function in question is operating on objects which have derivatives, then the user may either contact the author in order to see if the function can be overloaded, or rewrite their code to use a different function. A list of all the currently overloaded operations may be seen by typing ``\texttt{help cada}'' and then clicking on the link to the reference page.
+
+\subsection{Errors Regarding ``Strictly Symbolic'' Inputs}
+As stated in Section \ref{SubSec:Numeric}, in order to create an array, the size of the array must be a known numeric value. Similarly, in general, when performing a reference/assignment, the reference/assignment index must be a known numeric value. When these types of operations are performed and the algorithm does not know the value of the size and/or index, then an error will be produced. For example, if one were to perform the operation \texttt{y = ones(N,1)}, and the variable \texttt{N} does not have a known numeric value, then the error
+\begin{verbatim}
+    Cannot pre-allocate a stricly symbolic size
+\end{verbatim}
+would be produced. Similarly, if one were to perform the operation \texttt{y = x(I)} and the variable \texttt{I} does not have a known numeric value, then the error
+\begin{verbatim}
+    Cannot perform strictly symbolic referencing/assignment
+\end{verbatim}
+would be produced. In order to fix this, ensure that, if these sizes/indices are inputs, that they are given such that they are {\bf Known Auxiliary Inputs} as shown in Section \ref{SubSec:Inputs}. If they are values calculated from within the file, make sure that they are created by operating on known numeric objects. Also, note that the sizing operations \texttt{size,numel,length} will always produce a known numeric value.
+
+\subsection{Errors in the Derivative and/or Derivative Code}
+If you receive an error in the evaluation of the derivative code (on proper numerical inputs), then you have likely found a bug in the algorithm. Please report this. Similarly, if a derivative is computed incorrectly, then you have more than likely found a bug in the algorithm. Please report this as well.
+If an element of the derivative is being computed as \texttt{NaN}, then the derivative is likely undefined at the evaluation point.
+A common occurrence of this is evaluating the derivative of the \texttt{sqrt} function at 0 when the derivative of the \texttt{sqrt} argument is also zero.
+That is, if \texttt{y = sqrt(x)}, the derivative rule is produced along the lines of \texttt{dy = (1/2)/sqrt(x)*dx}; if this is then evaluated when \texttt{x=0} and \texttt{dx=0}, then \texttt{1/sqrt(x)} goes to infinity, and zero times infinity is undefined.
+Thus, the derivative code isn't wrong, the derivative is just undefined at that point. 
+
+\section{List of Included Examples}
+In this section we present an explanation of the examples included with the \emph{ADiGator} package.
+To run all the examples in this section, change your working directory to the `examples' directory and type `runAllExamples'.
+\subsection{Basic First Derivatives}
+In this section we present two examples which take the first derivative of vector functions of vectors and compare against MATLAB's \texttt{numjac} finite differencing tool.
+\subsubsection{Arrowhead}
+This is an example taken from Section 7.4 of \cite{Griewank1}. Here we take the derivative of a function $\bff: \bbR^n \rightarrow \bbR^n$, where
+\begin{equation}
+f_1(\bfx) = 2x^2_x+ \sum^n_{i=1}x_i^2, \quad f_j(\bfx) = x_1^2 + x_j^2, \quad (j = 2,\dots,n)
+\end{equation}
+This is coded up such that the Jacobian, $\bfJ\bff(\bfx)$ is built using \emph{ADiGator}, finite differencing, and compressed finite differencing. Here the user is free to change the the parameter \texttt{N} within the \texttt{main.m} (located in \texttt{examples/jacobians/arrowhead/})code in order to see that the \emph{ADiGator} algorithm becomes more useful as the problem size increases. Furthermore, you can see that there is a certain amount of overhead inherent with generating the derivative code, but, if you wish to evaluate the code many times, this overhead becomes less of an issue.
+\subsubsection{Polynomial Data Fitting}
+This example was taken from \cite{Bischof2002CST} which  is to determine the coefficients of the $m$-degree
+polynomial $p(x) = p_1 + p_2 x + p_3 x^2 + \cdots + p_m x^{m-1}$ that
+best fits the points $(x_i,d_i),\;(i = 1,\dots,n),\; (n > m)$, in the least
+squares sense. The code may be found in \texttt{examples/jacobians/polydatafit}. This polynomial data fitting problem leads to an 
+overdetermined linear system $\bfV \bfp = \bfd$, where $\bfV$ is the
+Vandermonde matrix,  
+\begin{equation}
+\bfV = \left[ \begin{array}{c c c c c}
+1 & x_1 & x_1^2 & \cdots & x_1^{m-1} \\
+1 & x_2 & x_2^2 & \cdots & x_2^{m-1} \\
+\vdots & \vdots &  & \vdots \\
+1 & x_n & x_n^2 & \cdots & x_n^{m-1}\\
+\end{array}\right].
+\end{equation}
+As with the previous example, the user should note that the overhead associated with generating the derivative file becomes less as the problem size increases, as well as the number of required derivative evaluations. Unlike the previous example, it is noted that the resulting Jacobian, $\bfJ\bfp(\bfx)$, is full (i.e. has no known non-zero elements), thus, after the derivative file is evaluated, the Jacobian is simply built using the reshape command:
+\begin{verbatim}
+    dpdx = reshape(p.dx,p.dx_size);
+\end{verbatim}
+
+\subsection{Stiff Ordinary Differential Equations}
+In this section we supply derivatives to the MATLAB ODE integrator, \texttt{ode15s}, to integrate two different ODEs.
+\subsubsection{Brusselator}
+In this example, we integrate the well known Brusselator system of \cite{wanner1991}. The dynamics of the system are given as
+\begin{equation}
+\begin{array}{l}
+\dot{u}_i = 1 + u_i^2v_i - 4u_i + \alpha (N+1)^2(u_{i-1}-2u_i + u_{i+1}) \\
+\dot{v}_i = 3u_i - u_i^2v_i + \alpha(N+1)^2(v_{i-1}-2v_i + v_{i+1})
+\end{array}
+\quad (i = 1,\dots,N)
+\end{equation}
+with initial conditions
+\begin{equation}
+\begin{array}{l}
+u_i(0) = 1 + \sin\left(2\pi \frac{i}{N+1} \right) \\
+v_i(0) = 3
+\end{array}
+\quad (i = 1,\dots,N)
+\end{equation}
+The code contained in \texttt{examples/stiffodes/brusselator/main.m} will generate the derivative file for the system using \emph{ADiGator}. It then integrates the system with \texttt{ode15s} three different times. The first time it does not supply derivatives, the second time it supplies the sparsity pattern (as calculated from the outputs of the \texttt{adigator} transformation command), and finally it supplies derivatives using the \emph{ADiGator} generated file. Here we note that the \emph{ADiGator} generated derivative file may not be given directly to \texttt{ode15s} as the input/output scheme of the generated files is different from the required input/output scheme for use with \texttt{ode15s}. Thus, a wrapper file is written such that the wrapper file has the input/output scheme required of \texttt{ode15s}. The wrapper file then uses its inputs to call the generated derivative file, and then build the Jacobian output using the outputs of the derivative file. The user is free to change the dimension $N$ and the time span over which to integrate. They should notice that supplying no derivative information is extremely slow, while supplying just the sparsity pattern or the sparsity pattern plus derivatives yield similar solve times.
+
+\subsubsection{DCAL Control of Two-Link Robot Manipulator}
+This example is a simulation of the experiment presented in \cite{Burg97}. The paper derives a control for the robotic model:
+\begin{equation}
+\bftau = \bfM(\bfq)\ddot{\bfq} + \bfV_m(\bfq,\dot{\bfq}) \bfq + G(\bfq) + \bfF_d(\dot{\bfq}),
+\end{equation}
+where $\bfq(t)$ is a position vector. The control, $\bftau$, is computed as a function of $\bfq$, $\bfY_d$ and $\dot{\bfY}_d$, where
+\begin{equation}
+\bfY_d = \bfY_d(\bfq_d,\dot{\bfq}_d,\ddot{\bfq}_d)
+\end{equation}
+and the vector $\bfq_d(t)$ is the desired trajectory. For this simulation, we have a two-link robot, thus $\bfq,\bfq_d,\bftau \in \bbR^2$, with the desired trajectory given as
+\begin{equation}
+q_{d1}(t) = q_{d2}(t) = 0.7\sin(2t)\left(1-e^{-.3t^3}\right).
+\end{equation}
+Prior to integrating the differential equation is is required that the time derivatives $\dot{\bfq_d}$, $\ddot{\bfq_d}$, and $\dot{\bfY}_d$ are derived. Rather than doing this by hand, this is done using \emph{ADiGator} as follows. First, we differentiate the desired trajectory function \texttt{qd = getqd(t)} with respect to \texttt{t}. We then differentiate the resulting derivative file to get a file for $\ddot{\bfq}_d$, and then once more differentiate the resulting derivative file to get a file which calculates $\dddot{\bfq}_d$. We then define the vector $\textbf{Q} = [\bfq_d^T, \dot{\bfq_d}^T, \ddot{\bfq_d}^T]^T$, where $\bfY_d = \bfY_d(\textbf{Q})$. The calculations to get $\bfY_d$ are given in the file \texttt{Yd = getYd(Q)}. We then take the derivative of the file \texttt{getYd} with respect to time in order to get a file which computes $\dot{\bfY}_d(\textbf{Q},\dot{\textbf{Q}})$. The control laws written in the file \texttt{getDCALcontrol} are then written such that they call these generated derivative files.
+
+Having generated these time derivative files, we then solve the ODE using \texttt{ode15s}. Here we note that we are just integrating the robot positions and velocities, but also an internal filter variable and a variable used in the parameter update law. Thus our states which we are integrating are defined as $\bfx = [\bfq^T, \dot{\bfq}^T, \bfp^T, \bfz^T]^T$, where $\bfq\in\bbR^2$ is the robot link position, $\dot{\bfq}\in\bbR^2$ is the robot link velocity, $\bfp\in\bbR^2$ is the internal filter variable, and $\bfz\in\bbR^5$ is the variable used in the parameter update law. The dynamic equations associated with all variables is calculated from within the \texttt{xdot = TwoLinkSys(t,x)} file (which calls \texttt{getDCAlcontrol}). We then take the derivative of the file \texttt{TwoLinkSys} with respect to \texttt{x} and supply this to the ODE solver \texttt{ode15s} in order to integrate the system.
+
+As with the previous example, a wrapper is used since the input/output scheme required by \texttt{ode15s} is different from that of \emph{ADiGator} generated files. Within the \texttt{main.m} file (which runs the simulation), the user is free to change the \texttt{supplyderiv} flag (to supply derivatives or not), the \texttt{displayplots} flag (to display plots or not), the \texttt{probinfo.noiseflag} (to add noise or not), or the value of final time, \texttt{tf}. Increasing the final time, not supplying derivatives, or adding noise will all increase the simulation run time. 
+\subsection{Constrained Optimization}
+In this section we supply derivatives to the MATLAB constrained optimization solver \texttt{fmincon} to solve three different problems. The first example is given as a simple demonstration on how to supply Objective Gradients, Constraint Jacobians, and Lagrangian Hessians using \emph{ADiGator}. In the second example we divide our problem into a vectorized portion and a non-vectorized portion. Finally, in the last example, we take full advantage of the vectorized nature of the problem.
+\subsubsection{Simple Example}
+The code for this example may be found in \texttt{examples/optimization/fminconEx/}.
+For this example, we use the problem taken from the MATLAB optimization toolbox help documentation. The problem is as follows:
+\begin{equation}
+\begin{array}{c}
+\min\limits_{\bfx \in \bbR^2}  f(\bfx) = e^{x_1}(4x_1^2+2x_2^2+4x_1x_2+2x_2+1)\\
+\text{such that}\\
+\bfc(\bfx) = 
+\begin{array}{ll}
+x_1x_2 - x_1-x_2+1.5 \\
+-x_1x_2-10
+\end{array} \leq \textbf{0}
+\end{array}.
+\end{equation}
+We use this somewhat simple problem to demonstrate how to create an \emph{objective Gradient}, \emph{constraint Jacobian}, and \emph{Lagrangian Hessian}. Furthermore, we show how these may be used with MATLAB's non-linear programming solver, \texttt{fmincon}. If the user does not have the optimization package, then \texttt{fmincon} will not be called, but they may still see how to generate the mentioned derivatives. We do this as follows. First, we solve the problem without supplying derivatives using the active-set method of \texttt{fmincon}. Next, we generate objective Gradient and constraint Jacobian files and supply these to \texttt{fmincon} to solve the problem again with the active-set method. We then move onto generating Lagrangian Hessians and supplying them to \texttt{fmincon}. This is done in two ways. The first is to write a file which computes the Lagrangian, and differentiate it twice using \emph{ADiGator}. In the second way, we take advantage of the fact that we previously created derivative files to compute the objective Gradient and constraint Jacobian, thus we write a file which computes the Lagrangian Gradient by calling these files. The Lagrangian Gradient file is then differentiated, achieving the same thing as if we were to simply differentiate the Lagrangian twice.
+Here we stress that various wrapper files must be made in order to use the \emph{ADiGator} generated files with \texttt{fmincon} as the input/output scheme required by \texttt{fmincon} is different from the input/output scheme of \emph{ADiGator} generated files. These files are included, but are not automatically generated.
+
+\subsubsection{Brachistochrone}
+In this example, we solve a discretized form of the continuous time optimal control problem:
+\begin{equation}
+\min\limits_{\bfx(t),u(t),t_f} t_f
+\end{equation}
+subject to the dynamic constraints
+\begin{equation}\label{brachcontdynamics}
+\bff(\bfx(t),\bfu(t)) = 
+\left[ \begin{array}{c}
+\dot{x}_1(t) \\ \dot{x}_2(t)\\ \dot{x}_3(t)
+\end{array} \right] = 
+\left[ \begin{array}{c}
+x_3(t) \sin u(t)\\
+-x_3(t) \cos u(t) \\
+g \cos u(t)
+\end{array} \right]
+\end{equation}
+and boundary conditions
+\begin{equation}\label{brachcontbound}
+\begin{array}{rrrr}
+x_1(0) = & 0, & x_1(t_f) = & 2 \\
+x_2(0) = & 0, & x_2(t_f) = & -2 \\
+x_3(0) = & 0. & & 
+\end{array}
+\end{equation}
+To solve this problem we use a Hermite-Simpson Separated collocation method. We do this using $K$ equally spaced intervals with a discrete point at the beginning and middle of each interval, as well as at a final point. This results in $N = 2K+1$ discrete time points, $t_j$ ($j = 1,\dots,N$). Here we introduce our discretized state, $\bfX \in \bbR^{N \times 3}$ where
+\begin{equation}
+X_{i,j} = x_i(t_j) \quad (i = 1,2,3) \quad	 (j = 1,\dots,N)
+\end{equation}
+and our discretized control, $\bfU \in \bbR^N$, where
+\begin{equation}
+U_j = u(t_j) \quad (j = 1,\dots,N).
+\end{equation}
+We also introduce the matrix function $\bfF(\bfX,\bfU) \in \bbR^{N \times 3}$, where,
+\begin{equation}
+F_{i,j} = f_i(\bfX_j^T,U_j), \quad (i = 1,2,3) \quad (j = 1,\dots,N),
+\end{equation}
+where $\bfX_j$ is the $j^{th}$ row of the matrix $\bfX$. 
+We now give the discretized problem  as:
+\begin{equation}
+\min\limits_{\bfX, \bfU, t_N} t_N 
+\end{equation}
+subject to the equality constraints
+\begin{equation}\label{bracheqcons}
+\begin{array}{c}
+\begin{array}{r}
+X_{i,2k+1} - \frac{1}{2}(X_{i,2k+2} + X_{i,2k}) - \frac{t_N}{8K}(F_{i,2k} - F_{i,2k+2}) = 0 \\
+X_{i,2k+2} - X_{i,2k} - \frac{t_N}{6K}(F_{i,2k+2} + 4F_{i,2k+2}  + F_{i,2k} ) = 0
+\end{array}\\
+(i = 1,2,3) \quad (k = 1,\dots,K)
+\end{array}
+\end{equation}
+and simple bounds
+\begin{equation}\label{brachdiscbound}
+\begin{array}{c}
+\bfX_{min} \leq \bfX \leq \bfX_{max} \\
+\bfU_{min} \leq \bfU \leq \bfU_{max} \\
+t_{Nmin} \leq t_N \leq t_{Nmax},
+\end{array}
+\end{equation}
+where we are using the notation that $\bfX_i$ is the $i^{th}$ row of the matrix $\bfX$, and that the boundary conditions of Equation \ref{brachcontbound} are included in the simple bounds of Equation \ref{brachdiscbound}. There are five different driver files which will solve this problem in the \texttt{examples/optimization/vectorized/brachistochrone} directory. The file \texttt{main\_noderivs} solves it without supplying derivative information. The files \texttt{main\_basic\_1stderivs} and \texttt{main\_basic\_2ndderivs} solve the problem by supplying first and second derivative information, respectively, without taking advantage of the vectorized nature of $\bfF(\bfX,\bfU)$. And the files \texttt{main\_vect\_1stderivs} and \texttt{main\_vect\_2ndderivs} solve the problem by supplying first and second derivatives, respectively, while taking advantage of the vectorized nature of $\bfF(\bfX,\bfU)$. Here we note that we do not use \emph{ADiGator} to compute the Objective Gradient as this is a simple calculation that does not require automatic differentiation. Furthermore, all of these files solve the problem four different times using values of $K = 5$, $K = 10$, $K = 20$, and $K = 40$, where, for the last three iterations the solution of the previous iteration is used as an initial guess to the current iteration.
+\subsubsection*{Supplying Derivatives without Vectorization}
+In order to supply a Constraint Jacobian in the most straightforward way, we write the function \texttt{[C,Ceq] = basic\_cons(z,probinfo)}, where the input vector is $\bfz = [\bfX^{\dag T}, \bfU^T,t_N]^T$, where $\bfX^{\dag}$ is the unrolled form of $\bfX$ (as described in the \hyperlink{Appendix}{Appendix}). The file \texttt{basic\_cons} calls the file \texttt{F = dynamics(X,U)} and uses the output to build the constraints of Equation \ref{bracheqcons}. So, in order to get the Constraint Jacobian, we simply apply \emph{ADiGator} to the \texttt{basic\_cons} file using $\bfz$ as our variable of differentiation. To then supply the Constraint Jacobian to \texttt{fmincon} using \texttt{fmincon}'s desired input/output scheme, we write the wrapper \texttt{basic\_conswrap} which calls our generated derivative file and builds the Constraint Jacobian.
+
+In order to supply the Lagrangian Hessian, we first write a file, \texttt{GL = basic\_laggrad(z,lambda,probinfo)}, which uses our constraint derivative file to build the Lagrangian Gradient:
+\begin{equation}
+\bigtriangledown_{\bfz}L = \bigtriangledown_{\bfz} t_f + \bflambda^T \bigtriangledown_{\bfz}\bfc(\bfz),
+\end{equation}
+where $\bigtriangledown_{\bfz}L$, $\bigtriangledown_{\bfz} t_f$, $\bflambda$, and $\bigtriangledown_{\bfz}\bfc(\bfz)$ represent the Lagrangian Gradient, Objective Gradient, Lagrange multipliers, and Constraint Jacobian, respectively. We then apply \emph{ADiGator} to the file \texttt{basic\_laggrad} using $\bfz$ as our variable of differentiation to create a file which is used to build the Lagrangian Hessian. In order to supply the Lagrangian Hessian to \texttt{fmincon}, we again write a wrapper which will call the generated derivative file \texttt{basic\_laggrad\_z} and build the Lagrangian Hessian using the required input/output scheme of \texttt{fmincon}. Here we note that, since we solve the problem at four different values of $K$, that this changes our problem size, and thus all derivative files must be generated prior to each call to \texttt{fmincon}.
+
+\subsubsection*{Supplying Derivatives with Vectorization}
+Here we note that a part of our problem, namely, $\bfF(\bfX,\bfU)$, is of the vectorized nature in that $\bfF_i$ is only a function of $\bfX_i$ and $\bfU_i$ ($i = 1,\dots,N$). As such, we may use \emph{ADiGator} in the vectorized mode in order to differentiate this sub-problem. In order to do so, we first define a variable $\bfy(t) = [\bfx^T(t),u(t)]^T$, we then apply \emph{ADiGator} in the vectorized mode to the file \texttt{F = dynamics(X,U)} with $\bfy(t)$ as our variable of differentiation. This essentially gives us a file which will compute $\bfJ\bff(\bfy(t))$ at the time points $t_1,\dots,t_N$, given the inputs $\bfX$ and $\bfU$, where $N$ may be any positive integer. In order to supply the Constraint Jacobian, we then write a file \texttt{Ceq = vect\_cons(X,F,tf,probinfo)}, where, unlike in the non-vectorized case, this takes \texttt{F} as an input rather than calling the dynamics file. We then use the sparsity pattern of $\bfJ\bff(\bfy(t))$ together with the function \texttt{adigatorProjectVectLocs} to define the sparsity pattern of $\bfJ\bfF(\bfz)$, given a fixed value of $N$, and apply \emph{ADiGator} in the \emph{non-vectorized} mode to the file \texttt{vect\_cons} with $\bfz$ as our variable of differentiation. In order to supply the Constraint Jacobian to \texttt{fmincon}, we then write a wrapper file \texttt{vect\_conswrap} which calls our vectorized dynamics derivative file, and uses the derivative outputs as inputs to the constraint derivative file and builds the Constraint Jacobian.
+
+In order to supply the Lagrangian Hessian in this manner, we first must create a file which computes the second derivatives of the dynamics file, that is, $\bigtriangledown^2_{\bfy(t)}\bff(t)$. This is done by applying \emph{ADiGator} to our previously created vectorized dynamics derivative file, \texttt{dynamics\_Y(X,U)}, again using $\bfy(t)$ as our variable of differentiation. Now, in order to get the Lagrangian Hessian, we first write a file which computes the Lagrangian Gradient, and take the derivative with respect to $\bfz$. In this example, we wrote this file as \texttt{GL = vect\_laggrad(X,dX,F,dF,tf,dtf,probinfo)}, where \texttt{X},\texttt{F}, \texttt{dF}, and \texttt{tf} are all identified as derivative inputs. Furthermore, the input \texttt{dF} is the non-zero derivatives of $\bfJ\bfF(\bfz)$, and as such, identifying the non-zero locations of the derivative of \texttt{dF} with respect to $\bfz$ can be tricky. After identifying the derivative inputs properly, \emph{ADiGator} is called in the non-vectorized mode on the file \texttt{vect\_laggrad} using $\bfz$ as the variable of differentiation. In order to supply the Lagrangian Hessian we write the file \texttt{vect\_laggradwrap} which first calls the second derivative of the dynamics file and then calls the derivative of the Lagrangian Gradient file. Here we note that since the derivatives of the dynamics file are done in the vectorized mode, that they only need to be generated once. Since the other derivative files are generated in the non-vectorized mode, they must be generated each time the value of $K$ is changed. We also note that, for this example, one does not gain a lot of efficiency by taking advantage of the vectorized nature of the dynamics (primarily because the dynamics are fairly simple), but hopefully it will give the user some insight on how a problem may be separated into a vectorized part and a non-vectorized part.
+
+\subsubsection{Minimum Time to Climb of Supersonic Aircraft}
+In this example, we solve a discretized form of the continuous time optimal control problem:
+\begin{equation}
+\min\limits_{\bfx(t),u(t),t_f} t_f
+\end{equation}
+subject to the dynamic constraints
+\begin{equation}
+\bff(\bfx(t),\bfu(t)) = 
+\left[ \begin{array}{c}
+\dot{x}_1(t) \\ \dot{x}_2(t)\\ \dot{x}_3(t)
+\end{array} \right] = 
+\left[ \begin{array}{c}
+x_2(t) \sin x_3(t)\\
+\frac{\zeta(\bfx(t))-\theta(\bfx(t))}{c_2}-c_1\sin x_3(t)\\
+\frac{c_1}{x_2(t)}(u(t) - \cos x_3(t)
+\end{array} \right]
+\end{equation}
+and boundary conditions
+\begin{equation}
+\begin{array}{ll}
+x_1(0) =  b_1, & x_1(t_f) =  b_2 \\
+x_2(0) =  b_3, & x_2(t_f) =  b_4 \\
+x_3(0) =  b_5, & x_3(t_f) =  b_5.
+\end{array}
+\end{equation}
+As with the previous example, we use the Hermite Simpson Separated collocation method and as such we will be using the same notation. For this example, though, we rewrite the equality conditions of \ref{bracheqcons} into the form:
+\begin{equation}
+\bfC(\bfX,\bfU,t_N) = \bfA\bfX + t_N\bfB\bfF(\bfX,\bfU),
+\end{equation}
+where $\bfC(\bfX,\bfU,t_N) \in \bbR^{(N-1)\times 3}$. We also use the unrolled form:
+\begin{equation}
+\bfC^{\dag}(\bfX^{\dag},\bfU,t_N) = \mathbb{A}\bfX^{\dag} + t_N\mathbb{B}\bfF^{\dag}(\bfX^{\dag},\bfU).
+\end{equation}
+As in the previous example, we define our NLP decision vector as $\bfz = [\bfX^{\dag T},\bfU^T,t_N]^T$.
+Our discretized problem is then
+\begin{equation}
+\min\limits_{\bfz} t_N
+\end{equation}
+subject to the equality constraints
+\begin{equation}
+\bfC^{\dag}(\bfz) = \bf0
+\end{equation}
+and the simple bounds
+\begin{equation}
+\bfz_{min} \leq \bfz \leq \bfz_{max}.
+\end{equation}
+Now, in this example, we are concerned with building the Constraint Jacobian and the Lagrangian Hessian, which we will denote by $\bigtriangledown _{\bfz} \bfC^{\dag}$ and $\bigtriangledown^2 _{\bfz} L$, respectively. In building these, we take advantage of the fact that $\bfF^{\dag}(\bfX^\dag,\bfU)$ is our only non-linear term, thus, \emph{ADiGator} is only used to differentiate our dynamics file and we then build the Constraint Jacobian and Lagrangian Hessian using the result.
+
+In order to build the Constraint Jacobian we first note that
+\begin{equation}
+\bigtriangledown _{\bfz}\bfC^{\dag} = \left[
+\begin{array}{ccc}
+\bigtriangledown_{\bfX^{\dag}} \bfC^{\dag} & \bigtriangledown_{\bfU} \bfC^{\dag} & \bigtriangledown_{t_N} \bfC^{\dag} 
+\end{array}
+\right],
+\end{equation}
+where
+\begin{equation}
+\bigtriangledown_{\bfX^{\dag}} \bfC^{\dag} = \mathbb{A} + t_N \mathbb{B}\otimes \bigtriangledown_{\bfX^{\dag}} \bfF^{\dag}.
+\end{equation}
+Here we note that we can take advantage of the way in which we write the unrolled Jacobian in order to perform the matrix multiplication $\mathbb{B}\otimes \bigtriangledown_{\bfX^{\dag}} \bfF^{\dag}$. That is, $\mathbb{B} \in \bbR^{((N-1)*3) \times (N*3)}$, and $\bigtriangledown_{\bfX^{\dag}} \bfF^{\dag} \in \bbR^{(N*3) \times (N*3)}$, thus we can perform the matrix multiplication by reshaping $\bigtriangledown_{\bfX^{\dag}} \bfF^{\dag}$ into a matrix of size $N \times (3*N*3)$, do the matrix multiplication, and then reshape the result into a matrix of size $((N-1)*3) \times (N*3)$. One should note, though, that this only works if multiplying by a matrix on the left side. Similarly, we can compute $\bigtriangledown_{\bfU} \bfC^{\dag}$ and $\bigtriangledown_{t_N} \bfC^{\dag}$ as
+\begin{equation}
+\bigtriangledown_{\bfU} \bfC^{\dag} = t_n \mathbb{B}\otimes \bigtriangledown_{\bfU} \bfF^{\dag}
+\end{equation}
+and
+\begin{equation}
+\bigtriangledown_{t_N} \bfC^{\dag}  = \mathbb{B} \bfF^{\dag}.
+\end{equation}
+
+We can do similar calculations in order to build the Lagrangian Hessian. First we start with the Lagrangian
+\begin{equation}
+L = t_N + \bflambda^T\left(\mathbb{A}\bfX^{\dag} + t_N\mathbb{B}\bfF^{\dag}\right).
+\end{equation}
+For these calculations, we first define a new variable $\bfY = [\bfX, \bfU]$, now, using some abusive notation, we may write our Lagrangian Gradient as
+\begin{equation}
+\bigtriangledown _{\bfz} L = 
+\left[ \begin{array}{cc}
+\bigtriangledown _{\bfY^{\dag}} L & \bigtriangledown _{t_N} L
+\end{array}\right]
+\end{equation}
+where
+\begin{equation}
+\bigtriangledown _{\bfY^{\dag}} L = \bflambda^T\left(\mathbb{A}\otimes[\bf1, \bf0] + t_N\mathbb{B}\otimes \bigtriangledown _{\bfY^{\dag}} \bfF^{\dag}\right)
+\end{equation}
+and
+\begin{equation}
+\bigtriangledown _{t_N} L = \bflambda ^T\left([\bf0, 1]^T + \mathbb{B}\bfF^{\dag}\right).
+\end{equation}
+Now, we write our Lagrangian Hessian as
+\begin{equation}
+\bigtriangledown _{\bfz}^2 L = \left[
+\begin{array}{cc}
+\bigtriangledown _{\bfY^{\dag}}^2 L & \bigtriangledown _{\bfY^{\dag}t_N} L \\
+\bigtriangledown _{\bfY^{\dag}t_N} L & \bigtriangledown _{t_N}^2 L 
+\end{array} \right],
+\end{equation}
+where,
+\begin{equation}
+\bigtriangledown _{\bfY^{\dag}}^2 L  = t_N \bflambda ^T  \mathbb{B} \otimes \bigtriangledown _{\bfY^{\dag}}^2 \bfF^{\dag},
+\end{equation}
+\begin{equation}
+\bigtriangledown _{\bfY^{\dag}t_N} L = \bflambda ^T \mathbb{B}\bigtriangledown_{\bfY^{\dag}} \bfF^{\dag},
+\end{equation}
+and
+\begin{equation}
+\bigtriangledown _{t_N}^2 L  = 0.
+\end{equation}
+
+The code for this example may be found in the directory \texttt{examples/optimization/vectorized/minimumclimb}. In this directory there are four files which will solve the problem on three different meshes ($K = 10$, $K = 20$, and $K = 40$), where the initial guess for the second two iterations is calculated from the solution of the previous mesh. The files \texttt{main\_1stderivs\_nonvect} and \texttt{main\_2ndderivs\_nonvect} supply derivatives without using the vectorizated mode, while the files \texttt{main\_1stderivs\_vect} and \texttt{main\_2ndderivs\_vect} supply derivatives using the vectorizated mode. Furthermore, the function which computes the Constraint Jacobian (and calls the first dynamics derivative file) is given in \texttt{conswrap.m} and the function which computes the Lagrangian Hessian (and calls the second dynamics derivative file) is given in \texttt{laghesswrap.m}.
+
+Here we see that, since we are only differentiating the dynamics file, that, when we use the vectorized mode, we must only create the derivative files a single time and they may be used to solve on as many different meshes as desired. If using the non-vectorized mode, however, the derivative files must be generated each time the value of $K$ is changed. As far as performance goes, the user should note a slight increase in performance using the vectorized mode at the first derivative (the vectorized file should solve in 90-95\% of the time it takes the non-vectorized). At the second derivative level, though, we see a major increase in performance as the vectorized file should solve in 5-10\% of the time it takes the non-vectorized.
+
+\subsection{Other}
+\subsubsection{Jacobian-Vector and Hessian-Vector Products}
+This code is contained within \texttt{examples/jachesvecprods/}. It shows the user how to generate functions which automatically compute Jacobian-vector products and Hessian-vector products via seeding. Note: If a Jacobian-vector product is required, it is likely most efficient to generate the file as a Jacobian-vector product. If a Hessian-vector product is required, it is more than likely more efficient to compute the Hessian and perform the product for ``small'' problem sizes ($n < 10000$). As $n$ increases beyond $10000$ or so, the Hessian-vector product via seeding is likely the better option.
+\subsubsection{Hessian of the Log-Sum-Exp Function}
+This code is contained within \texttt{examples/hessians/logsumexp/}. It simply uses the \texttt{adigatorGenHesFile} routine to generate a Hessian file wrapper.
+\subsubsection{Unconstrained Brown Minimization}
+This code is contained within \texttt{examples/optimization/fminuncEx/}. The code uses \texttt{adigatorGenFiles4Fminunc} together with \texttt{fminunc} to minimize the brown function.
+\subsubsection{Banana System of Non-Linear Equations}
+This code is contained within \texttt{examples/optimization/fsolveEx/}. The code uses the \texttt{adigatorGenFiles4Fsolve} together with \texttt{fsolve} to solve the banana system of equations.
+\subsubsection{Minimization Ginzburg-Landau (2-dimensional) Superconductivity Problem}
+This code is contained within \texttt{examples/optimization/ipoptEx/}. The code uses \texttt{adigatorGenFiles4Ipopt} together with \texttt{ipopt} in order to minimize the MINPACK-2 GL2 minimization problem.
+
+\section*{Appendix}\hypertarget{Appendix}{}
+
+In this user guide we employ the following notation.  First, all scalars, vectors, and matrices are denoted by lower or upper case non-boldface (e.g., $y$ or $Y$), lower case boldface (e.g., $\bfy$), and upper case boldface (e.g, $\bfY$) symbols, respectively. Furthermore, if we are referring to a variable in MATLAB, we will generally use the typewriter text (e.g., \texttt{y, Y}).
+Thus, if $\bfX\in\bbR^{m\times n}$, then
+\begin{equation}\label{general-matrix-x}
+  \bfX =
+  \left[\begin{array}{ccc}
+      X_{1,1} & \cdots & X_{1,n} \\
+      X_{2,1} & \cdots & X_{2,n} \\
+      \vdots & \ddots & \vdots \\
+      X_{m,1} & \cdots & X_{m,n}
+    \end{array}
+  \right]\in\bbR^{m\times n}, 
+\end{equation}
+where $X_{i,j},\;(i=1,\ldots,m),\;(j=1,\ldots,n)$ are the {\em elements} 
+of the $m\times n$ matrix $\bfX$.  Similarly, the output of any
+matrix function of a matrix is denoted by a upper case bold letter.  Consequently,
+if $\bfF:\bbR^{m\times n}\longrightarrow \bbR^{p\times q}$ is a matrix
+function of the matrix variable $\bfX$, then $\bfF(\bfX)$ has the form
+\begin{equation}\label{general-matrix-f}
+  \bfF(\bfX) =
+  \left[
+    \begin{array}{ccc}
+      F_{1,1}(\bfX) & \cdots & F_{1,q}(\bfX) \\
+      F_{2,1}(\bfX) & \cdots & F_{2,q}(\bfX) \\
+      \vdots & \ddots & \vdots \\
+      F_{p,1}(\bfX) & \cdots & F_{p,q}(\bfX)
+    \end{array}
+  \right]\in\bbR^{p\times q},
+\end{equation}
+where $F_{k,l}(\bfX),\;(k=1,\ldots,p),\;(l=1,\ldots,q)$ are the 
+{\em elements} of the $p\times q$ matrix function $\bfF(\bfX)$.  
+The {\em Jacobian} of the matrix function $\bfF(\bfX)$, denoted
+$\bfJ\bfF(\bfX)$, is then a four-dimensional array of size $p\times
+q\times m\times n$ that consists of $pqmn$ elements.  This
+multi-dimensional array will be referred to generically as the 
+{\em rolled} representation of the derivative of $\bfF(\bfX)$ with
+respect to $\bfX$ (where the term ``rolled'' is similar to the term
+``external'' as used in \cite{Forth1}).  In order to provide a more tractable form for
+the Jacobian of $\bfF(\bfX)$, the matrix variable $\bfX$ and matrix
+function $\bfF(\bfX)$ are transformed into the following so called 
+{\em unrolled} form (where, again, the term ``unrolled'' is similar to
+the term ``internal'' \cite{Forth1}).  First, $\bfX\in\bbR^{m\times n}$, is mapped
+isomorphically to a column vector $\bfx^\dag\in\bbR^{mn}$, such that
+\begin{equation}\label{general-vector-xdag}
+  x^\dag _k = X_{i,j}, \quad \text{where} \quad k = i+m(j-1),\quad \forall \quad \begin{array}{lll}
+  i & = & 1,\dots m \\
+  j & = & 1,\dots n \\
+  k & = & 1,\dots mn
+  \end{array}.
+\end{equation}
+
+
+Similarly, let
+$\bff^\dag(\bfx^{\dag})\in\bbR^{pq}$ be the one-dimensional
+transformation of the function $\bfF(\bfX)\in\bbR^{p\times q}$, such that 
+\begin{equation}\label{general-function-fdag}
+  f^\dag _k(\bfx^\dag) = F_{i,j}(\bfX), \quad \text{where} \quad k = i+q(j-1),\quad \forall \quad \begin{array}{lll}
+  i & = & 1,\dots q \\
+  j & = & 1,\dots p \\
+  k & = & 1,\dots qp
+  \end{array}.
+\end{equation}
+Here we note that the transformation from $\bfX$ to $\bfx^\dag$ can be performed in MATLAB using the command \texttt{xdag = X(:)}, where \texttt{xdag} and \texttt{X} correspond to $\bfx^\dag$ and $\bfX$, respectively. Furthermore, the MATLAB functions \texttt{sub2ind} and \texttt{ind2sub} are useful when switching between rolled and unrolled representations.
+
+
+Using the one-dimensional representations $\bfx^{\dag}$ and
+$\bff^{\dag}(\bfx^{\dag})$, the four-dimensional Jacobian,
+$\bfJ\bfF(\bfX)$ can be represented in two-dimensional form as
+\begin{equation}\label{general-Jacobian-of-fdag}
+  \bfJ\bff^\dag(\bfx^\dag) =
+  \left[
+    \begin{array}{ccc}
+      \pd{f^\dag_1}{x^\dag_1} & \cdots & \pd{f^\dag_1}{x^\dag_{mn}} \vspace{4pt} \\
+      \pd{f^\dag_2}{x^\dag_1} & \cdots & \pd{f^\dag_2}{x^\dag_{mn}} \vspace{2pt} \\
+      \vdots & \ddots & \vdots \vspace{2pt} \\
+      \pd{f^\dag_{pq}}{x^\dag_1} & \cdots & \pd{f^\dag_{pq}}{x^\dag_{mn}} \vspace{2pt} \\
+    \end{array}
+  \right]\in\bbR^{pq\times mn}.
+\end{equation}
+Equation~(\ref{general-Jacobian-of-fdag}) provides what we refer to as the ``unrolled Jacobian''.
+
+
+\renewcommand{\baselinestretch}{1}
+\normalsize
+\normalfont
+\bibliographystyle{unsrt}
+\bibliography{master}
+
+\end{document}

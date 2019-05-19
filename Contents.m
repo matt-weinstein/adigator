@@ -5,7 +5,7 @@
 % Copyright 2011-2015 Matthew J. Weinstein and Anil V. Rao
 % Distributed under the GNU General Public License version 3.0
 %
-% website: http://sourceforge.net/projects/adigator/
+% website: https://github.com/matt-weinstein/adigator
 %
 % ----------------------------------------------------------------------- %
 % FILES:
@@ -16,9 +16,12 @@
 % adigatorOptions.m          - function for setting adigator options
 %                              structure
 % startupadigator.m          - path setup for adigator toolbox
+% COPYING.txt                - licensing info
+% README.txt                 - readme
+%
 % ----------------------------------------------------------------------- %
 % DIRECTORIES:
-% doc      - user's guide and licensing information
+% doc      - user's guide and reference papers
 % examples - various example problems
 % lib      - ADiGator library of source transformation routines, overloaded
 %            classes, etc
