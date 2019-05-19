@@ -132,21 +132,21 @@ switch callerstr
   case 'acot'
     dydx = ['-1./(1+',x,'.^2)'];
   case 'asec'
-    dydx = ['1./',x,'./','sqrt(',x,'.^2-1)'];
+    dydx = ['1./',x,'.^2./','sqrt(1-1./',x,'.^2)'];
   case 'acsc'
-    dydx = ['-1./',x,'./','sqrt(',x,'.^2-1)'];
+    dydx = ['-1./',x,'.^2./','sqrt(1-1./',x,'.^2)'];
   case 'sind'
-    dydx = ['180./pi.*cos(',x,')'];
+    dydx = ['pi/180.*cosd(',x,')'];
   case 'cosd'
-    dydx = ['-180./pi.*sin(',x,')'];
+    dydx = ['-pi/180.*sind(',x,')'];
   case 'tand'
-    dydx = ['180./pi.*sec(',x,').^2'];
+    dydx = ['pi/180.*secd(',x,').^2'];
   case 'cotd'
-    dydx = ['-180./pi.*csc(',x,').^2'];
+    dydx = ['-pi/180.*cscd(',x,').^2'];
   case 'secd'
-    dydx = ['180./pi.*sec(',x,').*tan(',x,')'];
+    dydx = ['pi/180.*secd(',x,').*tand(',x,')'];
   case 'cscd'
-    dydx = ['-180./pi.*csc(',x,').*cot(',x,')'];
+    dydx = ['-pi/180.*cscd(',x,').*cotd(',x,')'];
   case 'asind'
     dydx = ['180./pi./sqrt(1-',x,'.^2)'];
   case 'acosd'
@@ -156,9 +156,9 @@ switch callerstr
   case 'acotd'
     dydx = ['-180./pi./(1+',x,'.^2)'];
   case 'asecd'
-    dydx = ['180./pi./',x,'./','sqrt(',x,'.^2-1)'];
+    dydx = ['180./pi./',x,'.^2./','sqrt(1-1./',x,'.^2)'];
   case 'acscd'
-    dydx = ['-180./pi./',x,'./','sqrt(',x,'.^2-1)'];
+    dydx = ['-180./pi./',x,'.^2./','sqrt(1-1./',x,'.^2)'];
   case 'sinh'
     dydx = ['cosh(',x,')'];
   case 'cosh'
@@ -174,13 +174,13 @@ switch callerstr
   case 'asinh'
     dydx = ['1./sqrt(',x,'.^2+1)'];
   case 'acosh'
-    dydx = ['1./sqrt(',x,'.^2-1)'];
+    dydx = ['1./sqrt(',x,'-1)./sqrt(',x,'+1)'];
   case 'atanh'
     dydx = ['1./(1-',x,'.^2)'];
   case 'acoth'
     dydx = ['1./(1-',x,'.^2)'];
   case 'asech'
-    dydx = ['-1./',x,'./sqrt(1-',x,'.^2)'];
+    dydx = ['-1./',x,'.^2./sqrt(1./',x,'-1)./sqrt(1./',x,'+1)'];
   case 'acsch'
     dydx = ['-1./abs(',x,')./sqrt(1+',x,'.^2)'];
   case 'erf'
