@@ -17,7 +17,7 @@
 %                              structure
 % startupadigator.m          - path setup for adigator toolbox
 % COPYING.txt                - licensing info
-% README.txt                 - readme
+% README.md                  - readme
 %
 % ----------------------------------------------------------------------- %
 % DIRECTORIES:
