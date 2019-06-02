@@ -13,6 +13,7 @@ weinstein87@gmail.com
 
 # Citing ADiGator:
 Please cite the most recent ACM-TOMS CALGO article. BibTex is here:
+```
 @article{weinstein2017algorithm,
   title={Algorithm 984: ADiGator, a toolbox for the algorithmic differentiation of mathematical functions in MATLAB using source transformation via operator overloading},
   author={Weinstein, Matthew J and Rao, Anil V},
@@ -23,6 +24,7 @@ Please cite the most recent ACM-TOMS CALGO article. BibTex is here:
   year={2017},
   publisher={ACM}
 }
+```
 
 # Release Notes:
 V 1.4 4/22/17
