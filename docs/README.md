@@ -27,6 +27,10 @@ Please cite the most recent ACM-TOMS CALGO article. BibTex is here:
 ```
 
 # Release Notes:
+V 1.5 6/02/19
+* A bit of repo re-organization, moved everything to github: https://github.com/matt-weinstein/adigator
+* Fixed derivative rules for a few unary trig functions. Many "degree" versions of trig routines had a bug, and a few of the hyperbolic versions were also off.
+
 V 1.4 4/22/17
 * Fix for matlab 2016b changing matlab.codetools.requiredFilesAndProducts to also return .mat files. Was causing issues with 2nd derivatives.
 * General code cleanup of comments and examples.
