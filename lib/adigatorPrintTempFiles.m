@@ -488,6 +488,8 @@ while MajorLineCount <= EndLocation(1) && ~isnumeric(FunStrFULL)
         errlink = GenErrorLink(Ffid,MajorLineCount);
         error(['In order to load in variables, must assign them to a'...
           ' variable name. At ',FunStri,' ',errlink]);
+      elseif StrLength > 5 && strcmp(FunStri(1:6),'pause(')
+        % PAUSE
       else
         % Dont know what this statement is.
         errlink = GenErrorLink(Ffid,MajorLineCount);
