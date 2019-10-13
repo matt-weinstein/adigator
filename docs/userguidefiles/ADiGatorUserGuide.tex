@@ -206,7 +206,7 @@ We now have our inputs defined and may generate the derivative code. Supposing w
 \end{verbatim}
 This would then generate the files \texttt{myderiv.m} and \texttt{myderiv.mat}. In order to now evaluate the derivative we need to redefine our inputs for $\bfx$ and $\bfk$. We would do this as follows:
 \begin{verbatim}
-    x = struct('f',rand(3,1),'dx',ones(3,1);
+    x = struct('f',rand(3,1),'dx',ones(3,1));
     k = rand(3,1);
 \end{verbatim}
 where we are assigning random values to $\bfx$ and $\bfk$. Furthermore, we note  that the derivative of $\bfx$ with respect to $\bfx$ is the $3\times 3$ identity matrix, and that the non-zero elements are given by a vector of ones (the value assigned to \texttt{x.dx}). We could then evaluate the derivative file by
@@ -688,7 +688,7 @@ In this section we present two examples which take the first derivative of vecto
 \subsubsection{Arrowhead}
 This is an example taken from Section 7.4 of \cite{Griewank1}. Here we take the derivative of a function $\bff: \bbR^n \rightarrow \bbR^n$, where
 \begin{equation}
-f_1(\bfx) = 2x^2_x+ \sum^n_{i=1}x_i^2, \quad f_j(\bfx) = x_1^2 + x_j^2, \quad (j = 2,\dots,n)
+f_1(\bfx) = 2x^2_1+ \sum^n_{i=1}x_i^2, \quad f_j(\bfx) = x_1^2 + x_j^2, \quad (j = 2,\dots,n)
 \end{equation}
 This is coded up such that the Jacobian, $\bfJ\bff(\bfx)$ is built using \emph{ADiGator}, finite differencing, and compressed finite differencing. Here the user is free to change the the parameter \texttt{N} within the \texttt{main.m} (located in \texttt{examples/jacobians/arrowhead/})code in order to see that the \emph{ADiGator} algorithm becomes more useful as the problem size increases. Furthermore, you can see that there is a certain amount of overhead inherent with generating the derivative code, but, if you wish to evaluate the code many times, this overhead becomes less of an issue.
 \subsubsection{Polynomial Data Fitting}
