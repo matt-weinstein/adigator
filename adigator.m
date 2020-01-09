@@ -723,7 +723,7 @@ function [SoftwareLocation,adigatorTempDir] = filekeeping()
 SoftwareLocation = which('adigator');
 SoftwareLocation = SoftwareLocation(1:end-11);
 % Delete any previously created dummy files
-adigatorTempDir = [SoftwareLocation,filesep,'adigatorTempDir',filesep];
+adigatorTempDir = [pwd,filesep,'adigatorTempDir',filesep];
 if exist(adigatorTempDir,'dir')
   P = path;
   if ~isempty(strfind(P,[adigatorTempDir(1:end-1),':']))
